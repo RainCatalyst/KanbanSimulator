@@ -2,25 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
 	<link rel="stylesheet" href="css/normalize.css">
 	<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,cyrillic"
 	 rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/master.css">
+
   <title>Document</title>
 </head>
 <body>
   <header class="main-header">
 		<nav class="main-navigation">
 			<a class="logo"><img src="images/logo.svg" width="368" height="204" alt="Лого Канбана"></a>
-			<div class="navigation-items">
-				<ul>
-					<li><a href="info.html">О нас</a></li>
-	        <li><a href="rules.html">Правила</a></li>
-	        <li><button type="button" name="contacts">Контакты</button></li>
-	        <li><button type="button" name="share">Поделиться</button></li>
-	        <li><a href="statistics.html">Рейтинг</a></li>
-				</ul>
+			<div class="container-fluid">
+        <div class="row">
+          	<div class="col-md-2"><a href="info.html">О нас</a></div>
+  	        <div class="col-md-2"><a href="rules.html">Правила</a></div>
+  	        <div class="col-md-2"><button type="button" name="contacts">Контакты</button></div>
+  	        <div class="col-md-2"><button type="button" name="share">Поделиться</button></div>
+  	        <div class="col-md-2"><a href="statistics.html">Рейтинг</a></div>
+        </div>
+
 			</div>
 			<ul class="user-navigation">
 				<li>
@@ -34,15 +41,25 @@
 		</nav>
 	</header>
 
-  <section class="options">
+  <section class="image">
+      <a class="kanban"><img src="images/kanban.jpg" alt="канбан"></a>
+  </section>
+
+  <div class="container-fluid">
     <!--  Кнопки не очень, тут должны быть ссылки
           так как они будут перенаправлять на другие страницы
     <button type="button" name="Создать комнату">Создать комнату</button>
     <button type="button" name="Правила">Правила</button>
     -->
-    <a class="kanban"><img src="images/kanban.jpg" alt="канбан"></a>
-    <a href="create_room.html">Создать комнату</a>
-    <a href="rules.html">Правила</a>
-  </section>
+    <div class="row">
+      <div class="col-md-4" style="background-color: #ff9999">
+        <a href="create_room.html">Создать комнату</a>
+      </div>
+      <div class="col-md-4" style="background-color: #fff999">
+        <a href="rules.html">Правила</a>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>

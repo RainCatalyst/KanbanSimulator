@@ -1,0 +1,78 @@
+
+@font-face {
+  font-family: "fira_monoregular";
+  src: url("fira_monoregular_webfont.woff2") format("woff2"),
+  url("fira_monoregular_webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "PT Sans Narrow", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+
+  background-color: rgba(51, 238, 255, 0.5);
+  background-image: url("img/background.jpg");
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+button {
+  font: inherit;
+
+  text-align: center;
+  color: #ffffff;
+  vertical-align: middle;
+  text-transform: uppercase;
+
+  background-color: #000000;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main-navigation {
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+  list-style: none;
+
+  background-color: #0E2749;
+}
+
+.main-logo {
+  position: relative;
+}
+
+.site-navigation,
+.user-navigation {
+  text-align: right;
+  list-style: none;
+}
+
+.site-navigation a,
+.user-navigation a {
+  color: #ffffff;
+  padding: 20px;
+}
+
+.site-navigation a:hover,
+.user-navigation a:hover,
+.site-navigation a:focus,
+.user-navigation a:focus {
+  background-color: #242424;
+}
+
+.kanban img{
+  width: 180px;
+  height: 120px;
+}

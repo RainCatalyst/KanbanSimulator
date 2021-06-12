@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,cyrillic"
+	 rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/master.css">
+  <title>Document</title>
+</head>
+<body>
+  <header class="main-header">
+		<nav class="main-navigation">
+			<a class="logo"><img src="images/logo.svg" width="368" height="204" alt="Лого Канбана"></a>
+			<div class="navigation-items">
+				<ul>
+					<li><a href="info.html">О нас</a></li>
+	        <li><a href="rules.html">Правила</a></li>
+	        <li><button type="button" name="contacts">Контакты</button></li>
+	        <li><button type="button" name="share">Поделиться</button></li>
+	        <li><a href="statistics.html">Рейтинг</a></li>
+				</ul>
+			</div>
+			<ul class="user-navigation">
+				<li>
+					<!-- Okey it is done in purpose, we put link instead of button
+					for 2 reasons: first, we will have opportunity to open login page
+					in a new window, second if javascript applet will not show up it will
+					redirect us to login page -->
+					<a href="login.html">Вход</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+
+  <section class="options">
+    <!--  Кнопки не очень, тут должны быть ссылки
+          так как они будут перенаправлять на другие страницы
+    <button type="button" name="Создать комнату">Создать комнату</button>
+    <button type="button" name="Правила">Правила</button>
+    -->
+    <a class="kanban"><img src="images/kanban.jpg" alt="канбан"></a>
+    <a href="create_room.html">Создать комнату</a>
+    <a href="rules.html">Правила</a>
+  </section>
+</body>
+</html>

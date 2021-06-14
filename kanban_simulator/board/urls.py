@@ -5,5 +5,8 @@ urlpatterns = [
     path('', views.index, name="home"),
     path('about', views.index, name="about"),
     path('board', views.board, name="board"),
-    path('populate_backlog', views.populateBackLog, name="populateBackLog")
+    path('populate_backlog', views.populateBackLog, name="populateBackLog"),
+    path('move_card', views.move_card),
+    path('move_player', views.move_player),
+    path('version_check', views.version_check)
 ]

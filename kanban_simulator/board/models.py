@@ -13,6 +13,8 @@ class Team(models.Model):
     name = models.CharField(max_length=30)
     # id of the correspondent game/room
     game = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # version of the board
+    version = models.IntegerField(default=0)
     # current game day
     dayNum = models.IntegerField(default=1)
 
@@ -36,12 +38,21 @@ class Day(models.Model):
 
 
 class Player(models.Model):
-    # Player name
-    name = models.CharField(max_length=30)
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    # amount of effort that can be spent on a particular day
-    effort = models.IntegerField()
+
+
+class Character(models.Model):
+    # Correspondent team
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # roles
+    # (0...1) analytics
+    # (2...4) developers
+    # (5..6) testers
+    role = models.IntegerField(default=0)
+    # if it's -1 then character locates at common character position
+    # otherwise it locates above the correspondent card
+    card_id = models.IntegerField(default=-1)
 
 
 class Card(models.Model):
@@ -65,3 +76,6 @@ class Card(models.Model):
 
     test_remaining = models.IntegerField()
     test_completed = models.IntegerField(default=0)
+
+    column_number = models.IntegerField(default=0)
+    row_number = models.IntegerField(default=0)

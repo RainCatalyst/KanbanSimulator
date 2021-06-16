@@ -2,64 +2,97 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-
-	<link rel="stylesheet" href="css/normalize.css">
-	<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,cyrillic"
-	 rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/master.css">
-
   <title>Document</title>
 </head>
 <body>
-  <header class="main-header">
-		<nav class="main-navigation">
-			<a class="logo"><img src="images/logo.svg" width="368" height="204" alt="Лого Канбана"></a>
-			<div class="container-fluid">
-        <div class="row">
-          	<div class="col-md-2"><a href="info.html">О нас</a></div>
-  	        <div class="col-md-2"><a href="rules.html">Правила</a></div>
-  	        <div class="col-md-2"><button type="button" name="contacts">Контакты</button></div>
-  	        <div class="col-md-2"><button type="button" name="share">Поделиться</button></div>
-  	        <div class="col-md-2"><a href="statistics.html">Рейтинг</a></div>
+  <header id="header" class="main-header">
+    <div class="container">
+      <nav class="main-navigation">
+        <a class="logo" href="index.html"><img src="images/logo.svg" alt="Лого Канбана"></a>
+        <div class="navigation-list">
+          <ul class="site-navigation">
+              <li class="navigation-item"><a href="about.html">О нас</a></li>
+              <li class="navigation-item"><a href="rules.html">Правила</a></li>
+              <li class="navigation-item"><a href="news.html">Статьи</a>
+          </ul>
         </div>
-
-			</div>
-			<ul class="user-navigation">
-				<li>
-					<!-- Okey it is done in purpose, we put link instead of button
-					for 2 reasons: first, we will have opportunity to open login page
-					in a new window, second if javascript applet will not show up it will
-					redirect us to login page -->
-					<a href="login.html">Вход</a>
-				</li>
-			</ul>
-		</nav>
+        <div class="help-button">
+          <a class="button" href="mypage.html">
+            <img src="images/help.svg" alt="help">
+          </a>
+        </div>
+      </nav>
+    </div>
 	</header>
 
-  <section class="image">
-      <a class="kanban"><img src="images/kanban.jpg" alt="канбан"></a>
-  </section>
-
-  <div class="container-fluid">
-    <!--  Кнопки не очень, тут должны быть ссылки
-          так как они будут перенаправлять на другие страницы
-    <button type="button" name="Создать комнату">Создать комнату</button>
-    <button type="button" name="Правила">Правила</button>
-    -->
-    <div class="row">
-      <div class="col-md-4" style="background-color: #ff9999">
-        <a href="create_room.html">Создать комнату</a>
+  <main>
+    <section class="first-row">
+      <div class="offer-zone">
+        <h1>KaBam - новый удобный канбан симулятор.</h1>
+        <p>Мы даем возможность собираться
+        в команды, соревнаться, узнавать
+        тонкости Kanban и  весело
+        проводить время</p>
+        <div class="buttons">
+          <div class="button">
+            <a class="button-rules" href="rules.html">Ознакомиться с правилами</a>
+          </div>
+          <div class="button">
+            <a class="button-play" href="set-game.html">Начать игру</a>
+          </div>
+        </div>
       </div>
-      <div class="col-md-4" style="background-color: #fff999">
-        <a href="rules.html">Правила</a>
+      <div class="kanban-image">
+        <img src="images/image.jpg" alt="first-image">
       </div>
+		</section>
+    <section class="about-us">
+      <h1>О нас вам не ничего знать не нужно!</h1>
+      <div class="container">
+        <div class="about-text">
+          <p>Вместо этого мы расскажем о нашем приложении.</p>
+<p>Так, я вот сейчас сел и подумал: а что же писать?
+Вроде мы уже упомянули, что наша игра нескучная,
+ее можно проходить в компании друзей и игровая
+сессия в среднем длиться 10-15 минут,  также что
+она познавательная, игра пытается симулировать
+все возможные ситуации, с которыми сталкивается
+обычный человек при работе с Kanban ом. Хм,
+что-то я забыл сказать. А, да! Точно!</p>
+<p>Соревновательный режим. Теперь команды могут
+соревноваться на время, и кто наберет наибольшее
+количество очков, тот победил. Победители будут
+записаны в почетной доске победителей, которая в
+скором времени будет висеть на главной странице
+сайта.</p>
+        </div>
+        <div class="leadership">
+          <img src="images/leaders.jpg" alt="leaders">
+        </div>
+      </div>
+    </section>
+    <section id="news" class="news">
+      <div class="container">
+        <h1>Статей пока нет</h1>
+      </div>
+    </section>
+  </main>
+  <footer id="footer" class="footer">
+    <div class="container">
+      <div class="copyright">
+        <p>GitHub</p>
+      </div>
+      <!-- <div class="share">
+        <button type="word" name="share">share</button>
+      </div> -->
     </div>
-
-  </div>
+  </footer>
 </body>
 </html>

@@ -1,5 +1,6 @@
 .kanban_card{
     margin: 25px;
+    width: 80%;
 }
 
 .containers{
@@ -14,17 +15,11 @@
     float: left;
 }
 
-.kanban_card{
-    width: 80%;
-}
-
 #board_container{
     width: 100%;
     height: 1000px;
 }
 
-#backlog_container{
-}
 
 #devop_container{
     background-color: blue;
@@ -57,4 +52,9 @@
 
 .test_player{
     background-color: green;
+}
+
+#header_container{
+    height: 100px;
+    width: 100%;
 }

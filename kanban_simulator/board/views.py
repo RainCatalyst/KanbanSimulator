@@ -1,6 +1,5 @@
 import json
 
-
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -29,7 +28,7 @@ def initial_conditions(team_id):
 
     Character.objects.filter(team=team).delete()
     for i in range(7):
-        character = Character(team=team)
+        character = Character(team=team, role=i)
         character.save()
 
     team.version = 0
@@ -100,7 +99,7 @@ def move_card(request):
             Card.objects.filter(pk=id).update(column_number=col, row_number=row)
             old_version = Team.objects.get(pk=team).version
             Team.objects.filter(pk=team).update(version=old_version + 1)
-            print("New version", old_version + 1)
+            print("Card#", id, " was moved on column#", col, "row#", row)
 
     return JsonResponse({"Success": ""}, status=200)
 
@@ -118,6 +117,7 @@ def move_player(request):
             Character.objects.filter(team=team, role=role).update(card_id=card_id)
             team.version += 1
             team.save()
+            print("Character was moved on card#", card_id)
 
     return JsonResponse({"Success": ""}, status=200)
 

@@ -1,12 +1,12 @@
 import json
 
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character
 import random
 
-# Create your views here.
 
 NUMBER_OF_CHARACTERS = 7
 
@@ -148,3 +148,25 @@ def version_check(request):
             return JsonResponse({"SYN": True}, status=200)
 
     return JsonResponse({"Error": "error"}, status=400)
+
+
+def create_room(request):
+    new_room = Room()
+    new_room.save()
+    new_team = Team(game=new_room)
+    new_team.save()
+    new_player = Player(team=new_team, creator=True)
+    new_player.save()
+    return HttpResponseRedirect(reverse('board:waitingRoom'), args=(new_room.pk, new_player.pk))
+
+
+def join_room(request, room_id):
+    room = Room.objects.get(pk=room_id)
+    team = Team.objects.filter(game=room)
+    new_player = Player(team=team)
+    new_player.save()
+    return HttpResponseRedirect(reverse('board:waitingRoom'), args=(room.pk, new_player.pk))
+
+
+def waiting_room(request, room_id, player_id):
+    return render(request, 'board/waiting_room.html')

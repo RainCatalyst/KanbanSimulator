@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Room(models.Model):
-    # number of people in particular the game
+    # number of people in particular game
     people = models.IntegerField()
 
 
@@ -31,7 +31,7 @@ class Day(models.Model):
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
-    # Amount of completed tasks oby Analytics,Devops, Testers respectively
+    # Amount of completed tasks oby Analytics, Devops, Testers respectively
     anl_completed_tasks = models.IntegerField()
     dev_completed_tasks = models.IntegerField()
     test_completed_tasks = models.IntegerField()

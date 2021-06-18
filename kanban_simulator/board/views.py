@@ -16,8 +16,8 @@ def index(request):
 
 
 @csrf_exempt
-def board(request):
-    return render(request, 'board/board.html')
+def board(request, team_id):
+    return render(request, 'board/board.html', {'team_id': team_id})
 
 
 # temporary function for testing (board clearing and etc.)
@@ -170,3 +170,12 @@ def join_room(request, room_id):
 
 def waiting_room(request, room_id, player_id):
     return render(request, 'board/waiting_room.html')
+
+
+def rules(request):
+    return render(request, 'board/rules.html')
+
+
+# to be added
+def news(request):
+    return

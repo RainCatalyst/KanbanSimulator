@@ -1,0 +1,227 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: 000;
+  font-size: 16px;
+
+  background-image: url('../img/background-image.jpg');
+  background: linear-gradient(161.63deg, #8EF8FF 8.27%, #00B2FF 88.46%);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+ul, li {
+  display: block;
+}
+
+.site-navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-item {
+  padding: 0;
+  margin: 0;
+  margin-right: 50px;
+}
+
+.navigation-item  a {
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+
+  font-family: Montserrat;
+
+  color: black;
+}
+
+.help-button {
+  margin-left: 1068px;
+}
+
+.help-button .button {
+  display: block;
+
+  color: #000;
+  text-decoration: none;
+}
+
+.main-navigation {
+  padding-top: 20px;
+
+  display: flex;
+  align-items: center;
+}
+
+.navigation-list {
+  margin-left: 277px;
+}
+
+.container {
+  width: 1170px;
+  margin: 0 auto;
+}
+
+.navigator {
+  margin-top: 55px;
+}
+
+.game-navigator {
+  margin-left: 350px;
+  display: flex;
+
+  width: 800px;
+  height: 60px;
+
+  background: #DCFAFE;
+  border-radius: 10px;
+}
+
+.game-list {
+  padding: 5px;
+  /* align-items: center; */
+}
+
+.buttons {
+  display: flex;
+}
+
+.add-card {
+  padding: 10px;
+}
+
+.play-buttons {
+  margin-left: 30px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+
+  width: 60px;
+  height: 31px;
+}
+
+.dices {
+  display: flex;
+  justify-content: space-between;
+
+  margin-left: 122px;
+
+  width: 104px;
+  height: 60px;
+}
+
+.dices label {
+  font-weight: bold;
+}
+
+.dice {
+  width: 30px;
+  height: 30px;
+}
+
+.game-state {
+  margin-left: 76px;
+
+  font-weight: bold;
+}
+
+.columns {
+  margin-top: 40px;
+}
+
+.columns .container {
+  margin-left: 280px;
+  display: flex;
+  justify-content: space-between;
+
+  width: 916px;
+  height: 430px;
+}
+
+.backlog {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table1 {
+  width: 260px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table2 {
+  width: 260px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table3 {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.done {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.columns h5 {
+  width: 65px;
+  height: 21px;
+
+  font-style: normal;
+  font-weight: bold;
+}
+
+.text-state {
+  display: flex;
+}
+
+.columns .active{
+  margin-left: 40px;
+}
+
+.columns .finished{
+  margin-left: 65px;
+}
+
+.footer {
+  margin-top: 261px;
+
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.footer .container{
+  display: flex;
+}
+
+.copyright {
+  margin-left: 100px;
+
+  color: #fff;
+}

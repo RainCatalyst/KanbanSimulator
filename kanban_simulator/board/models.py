@@ -6,6 +6,7 @@ from django.db import models
 class Room(models.Model):
     # number of people in particular game
     people = models.IntegerField()
+    started = models.BooleanField(default=False)
 
 
 class Team(models.Model):
@@ -40,6 +41,7 @@ class Day(models.Model):
 class Player(models.Model):
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    creator = models.BooleanField(default=False)
 
 
 class Character(models.Model):

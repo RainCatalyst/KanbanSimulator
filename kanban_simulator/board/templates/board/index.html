@@ -1,16 +1,57 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
-</head>
-<body>
-<h1>Main page</h1>
-<a href="{% url 'about' %}">About</a>
-
-</body>
-</html>
+{% extends 'board/base.html' %}
+{% load static %}
+{% block title %}Main Page{% endblock %}
+{% block content %}
+    <main>
+        <section class="first-row">
+            <div class="offer-zone">
+                <h1>KaBam - новый удобный канбан симулятор.</h1>
+                <p>Мы даем возможность собираться
+                    в команды, соревнаться, узнавать
+                    тонкости Kanban и весело
+                    проводить время</p>
+                <div class="buttons">
+                    <div class="button">
+                        <a class="button-rules" href="{% url 'board:rules' %}">Ознакомиться с правилами</a>
+                    </div>
+                    <div class="button">
+                        <a class="button-play" href="{% url 'board:createRoom' %}">Начать игру</a>
+                    </div>
+                </div>
+            </div>
+            <div class="kanban-image">
+                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
+            </div>
+        </section>
+        <section class="about-us">
+            <h1>О нас вам не ничего знать не нужно!</h1>
+            <div class="container">
+                <div class="about-text">
+                    <p>Вместо этого мы расскажем о нашем приложении.</p>
+                    <p>Так, я вот сейчас сел и подумал: а что же писать?
+                        Вроде мы уже упомянули, что наша игра нескучная,
+                        ее можно проходить в компании друзей и игровая
+                        сессия в среднем длиться 10-15 минут, также что
+                        она познавательная, игра пытается симулировать
+                        все возможные ситуации, с которыми сталкивается
+                        обычный человек при работе с Kanban ом. Хм,
+                        что-то я забыл сказать. А, да! Точно!</p>
+                    <p>Соревновательный режим. Теперь команды могут
+                        соревноваться на время, и кто наберет наибольшее
+                        количество очков, тот победил. Победители будут
+                        записаны в почетной доске победителей, которая в
+                        скором времени будет висеть на главной странице
+                        сайта.</p>
+                </div>
+                <div class="leadership">
+                    <img src="{% static 'board/images/leaders.jpg' %}" alt="leaders">
+                </div>
+            </div>
+        </section>
+        <section id="news" class="news">
+            <div class="container">
+                <h1>Статей пока нет</h1>
+            </div>
+        </section>
+    </main>
+{% endblock %}

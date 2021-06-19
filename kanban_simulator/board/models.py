@@ -67,7 +67,7 @@ class UserStory(models.Model):
 
 
 class Card(models.Model):
-    user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
+    # user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
 
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
@@ -79,13 +79,13 @@ class Card(models.Model):
     ready_day = models.IntegerField(default=15)
 
     # Amount of remaining and completed points in the Analytic, Devop, Test lines respectively
-    analytic_remaining = models.IntegerField(default=user_story.analytic_points)
+    analytic_remaining = models.IntegerField()
     analytic_completed = models.IntegerField(default=0)
 
-    develop_remaining = models.IntegerField(default=user_story.develop_points)
+    develop_remaining = models.IntegerField()
     develop_completed = models.IntegerField(default=0)
 
-    test_remaining = models.IntegerField(default=user_story.test_points)
+    test_remaining = models.IntegerField()
     test_completed = models.IntegerField(default=0)
 
     column_number = models.IntegerField(default=0)

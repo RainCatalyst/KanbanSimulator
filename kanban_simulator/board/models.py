@@ -5,8 +5,7 @@ from django.db import models
 
 class Room(models.Model):
     # number of people in particular game
-    people = models.IntegerField()
-    started = models.BooleanField(default=False)
+    ready = models.BooleanField(default=False)
 
 
 class Team(models.Model):
@@ -20,9 +19,9 @@ class Team(models.Model):
     dayNum = models.IntegerField(default=1)
 
     # WIP limits for Analytics, Devops, Testers respectively
-    wip1 = models.IntegerField(name='wip_limit1')
-    wip2 = models.IntegerField(name='wip_limit2')
-    wip3 = models.IntegerField(name='wip_limit3')
+    wip1 = models.IntegerField(name='wip_limit1', null=True, blank=True)
+    wip2 = models.IntegerField(name='wip_limit2', null=True, blank=True)
+    wip3 = models.IntegerField(name='wip_limit3', null=True, blank=True)
 
 
 # Primary usage - statistics (graph plotting)

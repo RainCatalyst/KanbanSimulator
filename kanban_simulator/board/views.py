@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character
+from math import ceil
 import random
 
 
@@ -16,8 +17,9 @@ def index(request):
 
 
 @csrf_exempt
-def board(request, team_id):
-    return render(request, 'board/board.html', {'team_id': team_id})
+def board(request, player_id):
+    player = Player.objects.get(pk=player_id)
+    return render(request, 'board/board.html', {'player': player})
 
 
 # temporary function for testing (board clearing and etc.)
@@ -157,7 +159,7 @@ def create_room(request):
     new_team.save()
     new_player = Player(team=new_team, creator=True)
     new_player.save()
-    return HttpResponseRedirect(reverse('board:waitingRoom'), args=(new_room.pk, new_player.pk))
+    return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
 
 
 def join_room(request, room_id):
@@ -165,11 +167,38 @@ def join_room(request, room_id):
     team = Team.objects.filter(game=room)
     new_player = Player(team=team)
     new_player.save()
-    return HttpResponseRedirect(reverse('board:waitingRoom'), args=(room.pk, new_player.pk))
+    return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
 
 
-def waiting_room(request, room_id, player_id):
-    return render(request, 'board/waiting_room.html')
+def waiting_room(request, player_id):
+    player = Player.objects.get(pk=player_id)
+    return render(request, 'board/waiting_room.html', {'player': player})
+
+
+def start_game(request, player_id):
+    room = Player.objects.get(pk=player_id).team.game
+    player_set = Team.objects.get(game=room).player_set
+    team_num = ceil(len(player_set) ** 0.5)
+
+    for i in range(team_num - 1):
+        new_team = Team(game=room)
+        new_team.save()
+
+    team_set = room.team_set
+    i = 0
+    for el in player_set:
+        el.team = team_set[i]
+        el.save()
+        i = (i + 1) % team_num
+    room.ready = True
+    room.save()
+    return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
+
+
+def join_game(request, player_id):
+    player = Player.objects.get(pk=player_id)
+    if player.team.game.ready:
+        return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
 
 
 def rules(request):

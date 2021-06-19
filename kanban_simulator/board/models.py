@@ -4,7 +4,6 @@ from django.db import models
 # Create your models here.
 
 class Room(models.Model):
-    # number of people in particular game
     ready = models.BooleanField(default=False)
 
 
@@ -56,9 +55,20 @@ class Character(models.Model):
     card_id = models.IntegerField(default=-1)
 
 
-class Card(models.Model):
+class UserStory(models.Model):
     # Card title
     title = models.CharField(max_length=20)
+
+    analytic_points = models.IntegerField()
+    develop_points = models.IntegerField()
+    test_points = models.IntegerField()
+
+    business_value = models.IntegerField()
+
+
+class Card(models.Model):
+    user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
+
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     # age of the current card
@@ -69,13 +79,13 @@ class Card(models.Model):
     ready_day = models.IntegerField(default=15)
 
     # Amount of remaining and completed points in the Analytic, Devop, Test lines respectively
-    analytic_remaining = models.IntegerField()
+    analytic_remaining = models.IntegerField(default=user_story.analytic_points)
     analytic_completed = models.IntegerField(default=0)
 
-    develop_remaining = models.IntegerField()
+    develop_remaining = models.IntegerField(default=user_story.develop_points)
     develop_completed = models.IntegerField(default=0)
 
-    test_remaining = models.IntegerField()
+    test_remaining = models.IntegerField(default=user_story.test_points)
     test_completed = models.IntegerField(default=0)
 
     column_number = models.IntegerField(default=0)

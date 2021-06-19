@@ -41,7 +41,7 @@ def initial_conditions(team_id):
 @csrf_exempt
 def populateBackLog(request):
     if request.method == 'POST':
-        request_room = request.POST.get('room', 0)
+        # request_room = request.POST.get('room', 0)
         request_team = request.POST.get('team', 0)
         initial_conditions(request_team)
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
@@ -178,18 +178,22 @@ def waiting_room(request, player_id):
 def start_game(request, player_id):
     room = Player.objects.get(pk=player_id).team.game
     player_set = Team.objects.get(game=room).player_set
-    team_num = ceil(len(player_set) ** 0.5)
 
+    # creating teams
+    team_num = ceil(len(player_set) ** 0.5)
     for i in range(team_num - 1):
         new_team = Team(game=room)
         new_team.save()
-
+    # distributing players among teams
     team_set = room.team_set
     i = 0
     for el in player_set:
         el.team = team_set[i]
         el.save()
         i = (i + 1) % team_num
+
+    # creating cards
+    cards_num = random.randint
     room.ready = True
     room.save()
     return HttpResponseRedirect(reverse('board:board', args=(player_id,)))

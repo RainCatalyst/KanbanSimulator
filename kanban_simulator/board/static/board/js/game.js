@@ -6,7 +6,8 @@ function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
         url: "populate_backlog",
-        data: {room: "0", team: "1"},
+        // data: {room: "0", team: team_id},
+        data: {team: team_id},
         success: function (response){
             var cards = JSON.parse(response["cards"]);
             current_effort = JSON.parse(response["team_effort"]);

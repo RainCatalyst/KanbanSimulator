@@ -59,6 +59,9 @@ class UserStory(models.Model):
     # Card title
     title = models.CharField(max_length=20)
 
+    # Expedite factor
+    is_expedite = models.BooleanField(default=False)
+
     analytic_points = models.IntegerField()
     develop_points = models.IntegerField()
     test_points = models.IntegerField()
@@ -68,6 +71,9 @@ class UserStory(models.Model):
 
 class Card(models.Model):
     # user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
+
+    # Card title
+    title = models.CharField(max_length=20, null=True)
 
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
@@ -90,3 +96,5 @@ class Card(models.Model):
 
     column_number = models.IntegerField(default=0)
     row_number = models.IntegerField(default=0)
+
+    business_value = models.IntegerField(null=True)

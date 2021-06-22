@@ -101,7 +101,7 @@ function moveCard(column_number, row_number, id){
             "team_id": team_id};
     $.ajax({
         type: "POST",
-        url: "move_card",
+        url: "{% url 'board:moveCard' %}",
         data: data,
         success: function(response){
             current_version += 1;

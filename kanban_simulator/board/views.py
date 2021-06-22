@@ -4,12 +4,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
-from .models import Room, Team, Day, Player, Card, Character
+from .models import Room, Team, Day, Player, Card, Character, UserStory
 from math import ceil
 import random
 
-
 NUMBER_OF_CHARACTERS = 7
+CARDS_IN_GAME = 10
 
 
 def index(request):
@@ -43,7 +43,10 @@ def populateBackLog(request):
     if request.method == 'POST':
         # request_room = request.POST.get('room', 0)
         request_team = request.POST.get('team', 0)
-        initial_conditions(request_team)
+
+        # testing purposes
+        # initial_conditions(request_team)
+
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                               'analytic_remaining', 'analytic_completed',
                                                               'develop_remaining', 'develop_completed',
@@ -177,15 +180,16 @@ def waiting_room(request, player_id):
 
 def start_game(request, player_id):
     room = Player.objects.get(pk=player_id).team.game
-    player_set = Team.objects.get(game=room).player_set
+    player_set = Team.objects.get(game=room).player_set.all()
 
     # creating teams
     team_num = ceil(len(player_set) ** 0.5)
     for i in range(team_num - 1):
         new_team = Team(game=room)
         new_team.save()
+
     # distributing players among teams
-    team_set = room.team_set
+    team_set = room.team_set.all()
     i = 0
     for el in player_set:
         el.team = team_set[i]
@@ -193,7 +197,40 @@ def start_game(request, player_id):
         i = (i + 1) % team_num
 
     # creating cards
-    cards_num = random.randint
+
+    # cards that will be actually used in the game
+    cards_set = []
+
+    # getting random set of cards
+    chosen_indexes = set()
+    user_stories = UserStory.objects.filter(is_expedite=False)
+
+    for i in range(CARDS_IN_GAME):
+        number_found = False
+        while not number_found:
+            j = random.randint(0, len(user_stories)-1)
+            if j in chosen_indexes:
+                continue
+
+            cards_set.append(user_stories[j])
+            chosen_indexes.add(j)
+            number_found = True
+
+    for team in team_set:
+        # creating cards for each team
+        row = 0
+        for card in cards_set:
+            new_card = Card(title=card.title, team=team, analytic_remaining=card.analytic_points,
+                            develop_remaining=card.develop_points, test_remaining=card.test_points, row_number=row,
+                            business_value=card.business_value)
+            new_card.save()
+            row = row + 1
+
+        # creating characters for each team
+        for i in range(7):
+            character = Character(team=team, role=i)
+            character.save()
+
     room.ready = True
     room.save()
     return HttpResponseRedirect(reverse('board:board', args=(player_id,)))

@@ -5,7 +5,7 @@ var current_day = 0;
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
-        url: "populate_backlog",
+        url: "{% url 'board:populateBacklog' %}",
         // data: {room: "0", team: team_id},
         data: {team: team_id},
         success: function (response){
@@ -36,7 +36,7 @@ $(function() {
 function performVersionCheck(){
     $.ajax({
         type: "POST",
-        url: "version_check",
+        url: "{% url 'board:VersionCheck' %}",
         data: {'team_id': team_id,
                 'version': current_version},
         success: function(response){

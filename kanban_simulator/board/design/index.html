@@ -15,18 +15,20 @@
   <header id="header" class="main-header">
     <div class="container">
       <nav class="main-navigation">
-        <a class="logo" href="index.html"><img src="images/logo.svg" alt="Лого Канбана"></a>
+        <div class="button">
+          <a class="logo" href=#header><img src="images/logo.svg" alt="Лого Канбана"></a>
+        </div>
         <div class="navigation-list">
           <ul class="site-navigation">
-              <li class="navigation-item"><a href="about.html">О нас</a></li>
-              <li class="navigation-item"><a href="rules.html">Правила</a></li>
-              <li class="navigation-item"><a href="news.html">Статьи</a>
+            <li class="navigation-item"><a href=#about>О нас</a></li>
+            <li class="navigation-item"><a href="rules.html">Правила</a></li>
+            <li class="navigation-item"><a href=#news>Статьи</a>
           </ul>
         </div>
         <div class="help-button">
-          <a class="button" href="mypage.html">
-            <img src="images/help.svg" alt="help">
-          </a>
+          <div class="button">
+            <a href=#><img src="images/help.svg" alt="help"></a>
+          </div>
         </div>
       </nav>
     </div>
@@ -41,19 +43,15 @@
         тонкости Kanban и  весело
         проводить время</p>
         <div class="buttons">
-          <div class="button">
-            <a class="button-rules" href="rules.html">Ознакомиться с правилами</a>
-          </div>
-          <div class="button">
-            <a class="button-play" href="set-game.html">Начать игру</a>
-          </div>
+          <a class="button-rules" href="rules.html">Ознакомиться с правилами</a>
+          <a class="button-play" href="set-game.html">Начать игру</a>
         </div>
       </div>
       <div class="kanban-image">
         <img src="images/image.jpg" alt="first-image">
       </div>
 		</section>
-    <section class="about-us">
+    <section id="about" class="about-us">
       <h1>О нас вам не ничего знать не нужно!</h1>
       <div class="container">
         <div class="about-text">
@@ -87,7 +85,7 @@
   <footer id="footer" class="footer">
     <div class="container">
       <div class="copyright">
-        <p>GitHub</p>
+        <a href="https://github.com/EvgenyPetrashko/KanbanSimulator">GitHub</a>
       </div>
       <!-- <div class="share">
         <button type="word" name="share">share</button>

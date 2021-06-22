@@ -8,41 +8,63 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/set-game.css">
+  <link rel="stylesheet" href="css/master.css">
   <title>Document</title>
 </head>
 <body>
   <header id="header" class="main-header">
     <div class="container">
       <nav class="main-navigation">
-        <a class="logo" href="index.html"><img src="images/logo.svg" alt="Лого Канбана"></a>
+        <div class="button">
+          <a class="logo" href="index.html#header"><img src="images/logo.svg" alt="Лого Канбана"></a>
+        </div>
         <div class="navigation-list">
           <ul class="site-navigation">
-              <li class="navigation-item"><a href="about.html">О нас</a></li>
-              <li class="navigation-item"><a href="rules.html">Правила</a></li>
-              <li class="navigation-item"><a href="news.html">Статьи</a>
+            <li class="navigation-item"><a href="index.html#about">О нас</a></li>
+            <li class="navigation-item"><a class="selected" href="rules.html">Правила</a></li>
+            <li class="navigation-item"><a href="index.html#news">Статьи</a>
           </ul>
         </div>
         <div class="help-button">
-          <a class="button" href="mypage.html">
-            <img src="images/help.svg" alt="help">
-          </a>
+          <div class="button">
+            <a href=#><img src="images/help.svg" alt="help"></a>
+          </div>
         </div>
       </nav>
     </div>
 	</header>
-  <section id="first-row" class="first-row">
-    <div class="container">
-      <div class="information">
-        <h2>Настройки игры</h2>
-        <p>Перед тем, как начать игру мы советуем ознакомиться с основными <a href="rules.html">правилами</a></p>
-        <p>Для начала выберите сколько игроков может вместить одна команда</p>
+  <main>
+    <section id="first-row" class="first-row">
+      <div class="container">
+        <div class="information">
+          <h2>Настройки игры</h2>
+          <p>Перед тем, как начать игру мы советуем ознакомиться с основными правилами</p>
+          <p>Для начала выберите сколько игроков может вместить одна команда</p>
+          <div class="start">
+            <a href="board.html" alt="board">Начать игру</a>
+          </div>
+        </div>
+        <div class="form">
+          <form class="appointment-form" action="index.html" method="post">
+						<p class="appointment-item">
+					 	 <label for="your-name">Ваше имя</label>
+						 <input id="your-name" type="text" name="your name" value="" placeholder="Магогуша">
+					  </p>
+				 	 <p class="appointment-item">
+						 <label for="team-name">имя команды</label>
+						 <input id="team-name" type="text" name="team name" value="" placeholder="Агуша">
+					 </p>
+           <p class="appointment-item">
+						 <label for="player-amount">количество игроков</label>
+						 <input id="player-amount" type="number" name="team name" value="" placeholder="3">
+					 </p>
+           <button type="button" class="button" name="button">пригласить</button>
+				  </form>
+        </div>
       </div>
-      <div class="start">
-        <a href="board.html" alt="board">Начать игру</a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
+
   <footer id="footer" class="footer">
     <div class="container">
       <div class="copyright">

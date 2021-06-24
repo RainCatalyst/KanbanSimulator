@@ -7,19 +7,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/board.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/master.css">
+
   <title>Document</title>
 </head>
 <body>
-  <header id="header" class="main-header">
+  <header class="border-header">
     <div class="container">
-      <nav class="main-navigation">
-        <a class="logo" href="index.html"><img src="images/logo.svg" alt="Лого Канбана"></a>
-        <div class="help-button">
-          <a class="button" href="mypage.html">
-            <img src="images/help.svg" alt="help">
-          </a>
-        </div>
+      <nav class="board-navigation">
+          <div class="button">
+            <a class="logo" href="index.html"><img src="images/logo.svg" alt="Лого Канбана"></a>
+          </div>
+          <div class="help-button">
+            <a class="button" href=#>
+              <img src="images/help.svg" alt="help">
+            </a>
+          </div>
       </nav>
     </div>
 	</header>
@@ -29,10 +35,11 @@
       <div class="game-navigator">
         <div class="container">
           <div class="game-list">
-            <div class="buttons">
 
               <div class="add-card">
-                <img src="images/board/add-story.png" alt="card">
+                <div class="buttom">
+                  <img src="images/board/add-story.png" alt="card">
+                </div>
               </div>
               <div class="play-buttons">
                 <div class="buttom">
@@ -44,23 +51,29 @@
               </div>
 
               <div class="dices">
-                <div class="dice">
-                  <img id="red-dice" src="images/board/red-dice.png" alt="dice">
-                  <label for="red-dice">2x</label>
+                <div class="buttom">
+                  <div class="dice">
+                    <img id="red-dice" src="images/board/red-dice.png" alt="dice">
+                    <label for="red-dice" class="red-dice">2x</label>
+                  </div>
                 </div>
-                <div class="dice">
-                  <img id="blue-dice" src="images/board/blue-dice.png" alt="dice">
-                  <label for="blue-dice">3x</label>
+                <div class="buttom">
+                  <div class="dice">
+                    <img id="blue-dice" src="images/board/blue-dice.png" alt="dice">
+                    <label for="blue-dice" class="blue-dice">3x</label>
+                  </div>
                 </div>
-                <div class="dice">
-                  <img id="green-dice" src="images/board/green-dice.png" alt="dice">
-                  <label for="green-dice">2x</label>
+                <div class="buttom">
+                  <div class="dice">
+                    <img id="green-dice" src="images/board/green-dice.png" alt="dice">
+                    <label for="green-dice" class="green-dice">2x</label>
+                  </div>
                 </div>
               </div>
               <div class="game-state">
                 <p>23 of 44 day</p>
               </div>
-            </div>
+
           </div>
         </div>
       </div>
@@ -73,12 +86,16 @@
         <div class="table1">
           <div class="text-state">
             <h5 class="active">active</h5>
+            <div class="vector">
+            </div>
             <h5 class="finished">finished</h5>
           </div>
         </div>
         <div class="table2">
           <div class="text-state">
             <h5 class="active">active</h5>
+            <div class="vector">
+            </div>
             <h5 class="finished">finished</h5>
           </div>
         </div>

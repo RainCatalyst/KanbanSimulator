@@ -1,57 +1,132 @@
-{% extends 'board/base.html' %}
-{% load static %}
-{% block title %}Main Page{% endblock %}
-{% block content %}
-    <main>
-        <section class="first-row">
-            <div class="offer-zone">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    {% block styles %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'board/css/style.css' %}">
+    {% endblock %}
+</head>
+<body class="bg-light">
+
+    <div class="container-fluid bg-dark">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-0 border-bottom">
+            <a href="{% url 'board:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none">
+            <span class="fs-4">Kanban Simulator</span>
+            </a>
+
+            <div class="d-grid gap-2 d-md-block">
+                <a class="btn btn-outline-primary" href="{% url 'board:home' %}" role="button">Домой</a>
+                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#RulesModal">Правила игры</button>
+            </div>
+
+            <div class="modal fade" id="RulesModal" tabindex="-1" aria-labelledby="RulesModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="RulesModalLabel">Правила игры</h5>
+                        </div>
+                        <div class="modal-body">
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+    </div>
+
+
+    <div class="container pt-5">
+        <div class="row" >
+            <div class="col-7 fw-light text-center pt-5">
                 <h1>KaBam - новый удобный канбан симулятор.</h1>
-                <p>Мы даем возможность собираться
-                    в команды, соревнаться, узнавать
-                    тонкости Kanban и весело
-                    проводить время</p>
-                <div class="buttons">
-                    <div class="button">
-                        <a class="button-rules" href="{% url 'board:rules' %}">Ознакомиться с правилами</a>
-                    </div>
-                    <div class="button">
-                        <a class="button-play" href="{% url 'board:createRoom' %}">Начать игру</a>
-                    </div>
+                <p class="mx-5 mt-5 mb-3">Мы даем возможность собираться в команды, соревнаться, узнавать тонкости Kanban и весело проводить время</p>
+
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#RulesModal">Ознакомиться с правилами</button>
+                <a class="btn btn-success" href="{% url 'board:createRoom' %}" role="button">Начать игру</a>
+            </div>
+
+            <div class="col-5 d-flex align-items-center pt-5">
+                <div class="card">
+                    <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
                 </div>
+
             </div>
-            <div class="kanban-image">
-                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
-            </div>
-        </section>
-        <section class="about-us">
-            <h1>О нас вам не ничего знать не нужно!</h1>
-            <div class="container">
-                <div class="about-text">
-                    <p>Вместо этого мы расскажем о нашем приложении.</p>
-                    <p>Так, я вот сейчас сел и подумал: а что же писать?
-                        Вроде мы уже упомянули, что наша игра нескучная,
-                        ее можно проходить в компании друзей и игровая
-                        сессия в среднем длиться 10-15 минут, также что
-                        она познавательная, игра пытается симулировать
-                        все возможные ситуации, с которыми сталкивается
-                        обычный человек при работе с Kanban ом. Хм,
-                        что-то я забыл сказать. А, да! Точно!</p>
-                    <p>Соревновательный режим. Теперь команды могут
-                        соревноваться на время, и кто наберет наибольшее
-                        количество очков, тот победил. Победители будут
-                        записаны в почетной доске победителей, которая в
-                        скором времени будет висеть на главной странице
-                        сайта.</p>
-                </div>
-                <div class="leadership">
-                    <img src="{% static 'board/images/leaders.jpg' %}" alt="leaders">
-                </div>
-            </div>
-        </section>
-        <section id="news" class="news">
-            <div class="container">
-                <h1>Статей пока нет</h1>
-            </div>
-        </section>
-    </main>
-{% endblock %}
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -167,7 +167,7 @@ def create_room(request):
 
 def join_room(request, room_id):
     room = Room.objects.get(pk=room_id)
-    team = Team.objects.filter(game=room)
+    team = Team.objects.get(game=room)
     new_player = Player(team=team)
     new_player.save()
     return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))

@@ -75,7 +75,7 @@ function moveCharacter(role, card_id){
             "card_id": card_id};
     $.ajax({
         type: "POST",
-        url: "{% url 'board:movePlayer' %}",
+        url: "move_player",
         data: data,
         success: function(response){
             current_version += 1;

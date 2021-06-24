@@ -1,0 +1,16 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title %}Waiting Room{% endblock %}
+{% block content %}
+    {% if player.creator %}
+        <div class="button">
+            <a class="button-play" href="{% url 'board:startGame' player.pk %}">Начать игру</a>
+            <p>Share this URL to play with your friends:</p>
+            <p>{% url 'board:join' player.team.game.pk %}</p>
+        </div>
+    {% else %}
+        <a class="button-play" href="{% url 'board:joinGame' player.pk %}">Присоединиться</a>
+    {% endif %}
+{% endblock %}
+

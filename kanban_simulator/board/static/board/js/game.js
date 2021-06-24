@@ -5,7 +5,7 @@ var current_day = 0;
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
-        url: "{% url 'board:populateBacklog' %}",
+        url: "populate_backlog",
         // data: {room: "0", team: team_id},
         data: {team: team_id},
         success: function (response){
@@ -25,6 +25,79 @@ function backLogInitialPopulation(){
     }});
 }
 
+
+// in process...
+function start_new_day(){
+    var data = {"team": team_id};
+
+    var anl_comp = 0;
+    var dev_comp = 0;
+    var test_comp = 0;
+
+    var index = 0;
+    for (var j = 0; j < players_list.length; j++){
+        var character_position = players_list[j];
+        if (character_position != -1){
+            var card_id = getIndexOfArrayCardById(character_position);
+            var first_empty_row_anl_comp = 0;
+            var first_empty_row_dev_comp = 0;
+            var first_empty_row_test_comp = 0;
+            if (card_list[card_id]["dev_completed"] >= card_list[card_id]["dev_remaining"]){
+                card_list[card_id]["test_completed"] += current_effort[index];
+                if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"])
+                    test_comp += 1;
+                    card_list[card_id]["ready_day"] = current_day;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_test_comp;
+                    first_empty_row_test_comp += 1;
+            }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
+                card_list[card_id]["dev_completed"] += current_effort[index];
+                if (card_list[card_id]["dev_completed"] >= card_list[card_id]["dev_remaining"])
+                    dev_comp += 1;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_dev_comp;
+                    first_empty_row_dev_comp += 1;
+            }else{
+                card_list[card_id]["analytic_completed"] += current_effort[index];
+                if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"])
+                    anl_comp += 1;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_anl_comp;
+                    first_empty_row_anl_comp += 1;
+            }
+            index += 1;
+        }
+    }
+
+    for (card in card_list){
+        card["age"] += 1;
+    }
+
+    for (var k = 0; k < card_list.length; k ++){
+        card_list[k]["age"] += 1;
+    }
+
+     data["current_day"] = current_day;
+     data["anl_completed"] = anl_comp;
+     data["dev_completed"] = dev_comp;
+     data["test_completed"] = test_comp;
+     data["cards"] = card_list;
+     console.log(data);
+
+     $.ajax({
+        type: "POST",
+        url: "start_day",
+        data: data,
+        success: function(response){
+
+
+        }
+     });
+
+     current_day ++;
+
+}
+
 $(function() {
     // description of droppable property of the header(initial place for characters)
     updateCharacterConfiguration();
@@ -36,7 +109,7 @@ $(function() {
 function performVersionCheck(){
     $.ajax({
         type: "POST",
-        url: "{% url 'board:VersionCheck' %}",
+        url: "version_check",
         data: {'team_id': team_id,
                 'version': current_version},
         success: function(response){

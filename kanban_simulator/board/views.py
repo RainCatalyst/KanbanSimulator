@@ -45,7 +45,7 @@ def populateBackLog(request):
         request_team = request.POST.get('team', 0)
 
         # testing purposes
-        # initial_conditions(request_team)
+        initial_conditions(request_team)
 
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                               'analytic_remaining', 'analytic_completed',
@@ -64,23 +64,28 @@ def populateBackLog(request):
 @csrf_exempt
 def start_new_day(request):
     if request.method == 'POST':
-        day_num = request.POST.get('day', 0)
+        day_num = request.POST.get('current_day', 0)
         team_num = request.POST.get('team', 0)
-        team = Team.objects.filter(team=team_num)
-        completed_cards = request.POST.get('completed_cards', [])
-        anl = 0
-        dev = 0
-        test = 0
-        for card in completed_cards:
-            if card["dep"] == "analytic":
-                anl += 1
-            elif card["dep"] == "devop":
-                dev += 1
-            else:
-                test += 1
+        team = Team.objects.get(pk=team_num)
+        cards = request.POST.get('cards', [])
+        anl_comp = request.POST.get('anl_completed', 0)
+        dev_comp = request.POST.get('dev_completed', 0)
+        test_comp = request.POST.get('test_completed', 0)
 
-        day = Day(age=day_num, team=team, anl_completed_tasks=anl, dev_completed_tasks=dev, test_completed_tasks=test)
+        for card in cards:
+            Card.objects.filter(pk=card["pk"]).update(age=card["age"], ready_day=card["ready_day"],
+                                                      analytic_completed=card["analytic_completed"],
+                                                      dev_completed=card["dev_completed"],
+                                                      test_completed=card["test_completed"],
+                                                      row_number=card["row_number"],
+                                                      column_number=card["column_number"])
+
+        day = Day(age=day_num, team=team, anl_completed_tasks=anl_comp, dev_completed_tasks=dev_comp,
+                  test_completed_tasks=test_comp)
         day.save()
+        team.version += 1
+        team.save()
+        return JsonResponse({"Success": ""}, status=200)
 
 
 # function which generates random efforts for the characters
@@ -208,7 +213,7 @@ def start_game(request, player_id):
     for i in range(CARDS_IN_GAME):
         number_found = False
         while not number_found:
-            j = random.randint(0, len(user_stories)-1)
+            j = random.randint(0, len(user_stories) - 1)
             if j in chosen_indexes:
                 continue
 

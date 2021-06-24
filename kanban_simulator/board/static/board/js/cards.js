@@ -12,38 +12,6 @@ function createCardTemplate(card_model){
     return card_element;
 }
 
-// in process...
-function start_new_day(){
-    // effort calculation + completing the task
-    // ...
-
-    current_day ++;
-    var data = {"room": 0, "team": 1};
-    var anl_comp = 0;
-    var dev_comp = 0;
-    var test_comp = 0;
-        for (card in card_list){
-            if (card["ready_day"] == current_day){
-                if (card["analytic_remaining"] == card["analytic_completed"]
-                && card["develop_remaining"] != card["develop_completed"]){
-                    anl_comp += 1;
-                    continue;
-                }
-
-                if (card["develop_remaining"] == card["develop_completed"]
-                && card["test_remaining"] != card["test_completed"]){
-                    dev_comp += 1;
-                    continue;
-                }
-
-                if (card["test_remaining"] == card["test_completed"]){
-                    test_comp += 1;
-                    continue;
-                }
-            }
-        }
-}
-
 // droppable behavior for sub_containers
 $(function() {
     $('.droppable_anl_proc').droppable({
@@ -101,7 +69,7 @@ function moveCard(column_number, row_number, id){
             "team_id": team_id};
     $.ajax({
         type: "POST",
-        url: "{% url 'board:moveCard' %}",
+        url: "move_card",
         data: data,
         success: function(response){
             current_version += 1;
@@ -177,6 +145,14 @@ function changePositionInList(id, column_number, row_number){
 function getIdByCardModel(card){
     return card.attr("id").substring(card.attr("id").lastIndexOf('_') + 1);
 
+}
+
+function getIndexOfArrayCardById(id){
+    for (var k = 0; k < card_list.length; k++){
+        if (card_list[k]["pk"] == id)
+            return k;
+    }
+    return -1;
 }
 
 function test(){

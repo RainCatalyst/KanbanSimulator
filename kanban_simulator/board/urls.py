@@ -7,6 +7,7 @@ urlpatterns = [
     path('about', views.index, name="about"),
     path('board/<int:player_id>', views.board, name="board"),
     path('board/populate_backlog', views.populateBackLog, name="populateBackLog"),
+    path('board/start_day', views.start_new_day, name="startDay"),
     path('board/move_card', views.move_card, name="moveCard"),
     path('board/move_player', views.move_player, name="movePlayer"),
     path('board/version_check', views.version_check, name="versionCheck"),

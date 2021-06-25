@@ -26,7 +26,7 @@ def board(request, player_id):
 def initial_conditions(team_id):
     team = Team.objects.get(pk=team_id)
     Card.objects.filter(team=team).update(column_number=0, row_number=0, analytic_completed=0,
-                                          develop_completed=0, test_completed=0, ready_day=15)
+                                          develop_completed=0, test_completed=0, ready_day=-1, age=0)
 
     Character.objects.filter(team=team).delete()
     for i in range(7):
@@ -34,6 +34,7 @@ def initial_conditions(team_id):
         character.save()
 
     team.version = 0
+    team.dayNum = 0
     team.save()
 
 
@@ -67,25 +68,32 @@ def start_new_day(request):
         day_num = request.POST.get('current_day', 0)
         team_num = request.POST.get('team', 0)
         team = Team.objects.get(pk=team_num)
-        cards = request.POST.get('cards', [])
-        anl_comp = request.POST.get('anl_completed', 0)
-        dev_comp = request.POST.get('dev_completed', 0)
-        test_comp = request.POST.get('test_completed', 0)
+        if int(day_num) == int(team.dayNum):
+            cards = json.loads(request.POST.get('cards', []))
+            characters = request.POST.getlist("characters[]", [])
+            anl_comp = request.POST.get('anl_completed', 0)
+            dev_comp = request.POST.get('dev_completed', 0)
+            test_comp = request.POST.get('test_completed', 0)
 
-        for card in cards:
-            Card.objects.filter(pk=card["pk"]).update(age=card["age"], ready_day=card["ready_day"],
-                                                      analytic_completed=card["analytic_completed"],
-                                                      dev_completed=card["dev_completed"],
-                                                      test_completed=card["test_completed"],
-                                                      row_number=card["row_number"],
-                                                      column_number=card["column_number"])
+            for card in cards:
+                print("Column_number", card["column_number"])
+                Card.objects.filter(pk=card["pk"]).update(age=card["age"], ready_day=card["ready_day"],
+                                                          analytic_completed=card["analytic_completed"],
+                                                          develop_completed=card["develop_completed"],
+                                                          test_completed=card["test_completed"],
+                                                          row_number=card["row_number"],
+                                                          column_number=card["column_number"])
+            print("Character positions", characters)
+            for i in range(len(characters)):
+                Character.objects.filter(team=team, role=i).update(card_id=characters[i])
 
-        day = Day(age=day_num, team=team, anl_completed_tasks=anl_comp, dev_completed_tasks=dev_comp,
-                  test_completed_tasks=test_comp)
-        day.save()
-        team.version += 1
-        team.save()
-        return JsonResponse({"Success": ""}, status=200)
+            day = Day(age=int(day_num) + 1, team=team, anl_completed_tasks=anl_comp, dev_completed_tasks=dev_comp,
+                      test_completed_tasks=test_comp)
+            day.save()
+            team.version += 1
+            team.dayNum = int(day_num) + 1
+            team.save()
+            return JsonResponse({"day_num": int(day_num) + 1, "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
 
 
 # function which generates random efforts for the characters
@@ -172,7 +180,7 @@ def create_room(request):
 
 def join_room(request, room_id):
     room = Room.objects.get(pk=room_id)
-    team = Team.objects.filter(game=room)
+    team = Team.objects.get(game=room)
     new_player = Player(team=team)
     new_player.save()
     return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))

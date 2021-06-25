@@ -82,7 +82,7 @@ class Card(models.Model):
     # Expedite factor
     is_expedite = models.BooleanField(default=False)
     # Day when card was completed (used for statistics, particularly for Lead Time Distribution Chart)
-    ready_day = models.IntegerField(default=15)
+    ready_day = models.IntegerField(default=-1)
 
     # Amount of remaining and completed points in the Analytic, Devop, Test lines respectively
     analytic_remaining = models.IntegerField()

@@ -1,38 +1,9 @@
-.kanban_card{
-    margin: 25px;
-    width: 80%;
+.players{
+    z-index: 100;
+    padding: 3px;
 }
 
-.containers{
-    width: 25%;
-    height: 100%;
-    float: left;
-}
-
-.sub_containers{
-    width: 50%;
-    height: 100%;
-    float: left;
-}
-
-#board_container{
-    width: 100%;
-    height: 1000px;
-}
-
-
-#devop_container{
-    background-color: blue;
-}
-
-#analytic_container{
-    background-color: red;
-}
-
-#test_container{
-    background-color: green;
-}
-
+/*
 .players{
     width: 50px;
     height: 50px;
@@ -41,42 +12,56 @@
     border: 2px solid black;
     z-index: 100;
 }
-
 .anl_player{
     background-color: red;
 }
-
 .dev_player{
     background-color: blue;
 }
-
 .test_player{
     background-color: green;
 }
+*/
 
-#header_container{
-    height: 100px;
-    width: 100%;
+.kanban_card{
+    margin: 25px;
+    width: 80%;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    height:100vh;
-    margin: 0;
-    padding: 0;
+/*.containers{*/
+/*    width: 25%;*/
+/*    height: 100%;*/
+/*    float: left;*/
+/*}*/
 
-}
+/*.sub_containers{*/
+/*    width: 50%;*/
+/*    height: 100%;*/
+/*    float: left;*/
+/*}*/
 
-#temp {
-  flex: 1;
-    box-shadow: inset 0px 4px 10px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1);
-}
+/*#board_container{*/
+/*    width: 100%;*/
+/*    height: 1000px;*/
+/*}*/
 
-#temp::-webkit-scrollbar {
-  width: 0;
-}
 
-#temp2 {
-  flex: 1;
-}
+/*#devop_container{*/
+/*    background-color: blue;*/
+/*}*/
+
+/*#analytic_container{*/
+/*    background-color: red;*/
+/*}*/
+
+/*#test_container{*/
+/*    background-color: green;*/
+/*}*/
+
+
+
+
+/*#header_container{*/
+/*    height: 100px;*/
+/*    width: 100%;*/
+/*}*/

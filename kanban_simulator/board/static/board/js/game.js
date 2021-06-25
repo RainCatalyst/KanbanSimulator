@@ -1,18 +1,22 @@
 var current_version = 0;
 var team_id = 1;
+var current_day = 0;
 
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
         url: "populate_backlog",
-        data: {room: "0", team: "1"},
+        // data: {room: "0", team: team_id},
+        data: {team: team_id},
         success: function (response){
             var cards = JSON.parse(response["cards"]);
-            console.log(cards);
             current_effort = JSON.parse(response["team_effort"]);
-            current_day = 0;
             for (var i = 0; i < cards.length; i++){
-                addCardToColumn(0, i, cards[i]);
+                var card_element = createCardTemplate(cards[i]);
+                document.getElementById("backlog_container").innerHTML += card_element;
+                cards[i]['row_number'] = i;
+                cards[i]['column_number'] = 0;
+                card_list.push(cards[i]);
             }
 
             $('.draggable').draggable({revert: 'invalid'});
@@ -21,18 +25,82 @@ function backLogInitialPopulation(){
     }});
 }
 
+
+// in process...
+function start_new_day(){
+    var data = {"team": team_id};
+
+    var anl_comp = 0;
+    var dev_comp = 0;
+    var test_comp = 0;
+
+    var index = 0;
+    for (var j = 0; j < players_list.length; j++){
+        var character_position = players_list[j];
+        if (character_position != -1){
+            var card_id = getIndexOfArrayCardById(character_position);
+            var first_empty_row_anl_comp = 0;
+            var first_empty_row_dev_comp = 0;
+            var first_empty_row_test_comp = 0;
+            if (card_list[card_id]["dev_completed"] >= card_list[card_id]["dev_remaining"]){
+                card_list[card_id]["test_completed"] += current_effort[index];
+                if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"])
+                    test_comp += 1;
+                    card_list[card_id]["ready_day"] = current_day;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_test_comp;
+                    first_empty_row_test_comp += 1;
+            }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
+                card_list[card_id]["dev_completed"] += current_effort[index];
+                if (card_list[card_id]["dev_completed"] >= card_list[card_id]["dev_remaining"])
+                    dev_comp += 1;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_dev_comp;
+                    first_empty_row_dev_comp += 1;
+            }else{
+                card_list[card_id]["analytic_completed"] += current_effort[index];
+                if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"])
+                    anl_comp += 1;
+                    card_list[card_id]["column_number"] += 1;
+                    card_list[card_id]["row_number"] = first_empty_row_anl_comp;
+                    first_empty_row_anl_comp += 1;
+            }
+            index += 1;
+        }
+    }
+
+    for (card in card_list){
+        card["age"] += 1;
+    }
+
+    for (var k = 0; k < card_list.length; k ++){
+        card_list[k]["age"] += 1;
+    }
+
+     data["current_day"] = current_day;
+     data["anl_completed"] = anl_comp;
+     data["dev_completed"] = dev_comp;
+     data["test_completed"] = test_comp;
+     data["cards"] = card_list;
+     console.log(data);
+
+     $.ajax({
+        type: "POST",
+        url: "start_day",
+        data: data,
+        success: function(response){
+
+
+        }
+     });
+
+     current_day ++;
+
+}
+
 $(function() {
     // description of droppable property of the header(initial place for characters)
-    $("#header_container").droppable({
-        accept: '.players',
-        drop: function(event, ui){
-            $(this).append(ui.draggable[0]);
-            var child = $(this).children().last();
-            var role = characterDistinguish(child);
-            console.log("Role: " + role);
-            moveCharacter(role, -1);
-        }
-    });
+    updateCharacterConfiguration();
 
     performVersionCheck();
 });
@@ -47,80 +115,55 @@ function performVersionCheck(){
         success: function(response){
             var syn = JSON.parse(response["SYN"]);
             if (!syn){
-            var cards = JSON.parse(response["cards"]);
-            var characters = JSON.parse(response["characters"]);
-            var board_info = JSON.parse(response["board_info"]);
+                var cards = JSON.parse(response["cards"]);
+                var characters = JSON.parse(response["characters"]);
+                var board_info = JSON.parse(response["board_info"]);
 
-            current_version = board_info["version"];
+                current_version = board_info["version"];
 
-            removeAllChildNodes('backlog_container');
-            removeAllChildNodes('analytic_in_process_container');
-            removeAllChildNodes('analytic_completed_container');
-            removeAllChildNodes('devop_in_process_container');
-            removeAllChildNodes('devop_completed_container');
-            removeAllChildNodes('test_in_process_container');
-            removeAllChildNodes('test_completed_container');
+                removeAllChildNodes('backlog_container');
+                removeAllChildNodes('analytic_in_process_container');
+                removeAllChildNodes('analytic_completed_container');
+                removeAllChildNodes('devop_in_process_container');
+                removeAllChildNodes('devop_completed_container');
+                removeAllChildNodes('test_in_process_container');
+                removeAllChildNodes('test_completed_container');
+                removeAllChildNodes('header_container');
 
-            cards.sort(compare_cards);
+                cards = cards.sort(compare_cards);
 
-            card_list = cards;
+                card_list = cards;
 
-            // card_positioning
-            for (var i = 0; i < cards.length; i++){
-                card = cards[i];
+                // card_positioning
+                for (var i = 0; i < cards.length; i++){
+                    card = cards[i];
 
-                var card_column_number = card["column_number"];
-                if (card_column_number == 0){
-                    addCardToParent('backlog_container', card);
-                }else if (card_column_number == 1){
-                    addCardToParent('analytic_in_process_container', card);
-                }else if (card_column_number == 2){
-                    addCardToParent('analytic_completed_container', card);
-                }else if (card_column_number == 3){
-                    addCardToParent('devop_in_process_container', card);
-                }else if (card_column_number == 4){
-                    addCardToParent('devop_completed_container', card);
-                }else if (card_column_number == 5){
-                    addCardToParent('test_in_process_container', card);
-                }else if (card_column_number == 6){
-                    addCardToParent('test_completed_container', card);
+                    var card_column_number = card["column_number"];
+                    if (card_column_number == 0){
+                        addCardToParent('backlog_container', card);
+                    }else if (card_column_number == 1){
+                        addCardToParent('analytic_in_process_container', card);
+                    }else if (card_column_number == 2){
+                        addCardToParent('analytic_completed_container', card);
+                    }else if (card_column_number == 3){
+                        addCardToParent('devop_in_process_container', card);
+                    }else if (card_column_number == 4){
+                        addCardToParent('devop_completed_container', card);
+                    }else if (card_column_number == 5){
+                        addCardToParent('test_in_process_container', card);
+                    }else if (card_column_number == 6){
+                        addCardToParent('test_completed_container', card);
+                    }
                 }
-            }
 
-            // character_positioning
-            for (character in characters){
-                var character_template;
-                switch (character["role"]){
-                    case 0:
-                        character_template = $('#anl_player1');
-                        break;
-                    case 1:
-                        character_template = $('#anl_player2');
-                        break;
-                    case 2:
-                       character_template = $('#dev_player1');
-                       break;
-                    case 3:
-                       character_template = $('#dev_player2');
-                       break;
-                    case 4:
-                       character_template = $('#dev_player3');
-                       break;
-                    case 5:
-                       character_template = $('#test_player1');
-                       break;
-                    case 6:
-                       character_template = $('#test_player2');
-                       break;
+                // character_positioning
+                for (var j = 0; j < characters.length; j ++){
+                    var character_template = createCharacterTemplate(characters[j]["role"], characters[j]["card_id"])
+                    placeCharacterAtSpecifiedCard(character_template, characters[j]["card_id"]);
                 }
-                placeCharacterAtSpecifiedCard(character_template, character["card_id"]);
+                updateCharacterConfiguration();
             }
-
-
-            }
-
-
-            setTimeout(performVersionCheck, 5000);
+            setTimeout(performVersionCheck, 4000);
         }
     });
 }
@@ -140,7 +183,7 @@ function addCardToParent(parent, card){
 // needed for comparing two cards (the first one - smallest row, the last one - the biggest row)
 function compare_cards(card_a, card_b) {
   if (card_a["row_number"] > card_b["row_number"]) return 1;
-  if (card_a["row_number"] > card_b["row_number"]) return -1;
+  else if (card_a["row_number"] < card_b["row_number"]) return -1;
 
   return 0;
 }

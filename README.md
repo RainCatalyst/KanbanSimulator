@@ -11,7 +11,7 @@ pip install django
 
 To start the local server:
 ```
-python manage.py startserver
+python manage.py runserver
 ```
 ## Miggrations
 To make migration file:

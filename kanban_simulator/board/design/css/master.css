@@ -1,0 +1,555 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: 000;
+  font-size: 16px;
+
+  background: linear-gradient(161.63deg, #8EF8FF 8.27%, #00B2FF 88.46%);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+ul, li {
+  display: block;
+}
+
+.site-navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-item {
+  padding: 0;
+  margin: 0;
+  margin-right: 50px;
+}
+
+.navigation-item  a {
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 17px;
+
+  font-family: Montserrat;
+
+  color: black;
+}
+
+
+.help-button {
+  margin-left: 30%;
+}
+
+.help-button {
+  display: block;
+  vertical-align: middle;
+}
+
+.main-navigation {
+  padding-top: 30px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.navigation-list {
+  margin-left: 20%;
+}
+
+.navigation-item:focus,
+.navigation-item:hover {
+  border-radius: 5px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.14), 0 6px 20px 0 rgba(0,0,0,0.13);
+}
+
+.container {
+  width: 1170px;
+  margin: 0 auto;
+}
+
+.first-row {
+  margin-top: 140px;
+  margin-left: 165px;
+  padding: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.first-row h1 {
+  width: 416px;
+  height: 88px;
+
+  text-transform: none;
+  text-align: center;
+  font-family: Montserrat;
+
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 44px;
+}
+
+.first-row p {
+  margin-top: 24px;
+  width: 410px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.buttons {
+  margin-top: 24px;
+  padding-left: 30px;
+
+  display: flex;
+  align-items: center;
+}
+
+.first-row a {
+  margin-left: 10px;
+  padding: 5px;
+  width: 150px;
+  height: 50px;
+
+  display: block;
+
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+
+  color: white;
+
+  background: linear-gradient(106.61deg, #FF9C65 20.8%, rgba(255, 76, 19, 0.71) 113.78%, rgba(255, 85, 31, 0.29) 113.79%);
+  box-shadow: 0px 8px 6px rgba(255, 112, 32, 0.35);
+  border-radius: 5px;
+}
+
+.first-row a:focus,
+.first-row a:hover {
+  border-radius: 5px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.14), 0 6px 20px 0 rgba(0,0,0,0.13);
+}
+
+
+.kanban-image {
+  margin-left: 156px;
+}
+
+.about-us {
+  margin-top: 203px;
+
+  background: #DCFAFE;
+}
+
+.about-us h1 {
+  padding-top: 40px;
+
+  text-align: center;
+}
+
+.about-us .container {
+  margin-top: 63px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.about-text {
+  /* height: 437px; */
+}
+
+.about-text p {
+  width: 500px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 23px;
+
+  color: #000000;
+}
+
+.leadership {
+  margin-left: 102px;
+  margin-bottom: 102px;
+}
+
+.news h1{
+  margin-top: 155px;
+  color: #fff;
+
+  font-size: 64px;
+
+  text-align: center;
+}
+
+.button a {
+  display: block;
+  padding: 5px;
+  vertical-align: middle;
+  color: #ffffff;
+}
+
+.button:focus,
+.button:hover {
+  border-radius: 5px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.footer {
+  margin-top: 130px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.footer .container {
+  height: 50px;
+  display: flex;
+}
+
+.copyright {
+  margin-top: 20px;
+}
+
+.copyright a{
+  margin-left: 10%;
+
+  text-decoration: none;
+  color: #fff;
+}
+
+/* additional css code for rules.html will start here */
+
+.rules {
+  margin-top: 100px;
+  width: inherit;
+}
+
+.image-rule {
+  /* vertical-align: middle;
+  align-items: center; */
+}
+
+/* additional css code for set-game page */
+
+.first-row .container {
+  display: flex;
+
+}
+
+.first-row h2 {
+  width: 416px;
+  height: 44px;
+
+  text-transform: none;
+  text-align: center;
+  font-family: Montserrat;
+
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 44px;
+}
+
+.information,
+.form {
+  padding-left: 20px;
+}
+
+.form {
+  margin-bottom: 120px;
+  border: 5px solid #000000;
+}
+
+.form p {
+  text-align: left;
+}
+
+.form button {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  justify-content: center;
+
+  width: 150px;
+  height: 30px;
+
+  display: block;
+
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+
+  color: white;
+
+  background: rgba(0, 0, 0, 0.7);
+  /* box-shadow: 0px 8px 6px rgba(0, 0, 0, 0.35); */
+  border-radius: 5px;
+}
+
+.start {
+  margin-top: 30px;
+}
+
+.start a{
+  margin-left: 30%;
+  padding: 5px;
+  width: 150px;
+  height: 30px;
+
+  display: block;
+
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+
+  color: white;
+
+  background: linear-gradient(106.61deg, #FF9C65 20.8%, rgba(255, 76, 19, 0.71) 113.78%, rgba(255, 85, 31, 0.29) 113.79%);
+  box-shadow: 0px 8px 6px rgba(255, 112, 32, 0.35);
+  border-radius: 5px;
+}
+
+/* css code for board.html, yes, it starts here */
+
+.border-header {
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.board-navigation {
+  display: flex;
+  vertical-align: middle;
+}
+
+.board-navigation .help-button {
+  margin-left: 85%;
+}
+
+.game-navigator {
+  margin-left: 350px;
+  display: flex;
+
+  width: 800px;
+  height: 60px;
+
+  background: #DCFAFE;
+  border-radius: 10px;
+}
+
+.game-list {
+  padding: 5px;
+  display: flex;
+  /* align-items: center; */
+}
+
+.add-card {
+  padding: 7px;
+  padding-left: 14px;
+}
+
+.play-buttons {
+  margin-left: 30px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+
+  width: 60px;
+  height: 31px;
+}
+
+.buttom {
+  display: block;
+  vertical-align: middle;
+}
+
+.buttom:focus,
+.buttom:hover {
+  border-radius: 5px;
+  box-shadow: 0 0px 16px 20px rgba(255,255,255,0.2), 0 0px 20px 20px rgba(255,255,255,0.19);
+}
+
+.dices {
+  display: flex;
+  justify-content: space-between;
+
+  margin-left: 122px;
+
+  width: 140px;
+  height: 60px;
+}
+
+.dices label {
+  font-weight: bold;
+}
+
+.dice {
+  width: 30px;
+  height: 30px;
+}
+
+.red-dice {
+  color: #FF6A3C;
+}
+
+.blue-dice {
+  color: #001AFF;
+}
+
+.green-dice {
+  color: #258D00;
+}
+
+.game-state {
+  margin-left: 20%;
+
+  font-weight: bold;
+}
+
+.columns {
+  margin-top: 40px;
+}
+
+.columns .container {
+  margin-left: 280px;
+  display: flex;
+  justify-content: space-between;
+
+  width: 916px;
+  height: 430px;
+}
+
+.backlog {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table1 {
+  width: 260px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table1 .vector {
+    /* position: absolute; */
+
+    width: 0px;
+    height: 430px;
+    left: 130px;
+    top: 28px;
+
+    border: 1px solid #00B2FF;
+}
+
+.table1 h5 {
+  color: #FF6A3C;
+}
+
+.table2 {
+  width: 260px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table2 .vector {
+  width: 0px;
+  height: 430px;
+  left: 130px;
+  top: 28px;
+
+  border: 1px solid #00B2FF;
+}
+
+.table2 h5 {
+  color: #001AFF;
+}
+
+.table3 {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.table3 h5 {
+  color: #258D00;
+}
+
+.done {
+  width: 120px;
+  height: 430px;
+
+  background: #EDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.columns h5 {
+  width: 65px;
+  height: 21px;
+
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+
+  text-align: center;
+}
+
+.text-state {
+  width: 240px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.columns .active{
+  margin-left: 30px;
+}
+
+/* .columns .finished{
+  margin-left: 65px;
+} */
+
+.footer {
+  margin-top: 261px;
+
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.footer .container{
+  display: flex;
+}
+
+.copyright {
+  margin-left: 100px;
+
+  color: #fff;
+}

@@ -4,8 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Room(models.Model):
-    # number of people in particular the game
-    people = models.IntegerField()
+    ready = models.BooleanField(default=False)
 
 
 class Team(models.Model):
@@ -19,9 +18,9 @@ class Team(models.Model):
     dayNum = models.IntegerField(default=1)
 
     # WIP limits for Analytics, Devops, Testers respectively
-    wip1 = models.IntegerField(name='wip_limit1')
-    wip2 = models.IntegerField(name='wip_limit2')
-    wip3 = models.IntegerField(name='wip_limit3')
+    wip1 = models.IntegerField(name='wip_limit1', null=True, blank=True)
+    wip2 = models.IntegerField(name='wip_limit2', null=True, blank=True)
+    wip3 = models.IntegerField(name='wip_limit3', null=True, blank=True)
 
 
 # Primary usage - statistics (graph plotting)
@@ -31,7 +30,7 @@ class Day(models.Model):
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
-    # Amount of completed tasks oby Analytics,Devops, Testers respectively
+    # Amount of completed tasks oby Analytics, Devops, Testers respectively
     anl_completed_tasks = models.IntegerField()
     dev_completed_tasks = models.IntegerField()
     test_completed_tasks = models.IntegerField()
@@ -40,6 +39,7 @@ class Day(models.Model):
 class Player(models.Model):
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    creator = models.BooleanField(default=False)
 
 
 class Character(models.Model):
@@ -55,9 +55,26 @@ class Character(models.Model):
     card_id = models.IntegerField(default=-1)
 
 
-class Card(models.Model):
+class UserStory(models.Model):
     # Card title
     title = models.CharField(max_length=20)
+
+    # Expedite factor
+    is_expedite = models.BooleanField(default=False)
+
+    analytic_points = models.IntegerField()
+    develop_points = models.IntegerField()
+    test_points = models.IntegerField()
+
+    business_value = models.IntegerField()
+
+
+class Card(models.Model):
+    # user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
+
+    # Card title
+    title = models.CharField(max_length=20, null=True)
+
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     # age of the current card
@@ -79,3 +96,5 @@ class Card(models.Model):
 
     column_number = models.IntegerField(default=0)
     row_number = models.IntegerField(default=0)
+
+    business_value = models.IntegerField(null=True)

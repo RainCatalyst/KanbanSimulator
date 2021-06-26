@@ -83,7 +83,6 @@ def start_new_day(request):
                                                           test_completed=card["test_completed"],
                                                           row_number=card["row_number"],
                                                           column_number=card["column_number"])
-            print("Character positions", characters)
             for i in range(len(characters)):
                 Character.objects.filter(team=team, role=i).update(card_id=characters[i])
 
@@ -93,7 +92,9 @@ def start_new_day(request):
             team.version += 1
             team.dayNum = int(day_num) + 1
             team.save()
-            return JsonResponse({"day_num": int(day_num) + 1, "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
+            return JsonResponse({"SYN": True,"day_num": int(day_num) + 1, "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
+
+        return JsonResponse({"SYN": False}, status=200)
 
 
 # function which generates random efforts for the characters

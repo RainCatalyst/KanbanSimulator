@@ -19,7 +19,10 @@ function backLogInitialPopulation(){
                 card_list.push(cards[i]);
             }
 
-            $('.draggable').draggable({revert: 'invalid'});
+            $('.draggable').draggable({revert: 'invalid',
+                    stop: function(event){
+                    $(this).removeAttr("style");
+                    }});
 
 
     }});
@@ -45,20 +48,20 @@ function start_new_day(){
                 if (!changed_cards.includes(card_id)) {
                     changed_cards.push(card_id);
                 }
-                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
+                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
                     card_list[card_id]["test_completed"] += current_effort[j];
                     if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
-                        players_list[j] = -1;
+                        card_list[card_id]["blocked"] = true;
                     }
-                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
+                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
                     card_list[card_id]["develop_completed"] += current_effort[j];
                     if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
-                        players_list[j] = -1;
+                        card_list[card_id]["blocked"] = true;
                     }
-                }else{
+                }else if(card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"]){
                     card_list[card_id]["analytic_completed"] += current_effort[j];
                     if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
-                        players_list[j] = -1;
+                        card_list[card_id]["blocked"] = true;
                     }
                 }
             }
@@ -67,15 +70,9 @@ function start_new_day(){
         for (var j = 0; j < players_list.length; j++){
             var character_position = players_list[j];
             if (character_position != -1){
-                var card_id = getIndexOfArrayCardById(character_position);
-                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] &&
-                        card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
-                        players_list[j] = -1;
-                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] &&
-                        card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
-                        players_list[j] = -1;
-                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
-                        players_list[j] = -1;
+                var card_id = getIndexOfArrayCardById(players_list[j]);
+                if (card_list[card_id]["blocked"] != null && card_list[card_id]["blocked"]){
+                    players_list[j] = -1;
                 }
             }
         }
@@ -84,23 +81,24 @@ function start_new_day(){
         var first_empty_row_test_comp = getNumberOfChildNodesById("test_completed_container");
 
         for (var i = 0; i < changed_cards.length; i++){
-            if (card_list[changed_cards[i]]["ready_day"] == -1 &&
-                card_list[changed_cards[i]]["test_completed"] >= card_list[changed_cards[i]]["test_remaining"]){
-                test_comp += 1;
-                card_list[changed_cards[i]]["ready_day"] = current_day;
-                card_list[changed_cards[i]]["column_number"] += 1;
-                card_list[changed_cards[i]]["row_number"] = first_empty_row_test_comp;
-                first_empty_row_test_comp += 1;
-            }else if (card_list[changed_cards[i]]["develop_completed"] >= card_list[changed_cards[i]]["develop_remaining"]){
-                dev_comp += 1;
-                card_list[changed_cards[i]]["column_number"] += 1;
-                card_list[changed_cards[i]]["row_number"] = first_empty_row_dev_comp;
-                first_empty_row_dev_comp += 1;
-            }else if (card_list[changed_cards[i]]["analytic_completed"] >= card_list[changed_cards[i]]["analytic_remaining"]){
-                anl_comp += 1;
-                card_list[changed_cards[i]]["column_number"] += 1;
-                card_list[changed_cards[i]]["row_number"] = first_empty_row_anl_comp;
-                first_empty_row_anl_comp += 1;
+            if (card_list[changed_cards[i]]["blocked"] != null && card_list[changed_cards[i]]["blocked"]){
+                if (card_list[changed_cards[i]]["test_completed"] >= card_list[changed_cards[i]]["test_remaining"]){
+                    test_comp += 1;
+                    card_list[changed_cards[i]]["ready_day"] = current_day;
+                    card_list[changed_cards[i]]["column_number"] += 1;
+                    card_list[changed_cards[i]]["row_number"] = first_empty_row_test_comp;
+                    first_empty_row_test_comp += 1;
+                }else if (card_list[changed_cards[i]]["develop_completed"] >= card_list[changed_cards[i]]["develop_remaining"]){
+                    dev_comp += 1;
+                    card_list[changed_cards[i]]["column_number"] += 1;
+                    card_list[changed_cards[i]]["row_number"] = first_empty_row_dev_comp;
+                    first_empty_row_dev_comp += 1;
+                }else if (card_list[changed_cards[i]]["analytic_completed"] >= card_list[changed_cards[i]]["analytic_remaining"]){
+                    anl_comp += 1;
+                    card_list[changed_cards[i]]["column_number"] += 1;
+                    card_list[changed_cards[i]]["row_number"] = first_empty_row_anl_comp;
+                    first_empty_row_anl_comp += 1;
+                }
             }
         }
 
@@ -121,9 +119,13 @@ function start_new_day(){
             data: data,
             dataType : "json",
             success: function(response){
-                current_day = JSON.parse(response["day_num"]);
-                current_effort = JSON.parse(response["team_effort"]);
-                $('#day_num_title').text("День #" + current_day);
+                var syn = JSON.parse(response["SYN"]);
+                if (syn){
+                    current_day = JSON.parse(response["day_num"]);
+                    current_effort = JSON.parse(response["team_effort"]);
+                    $('#day_num_title').text("День #" + current_day);
+                }
+
             }
         });
 
@@ -155,6 +157,9 @@ function performVersionCheck(){
                 var board_info = JSON.parse(response["board_info"]);
 
                 current_version = board_info["version"];
+                current_day = board_info["Age"];
+                $('#day_num_title').text("День #" + current_day);
+
 
                 removeAllChildNodes('backlog_container');
                 removeAllChildNodes('analytic_in_process_container');
@@ -163,6 +168,7 @@ function performVersionCheck(){
                 removeAllChildNodes('devop_completed_container');
                 removeAllChildNodes('test_in_process_container');
                 removeAllChildNodes('test_completed_container');
+                removeAllChildNodes('finish_container');
                 removeAllChildNodes('header_container');
 
                 cards = cards.sort(compare_cards);
@@ -174,7 +180,7 @@ function performVersionCheck(){
                     var card = cards[i];
 
                     var card_column_number = card["column_number"];
-                    console.log("Card#" + card["pk"] + " column number: " + card_column_number);
+                    //console.log("Card#" + card["pk"] + " column number: " + card_column_number);
                     if (card_column_number == 0){
                         addCardToParent('backlog_container', card);
                     }else if (card_column_number == 1){
@@ -189,6 +195,8 @@ function performVersionCheck(){
                         addCardToParent('test_in_process_container', card);
                     }else if (card_column_number == 6){
                         addCardToParent('test_completed_container', card);
+                    }else if (card_column_number == 7){
+                        addCardToParent('finish_container', card);
                     }
                 }
 
@@ -197,6 +205,7 @@ function performVersionCheck(){
                     var character_template = createCharacterTemplate(characters[j]["role"]);
                     var column_number = 0;
                     var card_index = getIndexOfArrayCardById(characters[j]["card_id"]);
+                    players_list[j] = characters[j]["card_id"];
                     placeCharacterAtSpecifiedCard(character_template,
                         characters[j]["card_id"], card_index == -1 ? 0 :card_list[card_index]["column_number"]);
                 }
@@ -217,6 +226,9 @@ function addCardToParent(parent, card){
     document.getElementById(parent).innerHTML += createCardTemplate(card);
     card_template = document.getElementById('kb_card_' + card["pk"]);
     addDraggableAbility(card, card_template);
+    if (card["column_number"] % 2 == 1 && card["column_number"] != 7){
+        abilityToAddCharacters($(card_template));
+    }
 }
 
 // needed for comparing two cards (the first one - smallest row, the last one - the biggest row)

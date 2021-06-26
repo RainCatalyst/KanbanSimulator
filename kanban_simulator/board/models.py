@@ -4,8 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Room(models.Model):
-    # number of people in particular the game
-    people = models.IntegerField()
+    ready = models.BooleanField(default=False)
 
 
 class Team(models.Model):
@@ -13,13 +12,15 @@ class Team(models.Model):
     name = models.CharField(max_length=30)
     # id of the correspondent game/room
     game = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # version of the board
+    version = models.IntegerField(default=0)
     # current game day
     dayNum = models.IntegerField(default=1)
 
     # WIP limits for Analytics, Devops, Testers respectively
-    wip1 = models.IntegerField(name='wip_limit1')
-    wip2 = models.IntegerField(name='wip_limit2')
-    wip3 = models.IntegerField(name='wip_limit3')
+    wip1 = models.IntegerField(name='wip_limit1', null=True, blank=True)
+    wip2 = models.IntegerField(name='wip_limit2', null=True, blank=True)
+    wip3 = models.IntegerField(name='wip_limit3', null=True, blank=True)
 
 
 # Primary usage - statistics (graph plotting)
@@ -29,24 +30,51 @@ class Day(models.Model):
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
-    # Amount of completed tasks oby Analytics,Devops, Testers respectively
+    # Amount of completed tasks oby Analytics, Devops, Testers respectively
     anl_completed_tasks = models.IntegerField()
     dev_completed_tasks = models.IntegerField()
     test_completed_tasks = models.IntegerField()
 
 
 class Player(models.Model):
-    # Player name
-    name = models.CharField(max_length=30)
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    # amount of effort that can be spent on a particular day
-    effort = models.IntegerField()
+    creator = models.BooleanField(default=False)
+
+
+class Character(models.Model):
+    # Correspondent team
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # roles
+    # (0...1) analytics
+    # (2...4) developers
+    # (5..6) testers
+    role = models.IntegerField(default=0)
+    # if it's -1 then character locates at common character position
+    # otherwise it locates above the correspondent card
+    card_id = models.IntegerField(default=-1)
+
+
+class UserStory(models.Model):
+    # Card title
+    title = models.CharField(max_length=20)
+
+    # Expedite factor
+    is_expedite = models.BooleanField(default=False)
+
+    analytic_points = models.IntegerField()
+    develop_points = models.IntegerField()
+    test_points = models.IntegerField()
+
+    business_value = models.IntegerField()
 
 
 class Card(models.Model):
+    # user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
+
     # Card title
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=20, null=True)
+
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     # age of the current card
@@ -54,7 +82,7 @@ class Card(models.Model):
     # Expedite factor
     is_expedite = models.BooleanField(default=False)
     # Day when card was completed (used for statistics, particularly for Lead Time Distribution Chart)
-    ready_day = models.IntegerField(default=15)
+    ready_day = models.IntegerField(default=-1)
 
     # Amount of remaining and completed points in the Analytic, Devop, Test lines respectively
     analytic_remaining = models.IntegerField()
@@ -65,3 +93,8 @@ class Card(models.Model):
 
     test_remaining = models.IntegerField()
     test_completed = models.IntegerField(default=0)
+
+    column_number = models.IntegerField(default=0)
+    row_number = models.IntegerField(default=0)
+
+    business_value = models.IntegerField(null=True)

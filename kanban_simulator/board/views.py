@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character, UserStory
+from .forms import CreateRoomForm, JoinRoomForm
 from math import ceil
 import random
 
@@ -156,21 +157,63 @@ def version_check(request):
 
 
 def create_room(request):
-    new_room = Room()
-    new_room.save()
-    new_team = Team(game=new_room)
-    new_team.save()
-    new_player = Player(team=new_team, creator=True)
-    new_player.save()
-    return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
+    if request.method == 'POST':
+        form = CreateRoomForm(request.POST)
+        if form.is_valid():
+            # creating the room
+            new_room = Room()
+            new_room.save()
+
+            # getting data from the form
+            player_name = form.cleaned_data['name']
+            spectator = form.cleaned_data['spectator']
+            teams_num = form.cleaned_data['teams_num']
+
+            # creating teams
+            for i in range(teams_num):
+                new_team = Team(game=new_room)
+                new_team.save()
+
+            # creating player
+            new_player = Player(name=player_name, team=new_room.team_set.first(), spectator=spectator,
+                                creator=True)
+            new_player.save()
+            return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
+    else:
+        form = CreateRoomForm()
+
+    return render(request, 'board/create_room.html', {'form': form})
 
 
 def join_room(request, room_id):
-    room = Room.objects.get(pk=room_id)
-    team = Team.objects.get(game=room)
-    new_player = Player(team=team)
-    new_player.save()
-    return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
+    if request.method == 'POST':
+        form = JoinRoomForm(request.POST)
+        if form.is_valid():
+            # getting data from the form
+            player_name = form.cleaned_data['name']
+            spectator = form.cleaned_data['spectator']
+
+            # get room to join
+            room = Room.objects.get(pk=room_id)
+
+            # selecting team to join
+            selected_team = room.team_set.first()
+            min_players_num = len(selected_team.player_set.filter(spectator=False))
+            for team in room.team_set.all():
+                if len(team.player_set.filter(spectator=False)) < min_players_num:
+                    selected_team = team
+                    min_players_num = len(selected_team.player_set.filter(spectator=False))
+
+            # creating player
+            new_player = Player(name=player_name, team=selected_team,
+                                spectator=spectator,
+                                creator=False)
+            new_player.save()
+            return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
+    else:
+        form = JoinRoomForm()
+
+    return render(request, 'board/join_room.html', {'form': form})
 
 
 def waiting_room(request, player_id):
@@ -180,24 +223,9 @@ def waiting_room(request, player_id):
 
 def start_game(request, player_id):
     room = Player.objects.get(pk=player_id).team.game
-    player_set = Team.objects.get(game=room).player_set.all()
-
-    # creating teams
-    team_num = ceil(len(player_set) ** 0.5)
-    for i in range(team_num - 1):
-        new_team = Team(game=room)
-        new_team.save()
-
-    # distributing players among teams
     team_set = room.team_set.all()
-    i = 0
-    for el in player_set:
-        el.team = team_set[i]
-        el.save()
-        i = (i + 1) % team_num
 
     # creating cards
-
     # cards that will be actually used in the game
     cards_set = []
 
@@ -208,7 +236,7 @@ def start_game(request, player_id):
     for i in range(CARDS_IN_GAME):
         number_found = False
         while not number_found:
-            j = random.randint(0, len(user_stories)-1)
+            j = random.randint(0, len(user_stories) - 1)
             if j in chosen_indexes:
                 continue
 

@@ -138,45 +138,35 @@
 
 <div class="modal fade" id="StartGameModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="StartGameModalLabel" aria-hidden="true">
-    <form method="post">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="post">
+                {% load crispy_forms_tags %}
+                {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title" id="StartGameModalLabel">Создание игры</h5>
                 </div>
                 <div class="modal-body">
-                    {#                    <form>#}
-                    {#                        <div class="mb-3">#}
-                    {#                            <label for="nickname" class="form-label">Никнейм</label>#}
-                    {#                            <input type="text" class="form-control" id="nickname" placeholder="Введите свой никнейм">#}
-                    {#                        </div>#}
-                    {##}
-                    {#                        <div class="mb-3">#}
-                    {#                            <label for="numberofteams" class="form-label">Кол-во команд</label>#}
-                    {#                            <input type="number" class="form-control" min="0" max="10" id="numberofteams" placeholder="Введите количество команд">#}
-                    {#                        </div>#}
-                    {##}
-                    {##}
-                    {#                        <div class="mb-3 form-check">#}
-                    {#                            <input type="checkbox" class="form-check-input" id="spectator">#}
-                    {#                            <label class="form-check-label" for="spectator">Быть наблюдателем</label>#}
-                    {#                        </div>#}
-                    {#                    </form>#}
-                    {% load crispy_forms_tags %}
-                    {% csrf_token %}
-                    {{ form.name|as_crispy_field }}
-                    {{ form.teams_num|as_crispy_field }}
-                    {{ form.spectator|as_crispy_field }}
+                    <div class="mb-3">
+                        {{ form.name|as_crispy_field }}
+                    </div>
 
+                    <div class="mb-3">
+                        {{ form.teams_num|as_crispy_field }}
+                    </div>
+
+
+                    <div class="mb-3 form-check">
+                        {{ form.spectator|as_crispy_field }}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Создать комнату</button>
-                    {#                <a class="btn btn-primary" href="" role="button">Начать игру</a>#}
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 

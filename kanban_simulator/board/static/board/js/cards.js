@@ -6,54 +6,80 @@ function createCardTemplate(card_model){
     return '<div class="card border-success mb-3 kanban_card draggable no_droppable_card" id="kb_card_' + card_model["pk"] + '">' +
                             '<h6 class="card-header border-success text-start">' + card_model["title"] + '</h6>' +
                             '<div class="card-body p-1 text-start">' +
-                               '<div class="row">' +
-                                   '<div class="col-8">' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ' + getPercentage(card_model["analytic_remaining"], card_model["analytic_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["analytic_remaining"], card_model["analytic_completed"]) + '</div>' +
-                                        '</div>' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: ' + getPercentage(card_model["develop_remaining"], card_model["develop_completed"]) + '%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["develop_remaining"], card_model["develop_completed"]) + '</div>' +
-                                        '</div>' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ' + getPercentage(card_model["test_remaining"], card_model["test_completed"]) + '%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</div>' +
-                                        '</div>' +
 
-                                   '</div>' +
-                                   '<div class="col-4">' +
-                                        '<div class="for_players"></div>' +
-                                   '</div>' +
-                               '</div>' +
+                               '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ' + getPercentage(card_model["analytic_remaining"], card_model["analytic_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["analytic_remaining"], card_model["analytic_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: ' + getPercentage(card_model["develop_remaining"], card_model["develop_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["develop_remaining"], card_model["develop_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ' + getPercentage(card_model["test_remaining"], card_model["test_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;"></div>' +
+
                             '</div>' +
-                            '<div class="card-footer border-success text-end p-1 pe-2">День #'+ card_model["age"] +'</div>' +
-                        '</div>';
+
+                            '<div class="card-footer border-success text-end p-1 pe-2 fw-light fst-italic">День #' + card_model["age"] + '</div>' +
+            '</div>';
 }
 
 function createExpediteCardTemplate(card_model){
     return '<div class="card border-dark mb-3 kanban_card draggable no_droppable_card" id="kb_card_' + card_model["pk"] + '" >' +
                             '<h6 class="card-header bg-warning border-dark text-start">' + card_model["title"] + '</h6>' +
                             '<div class="card-body p-1 text-start">' +
-                               '<div class="row">' +
-                                   '<div class="col-8">' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ' + getPercentage(card_model["analytic_remaining"], card_model["analytic_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["analytic_remaining"], card_model["analytic_completed"]) + '</div>' +
-                                        '</div>' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: ' + getPercentage(card_model["develop_remaining"], card_model["develop_completed"]) + '%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["develop_remaining"], card_model["develop_completed"]) + '</div>' +
-                                        '</div>' +
-                                        '<div class="progress my-1">' +
-                                            '<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ' + getPercentage(card_model["test_remaining"], card_model["test_completed"]) + '%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</div>' +
-                                        '</div>' +
 
-                                   '</div>' +
-                                   '<div class="col-4">' +
-                                        '<div class="for_players"></div>' +
-                                   '</div>' +
-                               '</div>' +
+                               '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ' + getPercentage(card_model["analytic_remaining"], card_model["analytic_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["analytic_remaining"], card_model["analytic_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: ' + getPercentage(card_model["develop_remaining"], card_model["develop_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["develop_remaining"], card_model["develop_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row">' +
+                                   '<div class="flex-grow-1">' +
+                                        '<div class="progress my-1">' +
+                                            '<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ' + getPercentage(card_model["test_remaining"], card_model["test_completed"]) + '%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">' + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</small>' + '</div>' +
+                                '</div>' +
+
+                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;"></div>' +
+
                             '</div>' +
-                            '<div class="card-footer bg-warning border-dark text-end p-1 pe-2">День #'+ card_model["age"] +'</div>' +
-                        '</div>';
 
-
+                            '<div class="card-footer bg-warning border-dark text-end p-1 pe-2 fw-light fst-italic">День #' + card_model["age"] + '</div>' +
+            '</div>';
 }
 
 // droppable behavior for sub_containers

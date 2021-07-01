@@ -47,7 +47,7 @@ def populateBackLog(request):
         request_team = request.POST.get('team', 0)
 
         # testing purposes
-        initial_conditions(request_team)
+        #initial_conditions(request_team)
 
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                               'analytic_remaining', 'analytic_completed',

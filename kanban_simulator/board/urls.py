@@ -11,7 +11,6 @@ urlpatterns = [
     path('board/move_card', views.move_card, name="moveCard"),
     path('board/move_player', views.move_player, name="movePlayer"),
     path('board/version_check', views.version_check, name="versionCheck"),
-    path('create_room', views.create_room, name="createRoom"),
     path('<int:room_id>/join', views.join_room, name='join'),
     path('<int:player_id>/waiting_room', views.waiting_room, name='waitingRoom'),
     path('<int:player_id>/waiting_room/players_check', views.players_check, name="playersCheck"),

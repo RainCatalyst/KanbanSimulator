@@ -262,7 +262,6 @@ def join_room(request, room_id):
 
             # get room to join
             room = Room.objects.get(pk=room_id)
-            room.version += 1
 
             # selecting team to join
             selected_team = room.team_set.first()
@@ -276,10 +275,7 @@ def join_room(request, room_id):
             new_player = Player(name=player_name, team=selected_team,
                                 spectator=spectator,
                                 creator=False)
-            selected_team.version = selected_team.version + 1
-            selected_team.save()
             new_player.save()
-            room.save()
             return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
     else:
         form = JoinRoomForm()

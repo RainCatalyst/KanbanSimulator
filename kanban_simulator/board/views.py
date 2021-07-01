@@ -194,35 +194,6 @@ def version_check(request):
     return JsonResponse({"Error": "error"}, status=400)
 
 
-def create_room(request):
-    if request.method == 'POST':
-        form = CreateRoomForm(request.POST)
-        if form.is_valid():
-            # creating the room
-            new_room = Room()
-            new_room.save()
-
-            # getting data from the form
-            player_name = form.cleaned_data['name']
-            spectator = form.cleaned_data['spectator']
-            teams_num = form.cleaned_data['teams_num']
-
-            # creating teams
-            for i in range(teams_num):
-                new_team = Team(game=new_room)
-                new_team.save()
-
-            # creating player
-            new_player = Player(name=player_name, team=new_room.team_set.first(), spectator=spectator,
-                                creator=True)
-            new_player.save()
-            return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
-    else:
-        form = CreateRoomForm()
-
-    return render(request, 'board/create_room.html', {'form': form})
-
-
 def join_room(request, room_id):
     if request.method == 'POST':
         form = JoinRoomForm(request.POST)

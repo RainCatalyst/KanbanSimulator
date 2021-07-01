@@ -19,6 +19,7 @@
 
 <div class="container">
     <form method="post">
+        {% csrf_token %}
         {% for form in formset %}
             <p> Имя игрока: {{ form.name.value }}</p>
             <div class="fieldWrapper">
@@ -32,7 +33,7 @@
             </div>
             {{ form.spectator|as_crispy_field }}
         {% endfor %}
-        {#        {% crispy formset %}#}
+        <button type="submit" class="btn btn-primary">Начать</button>
     </form>
 </div>
 </body>

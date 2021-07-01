@@ -17,4 +17,5 @@ class JoinRoomForm(forms.Form):
     spectator = forms.BooleanField(label='Быть наблюдателем?', required=False)
 
 
-PlayerFormSet = modelformset_factory(Player, fields=("team", "spectator"), extra=0)
+PlayerFormSet = modelformset_factory(Player, fields=("name", "team", "spectator"),
+                                     widgets={'name': forms.HiddenInput()}, extra=0)

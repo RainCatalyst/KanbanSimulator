@@ -20,8 +20,19 @@
 <div class="container">
     <form method="post">
         {% for form in formset %}
-            {{ form|crispy }}
+            <p> Имя игрока: {{ form.name.value }}</p>
+            <div class="fieldWrapper">
+                {{ form.subject.errors }}
+                <label for="{{ form.team.id_for_label }}" class="">Команда игрока:</label>
+                <select name="{{ form.team.html_name }}">
+                    {% for choice in choices %}
+                        <option value="{{ choice.pk }}">{{ choice.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {{ form.spectator|as_crispy_field }}
         {% endfor %}
+        {#        {% crispy formset %}#}
     </form>
 </div>
 </body>

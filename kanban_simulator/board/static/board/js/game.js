@@ -1,6 +1,6 @@
 var current_version = 0;
 var team_id = 1;
-var current_day = 0;
+var current_day = 1;
 
 function backLogInitialPopulation(){
     $.ajax({

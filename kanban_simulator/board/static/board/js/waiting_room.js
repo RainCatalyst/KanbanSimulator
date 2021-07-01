@@ -6,7 +6,8 @@ function player_template(name, count){
     return '<tr>' +
                     '<th scope="row">' + count +'</th>' +
                     '<td>' + name + '</td>' +
-                    '<td>что-то</td>' +
+                    '<td>#</td>' +
+                    '<td>да</td>' +
                     '</tr>';
 }
 

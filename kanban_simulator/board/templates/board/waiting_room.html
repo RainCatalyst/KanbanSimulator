@@ -111,7 +111,6 @@
                 <div class="input-group">
                     <input type="text" class="form-control" disabled placeholder="http://127.0.0.1:8000{% url 'board:join' player.team.game.pk %}" aria-label="Recipient's username" aria-describedby="button-addon2">
                     <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-clipboard-text="http://127.0.0.1:8000{% url 'board:join' player.team.game.pk %}">Copy to clipboard</button>
-
                 </div>
             </div>
         </div>
@@ -127,7 +126,8 @@
                 <tr class="">
                     <th scope="col">#</th>
                     <th scope="col">Никнейм</th>
-                    <th scope="col">Может что-то еще</th>
+                    <th scope="col">Номер комнаты</th>
+                    <th scope="col">Наблюдатель?</th>
                 </tr>
             </thead>
 
@@ -193,12 +193,10 @@
     </div>
 
     <div class="container pb-4">
-        <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-diamond-fill pe-2" style="color: red"></i>Должно быть не менее 6 игроков! Приглашай еще!
-        </div>
-
         {% if player.creator %}
             <a class="btn btn-success" href="{% url 'board:startGame' player.pk %}" role="button">НАЧАТЬ ИГРУ</a>
+        {% else %}
+            <a class="btn btn-success" href="{% url 'board:joinGame' player.pk %}" role="button">ПРИСОЕДИНИТЬСЯ</a>
         {% endif %}
     </div>
 

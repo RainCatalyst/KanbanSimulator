@@ -184,27 +184,23 @@
      aria-labelledby="StartGameModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="StartGameModalLabel">Присоединиться к игре</h5>
-            </div>
             <form method="post">
+                {% load crispy_forms_tags %}
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="StartGameModalLabel">Подключение к игре</h5>
+                </div>
                 <div class="modal-body">
-                    {% load crispy_forms_tags %}
-                    {% csrf_token %}
-                    {{ form.name|as_crispy_field }}
-                    {{ form.spectator|as_crispy_field }}
-
-                    {#                    <div class="mb-3">#}
-                    {#                        <label for="nickname" class="form-label">Никнейм</label>#}
-                    {#                        <input type="text" class="form-control" id="nickname" placeholder="Введите свой никнейм">#}
-                    {#                    </div>#}
-                    {##}
-                    {#                    <div class="mb-3 form-check">#}
-                    {#                        <input type="checkbox" class="form-check-input" id="spectator">#}
-                    {#                        <label class="form-check-label" for="spectator">Быть наблюдателем</label>#}
-                    {#                    </div>#}
-
-
+                    <div class="mb-3">
+                        {#<label for="nickname" class="form-label">Никнейм</label>#}
+                        {#<input type="text" class="form-control" id="nickname" placeholder="Введите свой никнейм">#}
+                        {{ form.name|as_crispy_field }}
+                    </div>
+                    <div class="mb-3 ps-0 form-check">
+                        {#<input type="checkbox" class="form-check-input" id="spectator">#}
+                        {#<label class="form-check-label" for="">Быть наблюдателем</label>#}
+                        {{ form.spectator|as_crispy_field }}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Присоединиться</button>

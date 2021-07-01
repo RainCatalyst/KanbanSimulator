@@ -276,6 +276,11 @@ def join_room(request, room_id):
                                 spectator=spectator,
                                 creator=False)
             new_player.save()
+
+            # incrementing room version
+            room.version += 1
+            room.save()
+
             return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
     else:
         form = JoinRoomForm()

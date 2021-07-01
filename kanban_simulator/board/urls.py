@@ -1,9 +1,10 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 from . import views
 
 app_name = 'board'
 urlpatterns = [
-    path('home', views.index, name="home"),
+    path('', views.index, name="home"),
     path('about', views.index, name="about"),
     path('board/<int:player_id>', views.board, name="board"),
     path('board/populate_backlog', views.populateBackLog, name="populateBackLog"),

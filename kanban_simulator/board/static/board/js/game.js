@@ -214,7 +214,7 @@ function performVersionCheck(){
                 }
                 updateCharacterConfiguration();
             }
-            setTimeout(performVersionCheck, 4000);
+            setTimeout(performVersionCheck, 1000);
         }
     });
 }

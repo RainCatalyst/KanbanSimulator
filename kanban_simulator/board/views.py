@@ -47,7 +47,7 @@ def populateBackLog(request):
         request_team = request.POST.get('team', 0)
 
         # testing purposes
-        #initial_conditions(request_team)
+        # initial_conditions(request_team)
 
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                               'analytic_remaining', 'analytic_completed',
@@ -93,7 +93,8 @@ def start_new_day(request):
             team.version += 1
             team.dayNum = int(day_num) + 1
             team.save()
-            return JsonResponse({"SYN": True,"day_num": int(day_num) + 1, "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
+            return JsonResponse({"SYN": True, "day_num": int(day_num) + 1,
+                                 "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
 
         return JsonResponse({"SYN": False}, status=200)
 
@@ -170,6 +171,34 @@ def version_check(request):
     return JsonResponse({"Error": "error"}, status=400)
 
 
+@csrf_exempt
+def players_check(request, player_id):
+    if request.method == "POST":
+        game_id = request.POST.get('game_id', -1)
+        game = Room.objects.get(pk=game_id)
+        input_version = request.POST.get('version')
+        server_version = Room.objects.get(pk=game_id).version
+        if int(server_version) > int(input_version):
+            player_set = []
+            teams = Team.objects.filter(game=game)
+            counter = 0
+            for team in teams:
+                players = Player.objects.filter(team=team)
+                counter += 1
+                for player in players:
+                    player_set.append({"name": player.name,
+                                       "team_number": counter,
+                                       "team_id": team.pk,
+                                       "spectator": player.spectator})
+
+            return JsonResponse({"players": json.dumps(list(player_set)),
+                                 "version": server_version, "SYN": False}, status=200)
+        else:
+            return JsonResponse({"SYN": True}, status=200)
+
+    return JsonResponse({"Error": "error"}, status=400)
+
+
 def create_room(request):
     if request.method == 'POST':
         form = CreateRoomForm(request.POST)
@@ -209,6 +238,7 @@ def join_room(request, room_id):
 
             # get room to join
             room = Room.objects.get(pk=room_id)
+            room.version += 1
 
             # selecting team to join
             selected_team = room.team_set.first()
@@ -222,7 +252,10 @@ def join_room(request, room_id):
             new_player = Player(name=player_name, team=selected_team,
                                 spectator=spectator,
                                 creator=False)
+            selected_team.version = selected_team.version + 1
+            selected_team.save()
             new_player.save()
+            room.save()
             return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
     else:
         form = JoinRoomForm()
@@ -230,10 +263,10 @@ def join_room(request, room_id):
     return render(request, 'board/join_room.html', {'form': form})
 
 
-
 def waiting_room(request, player_id):
     player = Player.objects.get(pk=player_id)
-    return render(request, 'board/waiting_room.html', {'player': player})
+    game_id = player.team.game.pk
+    return render(request, 'board/waiting_room.html', {'player': player, 'game': game_id})
 
 
 def start_game(request, player_id):

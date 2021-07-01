@@ -49,17 +49,17 @@ function start_new_day(){
                     changed_cards.push(card_id);
                 }
                 if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
-                    card_list[card_id]["test_completed"] += current_effort[j];
+                    card_list[card_id]["test_completed"] += current_effort[j] + (j == 5 || j == 6 ? 0 : -1);
                     if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
                         card_list[card_id]["blocked"] = true;
                     }
                 }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
-                    card_list[card_id]["develop_completed"] += current_effort[j];
+                    card_list[card_id]["develop_completed"] += current_effort[j] + (j == 2 || j == 3 || j == 4 ? 0 : -1);
                     if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
                         card_list[card_id]["blocked"] = true;
                     }
                 }else if(card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"]){
-                    card_list[card_id]["analytic_completed"] += current_effort[j];
+                    card_list[card_id]["analytic_completed"] += current_effort[j] + (j == 0 || j == 1 ? 0 : -1);
                     if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
                         card_list[card_id]["blocked"] = true;
                     }
@@ -102,8 +102,11 @@ function start_new_day(){
             }
         }
 
+        var last_column = 7;
         for (var k = 0; k < card_list.length; k ++){
-            card_list[k]["age"] += 1;
+            if (card_list[k]["column_number"] != last_column){
+                card_list[k]["age"] += 1;
+            }
         }
 
         data["current_day"] = current_day;

@@ -119,6 +119,7 @@ function moveCharacter(role, card_id){
 function placeCharacterAtSpecifiedCard(character, card_id, col_number){
     if (card_id != -1 && col_number != 0 && col_number != 2 && col_number != 4 && col_number != 6){
         var card_string_id = '#kb_card_' + card_id;
+        var card_string_id = '#player_card_container_' + card_id;
         $(card_string_id).append(character);
     }else{
         $("#header_container").append(character);

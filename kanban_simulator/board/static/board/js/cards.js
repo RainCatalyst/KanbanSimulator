@@ -34,11 +34,11 @@ function createCardTemplate(card_model){
                                     '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</small>' + '</div>' +
                                 '</div>' +
 
-                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;"></div>' +
+                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;" id="player_card_container_' +  card_model["pk"] + '"></div>' +
 
                             '</div>' +
 
-                            '<div class="card-footer border-success text-end p-1 pe-2 fw-light fst-italic">День #' + card_model["age"] + '</div>' +
+                            '<div class="card-footer border-success text-end p-1 pe-2 fw-light fst-italic">День #' +card_model["age"] + '</div>' +
             '</div>';
 }
 
@@ -182,11 +182,14 @@ function abilityToAddCharacters(card){
     $('.droppable_card').droppable({
         accept: '.players',
         drop: function(event, ui){
-            $(this).append(ui.draggable[0]);
-            var child = $(this).children().last();
+            var card_id = getIdByCardModel($(this));
+            var card_cont_string = "#player_card_container_" + card_id;
+            //$(this).querySelector(card_cont_string).append(ui.draggable[0]);
+            var parent = $(card_cont_string)
+            parent.append(ui.draggable[0]);
+            var child = parent.children().last();
             child.css("inset", "");
 
-            var card_id = getIdByCardModel($(this));
             var role = characterDistinguish(child);
             if (players_list[role] != card_id){
                 moveCharacter(role, card_id);

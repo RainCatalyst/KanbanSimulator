@@ -5,8 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character, UserStory
-from .forms import CreateRoomForm, JoinRoomForm
-from math import ceil
+from .forms import CreateRoomForm, JoinRoomForm, PlayerFormSet
 import random
 
 NUMBER_OF_CHARACTERS = 7
@@ -223,35 +222,6 @@ def players_check(request, player_id):
     return JsonResponse({"Error": "error"}, status=400)
 
 
-def create_room(request):
-    if request.method == 'POST':
-        form = CreateRoomForm(request.POST)
-        if form.is_valid():
-            # creating the room
-            new_room = Room()
-            new_room.save()
-
-            # getting data from the form
-            player_name = form.cleaned_data['name']
-            spectator = form.cleaned_data['spectator']
-            teams_num = form.cleaned_data['teams_num']
-
-            # creating teams
-            for i in range(teams_num):
-                new_team = Team(game=new_room)
-                new_team.save()
-
-            # creating player
-            new_player = Player(name=player_name, team=new_room.team_set.first(), spectator=spectator,
-                                creator=True)
-            new_player.save()
-            return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
-    else:
-        form = CreateRoomForm()
-
-    return render(request, 'board/create_room.html', {'form': form})
-
-
 def join_room(request, room_id):
     if request.method == 'POST':
         form = JoinRoomForm(request.POST)
@@ -292,6 +262,16 @@ def waiting_room(request, player_id):
     player = Player.objects.get(pk=player_id)
     game_id = player.team.game.pk
     return render(request, 'board/waiting_room.html', {'player': player, 'game': game_id})
+
+
+def manage_players(request, player_id):
+    if request.method == 'POST':
+        return
+    else:
+        room = Player.objects.get(pk=player_id).team.game
+        players = Player.objects.filter(team_id__in=room.team_set.values('pk')).values('team', 'spectator')
+        formset = PlayerFormSet(initial=players)
+        return render(request, 'board/manage_players.html', {'formset': formset})
 
 
 def start_game(request, player_id):

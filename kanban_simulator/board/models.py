@@ -37,8 +37,13 @@ class Day(models.Model):
 
 
 class Player(models.Model):
+    # nickname
+    name = models.CharField(max_length=20, default='name')
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # is the player spectator
+    spectator = models.BooleanField(default=False)
+    # is the player creator of a room
     creator = models.BooleanField(default=False)
 
 

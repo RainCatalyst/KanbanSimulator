@@ -19,3 +19,8 @@ body {
 #temp2 {
   flex: 1;
 }
+
+.players{
+    z-index: 100;
+    padding: 3px;
+}

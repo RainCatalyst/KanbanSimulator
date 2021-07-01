@@ -12,7 +12,6 @@
     {% block styles %}
         {% load static %}
         <link rel="stylesheet" href="{% static 'board/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'board/css/styles.css' %}">
     {% endblock %}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -287,36 +286,7 @@
             <div class="col containers droppable" id="backlog_container"></div>
             <div class="col-3 border-start containers" id="analytic_container">
                 <div class="row flex-fill d-flex h-100 justify-content-start">
-                    <div class="col droppable_anl_proc sub_containers" id="analytic_in_process_container">
-
-
-
-                        <!--<div class="card border-dark mb-3" >
-                            <h6 class="card-header bg-warning border-dark text-start">Story #23</h6>
-                            <div class="card-body p-1 text-start">
-                               <div class="row">
-                                   <div class="col-8">
-                                        <div class="progress my-1">
-                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">6/15</div>
-                                        </div>
-                                        <div class="progress my-1">
-                                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">3/12</div>
-                                        </div>
-                                        <div class="progress my-1">
-                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">8/10</div>
-                                        </div>
-
-                                   </div>
-                                   <div class="col-4">
-                                        <div class="for_players"></div>
-                                   </div>
-                               </div>
-                            </div>
-                            <div class="card-footer bg-warning border-dark text-end p-1 pe-2">День #</div>
-                        </div>-->
-
-
-                    </div>
+                    <div class="col droppable_anl_proc sub_containers" id="analytic_in_process_container"></div>
                     <div class="col border-start sub_containers" id="analytic_completed_container"></div>
                 </div>
             </div>

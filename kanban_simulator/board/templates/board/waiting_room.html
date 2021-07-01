@@ -199,8 +199,8 @@
 
     <div class="container pb-4">
         {% if player.creator %}
-{#            <a class="btn btn-success" href="{% url 'board:managePlayers' player.pk %}" role="button">НАЧАТЬ ИГРУ</a>#}
-            <a class="btn btn-success" href="{% url 'board:startGame' player.pk %}" role="button">НАЧАТЬ ИГРУ</a>
+            <a class="btn btn-success" href="{% url 'board:managePlayers' player.pk %}" role="button">НАЧАТЬ ИГРУ</a>
+{#            <a class="btn btn-success" href="{% url 'board:startGame' player.pk %}" role="button">НАЧАТЬ ИГРУ</a>#}
         {% else %}
             <a class="btn btn-success" href="{% url 'board:joinGame' player.pk %}" role="button">ПРИСОЕДИНИТЬСЯ</a>
         {% endif %}

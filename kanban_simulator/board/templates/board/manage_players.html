@@ -19,6 +19,7 @@
 
 <div class="container">
     <form method="post">
+        {% csrf_token %}
         {% for form in formset %}
             <p> Имя игрока: {{ form.name.value }}</p>
             <div class="fieldWrapper">

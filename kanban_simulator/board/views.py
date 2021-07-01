@@ -266,7 +266,7 @@ def waiting_room(request, player_id):
 
 def manage_players(request, player_id):
     if request.method == 'POST':
-        return
+        return HttpResponseRedirect(reverse('board:startGame', args=(player_id,)))
     else:
         room = Player.objects.get(pk=player_id).team.game
         players = Player.objects.filter(team_id__in=room.team_set.values('pk')).only('name', 'team', 'spectator')

@@ -27,7 +27,7 @@ def index(request):
 
             # creating teams
             for i in range(teams_num):
-                new_team = Team(game=new_room)
+                new_team = Team(name='Команда '+str(i), game=new_room)
                 new_team.save()
 
             # creating player
@@ -269,9 +269,10 @@ def manage_players(request, player_id):
         return
     else:
         room = Player.objects.get(pk=player_id).team.game
-        players = Player.objects.filter(team_id__in=room.team_set.values('pk')).values('team', 'spectator')
-        formset = PlayerFormSet(initial=players)
-        return render(request, 'board/manage_players.html', {'formset': formset})
+        players = Player.objects.filter(team_id__in=room.team_set.values('pk')).only('name', 'team', 'spectator')
+        formset = PlayerFormSet(queryset=players)
+        choices = room.team_set.all()
+        return render(request, 'board/manage_players.html', {'formset': formset, 'choices': choices})
 
 
 def start_game(request, player_id):

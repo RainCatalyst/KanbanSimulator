@@ -1,14 +1,20 @@
 var number_of_players = 0;
 var game_id = 0;
-var current_version = 0;
+var current_version = -1;
 
-function player_template(name, count){
+function player_template(player, count){
     return '<tr>' +
                     '<th scope="row">' + count +'</th>' +
-                    '<td>' + name + '</td>' +
-                    '<td>#</td>' +
-                    '<td>да</td>' +
+                    '<td>' + player["name"] + '</td>' +
+                    '<td>' + player["team_number"] + '</td>' +
+                    '<td>' + isSpectator(player) + '</td>' +
                     '</tr>';
+}
+
+function isSpectator(player){
+    if (player["spectator"])
+        return "Да";
+    return "Нет";
 }
 
 function new_players_check(){
@@ -26,7 +32,7 @@ function new_players_check(){
                 document.getElementById("players_container").innerHTML = "";
 
                 for (var i = 0; i < players.length; i++){
-                    document.getElementById("players_container").innerHTML += player_template(players[i]["name"], i + 1);
+                    document.getElementById("players_container").innerHTML += player_template(players[i], i + 1);
                 }
             }
             setTimeout(new_players_check, 1000);

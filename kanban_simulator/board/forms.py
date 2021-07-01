@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import modelformset_factory
+from .models import Player
 
 
 class CreateRoomForm(forms.Form):
@@ -10,3 +12,6 @@ class CreateRoomForm(forms.Form):
 class JoinRoomForm(forms.Form):
     name = forms.CharField(label='Ваш никнейм.', max_length=20)
     spectator = forms.BooleanField(label='Хотите ли вы быть наблюдателем?', required=False)
+
+
+PlayerFormSet = modelformset_factory(Player, fields=("team", "spectator"), extra=0)

@@ -1,6 +1,6 @@
 var current_version = 0;
 var team_id = 1;
-var current_day = 0;
+var current_day = 1;
 
 function backLogInitialPopulation(){
     $.ajax({
@@ -104,7 +104,7 @@ function start_new_day(){
 
         var last_column = 7;
         for (var k = 0; k < card_list.length; k ++){
-            if (card_list[k]["column_number"] != last_column){
+            if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
             }
         }

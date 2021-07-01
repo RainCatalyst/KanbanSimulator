@@ -4,7 +4,7 @@ First of all:
 ```
 cd kanban_simulator
 ```
-2) Make sure you have already installed Django, otherwis
+2) Make sure you have already installed Django, otherwise
 ```
 pip install django
 ```
@@ -13,7 +13,7 @@ To start the local server:
 ```
 python manage.py runserver
 ```
-## Miggrations
+## Migrations
 To make migration file:
 ```
 python manage.py makemigrations

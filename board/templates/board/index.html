@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    {% block styles %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'board/css/style.css' %}">
+    {% endblock %}
+
+</head>
+<body class="bg-light">
+
+<div class="container-fluid bg-dark">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-0 border-bottom">
+        <a href="{% url 'board:home' %}"
+           class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none">
+            <span class="fs-4">Kanban Simulator</span>
+        </a>
+
+        <div class="d-grid gap-2 d-md-block">
+            <a class="btn btn-outline-primary" href="{% url 'board:home' %}" role="button">Домой</a>
+            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#RulesModal">
+                Правила игры
+            </button>
+        </div>
+
+        <div class="modal fade" id="RulesModal" tabindex="-1" aria-labelledby="RulesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="RulesModalLabel">Правила игры</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Каждая карточка на доске представляет собой задачу, которую должна
+                            выполнить ваша команда. Все новые задачи появляются в колонке «ОЧЕРЕДЬ». Чтобы выполнить
+                            задачу, вы должны доставить её в колонку «СДЕЛАНО», пройдя при этом промежуточные
+                            этапы - «АНАЛИЗ», «РАЗРАБОТКА» и «ТЕСТИРОВАНИЕ».</p>
+                        <div class="card border-success">
+                            <img src="{% static 'board/images/rule1.png' %}" alt="first-image">
+                        </div>
+                        <p>Ваша команда может выбирать карточки из колонки «ОЧЕРЕДЬ» и ставить
+                            игроков на эти карточки. Размещая игроков на карточки, нужно учитывать, что смена на
+                            другую работу будет стоить 1 очко. </p>
+                        <div class="card border-success">
+                            <img src="{% static 'board/images/rule1.png' %}" alt="first-image">
+                        </div>
+                        <p>Нажимая кнопку "НАЧАТЬ ДЕНЬ", размещенные игроки начинают выполнять работу.</p>
+                        <div class="card border-success">
+                            <img src="{% static 'board/images/rule1.png' %}" alt="first-image">
+                        </div>
+                        <p>Когда карточка будет выполнена в колонке "АНАЛИЗ", она переместиться в подколонку "Финиш".
+                            Дальше вы ее можете переместить в следующую колонку. </p>
+                        <div class="card border-success">
+                            <img src="{% static 'board/images/rule1.png' %}" alt="first-image">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+</div>
+
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-7 fw-light text-center pt-5">
+            <h1>KaBam - новый удобный канбан симулятор.</h1>
+            <p class="mx-5 mt-5 mb-3">Мы даем возможность собираться в команды, соревнаться, узнавать тонкости Kanban и
+                весело проводить время</p>
+
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#RulesModal">
+                Ознакомиться с правилами
+            </button>
+            {#            <a class="btn btn-success" href="{% url 'board:createRoom' %}" role="button">Начать игру</a>#}
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#StartGameModal">Начать
+                игру
+            </button>
+        </div>
+
+        <div class="col-5 d-flex align-items-center pt-5">
+            <div class="card">
+                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="StartGameModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="StartGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="post">
+                {% load crispy_forms_tags %}
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="StartGameModalLabel">Создание игры</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.name|as_crispy_field }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.teams_num|as_crispy_field }}
+                    </div>
+
+
+                    <div class="mb-3 form-check ps-0">
+                        {{ form.spectator|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Создать комнату</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

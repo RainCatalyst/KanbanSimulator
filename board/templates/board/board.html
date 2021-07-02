@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Board</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    {% block styles %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'board/css/style.css' %}">
+    {% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+
+    <script src="{% static 'board/js/cards.js' %}"></script>
+    <script src="{% static 'board/js/players.js' %}"></script>
+    <script src="{% static 'board/js/game.js' %}"></script>
+
+
+</head>
+<body class="bg-dark">
+
+    <div class="container-fluid bg-dark">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-0 border-bottom">
+            <a href="{% url 'board:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none">
+<!--            <svg class="bi me-2" width="40" height="32"><use xlink:href="#"/></svg>-->
+            <span class="fs-4">Kanban Simulator</span>
+            </a>
+
+            <div class="d-grid gap-2 d-md-block">
+                <a class="btn btn-outline-primary" href="{% url 'board:home' %}" role="button">Домой</a>
+                <button class="btn btn-outline-light" data-clipboard-text="https://kanbansummer21.herokuapp.com{% url 'board:joinGame' player.pk %}">Скопировать ссылку</button>
+
+                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#RulesModal">Правила игры</button>
+            </div>
+
+            <div class="modal fade" id="RulesModal" tabindex="-1" aria-labelledby="RulesModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="RulesModalLabel">Правила игры</h5>
+                        </div>
+                        <div class="modal-body">
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+                            Тут должны быть правила игры
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        <!--
+        <ul class="nav nav-pills">
+        <li class="nav-item"><button type="button" class="btn btn-outline-primary active">Домой</button></li>
+        <li class="nav-item"><button type="button" class="btn btn-outline-info">Скопировать ссылку</button></li>
+        <li class="nav-item"><button type="button" class="btn btn-outline-info">Правила игры</button></li>
+        <li class="nav-item"><button type="button" class="btn btn-outline-info">О нас</button></li>
+        </ul>
+        -->
+        <!--
+        <ul class="nav nav-pills">
+        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link btn btn-primary">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link btn btn-primary">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link btn btn-primary">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link btn btn-primary" role="button">About</a></li>
+        </ul>
+        -->
+
+        </header>
+    </div>
+
+    <nav class="navbar navbar-expand-md navbar-light rounded-top" style="background-color: #20c997" aria-label="Fourth navbar example">
+    <div class="container">
+
+        <div class="collapse navbar-collapse" id="navbarsExample04">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
+                <li class="nav-item dropdown pe-2">
+                    <button type="button" class="btn btn-outline-light text-dark" onclick="start_new_day()">Начать день</button>
+                </li>
+
+                <li class="nav-item text-dark d-flex align-items-center">
+                    <div class="nav-link text-dark"><i class="bi bi-calendar-week pe-2"></i><i id="day_num_title">День #0</i></div>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav mx-auto mb-2 mb-md-0" id="header_container">
+                <div class="anl_player players" id="anl_player0">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+                    <image id="A" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+                </svg>
+                </div>
+
+                <div class="anl_player players" id="anl_player1">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+                    <image id="A" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+                </svg>
+                </div>
+
+                <div class="dev_player players" id="dev_player2">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+                    <image id="D" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+</svg>
+                </div>
+                <div class="dev_player players" id="dev_player3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+                    <image id="D" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+</svg>
+                </div>
+                <div class="dev_player players" id="dev_player4">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+                    <image id="D" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+</svg>
+                </div>
+
+                <div class="tst_player players" id="tst_player5">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+  <image id="T" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+</svg>
+                </div>
+
+                <div class="tst_player players" id="tst_player6">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="29.375" viewBox="0 0 48 47">
+  <image id="T" width="48" height="47" xlink:href="data:img/png;base64,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"/>
+</svg>
+                </div>
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+
+                <li class="nav-item dropdown pe-2">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Настройки</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown04" style="background-color: #4fd1c5">
+                        <li><a class="dropdown-item" href="#">edit WIP limits</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown pe-2">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Статистика</button>
+
+
+                    <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header border-bottom">
+                            <h5 id="offcanvasRightLabel">Здесь должно быть какое-то меню</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <p>Игрок №1 - Чел1</p>
+                            <p>Игрок №2 - Чел2</p>
+                            <p>Игрок №3 - Чел3</p>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+    <div class="container-fluid overflow-auto bg-light" style="background-color: #c6f6d5" >
+        <div class="row text-center p-2 mb-1" >
+            <div class="col">
+                <h5><i class="bi bi-clock-fill pe-2" style="color: gray"></i>Очередь</h5>
+            </div>
+            <div class="col-3 border-start">
+                <h5><i class="bi bi-bar-chart-line-fill pe-2" style="color: red"></i>Анализ</h5>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="fw-light"><i class="bi bi-play-fill pe-1" style="color: deepskyblue"></i>Актив</h6>
+                    </div>
+                    <div class="col border-start">
+                        <h6 class="fw-light"><i class="bi bi-stop-fill pe-1" style="color: darkorange"></i>Финиш</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 border-start">
+                <h5><i class="bi bi-journal-code pe-2" style="color: slateblue"></i>Разработка</h5>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="fw-light"><i class="bi bi-play-fill pe-1" style="color: deepskyblue"></i>Актив</h6>
+                    </div>
+                    <div class="col border-start">
+                        <h6 class="fw-light"><i class="bi bi-stop-fill pe-1" style="color: darkorange"></i>Финиш</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 border-start">
+                <h5><i class="bi bi-clipboard-data pe-2" style="color: green"></i>Тестирование</h5>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="fw-light"><i class="bi bi-play-fill pe-1" style="color: deepskyblue"></i>Актив</h6>
+                    </div>
+                    <div class="col border-start">
+                        <h6 class="fw-light"><i class="bi bi-stop-fill pe-1" style="color: darkorange"></i>Финиш</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col border-start ">
+                <h5><i class="bi bi-check-lg pe-2" style="color: darkgreen"></i>Сделано</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid overflow-auto bg-light d-flex flex-column" id="temp" style="background-color: #c6f6d5">
+        <div class="row text-center text-break p-2 mb-1 flex-fill d-flex h-100 justify-content-start" id="board_container">
+            <div class="col containers droppable" id="backlog_container"></div>
+            <div class="col-3 border-start containers" id="analytic_container">
+                <div class="row flex-fill d-flex h-100 justify-content-start">
+                    <div class="col droppable_anl_proc sub_containers" id="analytic_in_process_container"></div>
+                    <div class="col border-start sub_containers" id="analytic_completed_container"></div>
+                </div>
+            </div>
+            <div class="col-3 border-start containers" id="devop_container">
+                <div class="row flex-fill d-flex h-100 justify-content-start">
+                    <div class="col droppable_dev_proc sub_containers" id="devop_in_process_container"></div>
+                    <div class="col border-start sub_containers" id="devop_completed_container"></div>
+                </div>
+            </div>
+            <div class="col-3 border-start containers" id="test_container">
+                <div class="row flex-fill d-flex h-100 justify-content-start">
+                    <div class="col droppable_test_in_proc sub_containers" id="test_in_process_container"></div>
+                    <div class="col border-start sub_containers" id="test_completed_container"></div>
+                </div>
+            </div>
+            <div class="col border-start containers" id="finish_container"></div>
+        </div>
+    </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function(){
+        team_id = {{ player.team.pk }};
+        backLogInitialPopulation();
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+<script>
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function (e) {
+    console.log(e);
+    });
+
+    clipboard.on('error', function (e) {
+    console.log(e);
+    });
+</script>
+
+</body>
+</html>

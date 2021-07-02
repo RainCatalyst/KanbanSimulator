@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height:100vh;
+    margin: 0;
+    padding: 0;
+
+}
+
+#temp {
+  flex: 1;
+    box-shadow: inset 0px 4px 10px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1);
+}
+
+#temp::-webkit-scrollbar {
+  width: 0;
+}
+
+#temp2 {
+  flex: 1;
+}
+
+.players{
+    z-index: 100;
+    padding: 3px;
+}

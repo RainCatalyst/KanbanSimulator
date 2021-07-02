@@ -19,15 +19,29 @@
 {##}
 {#<div class="container">#}
 {#    <form method="post">#}
+{#        {{ formset.management_form }}#}
+{#        {% if formset.errors %}#}
+{#            {% for errors in formset.errors %}#}
+{#                {% for error in errors.values %}#}
+{#                    {{ error }}#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#        {% endif %}#}
+{#        {{ formset.non_field_errors }}#}
 {#        {% csrf_token %}#}
 {#        {% for form in formset %}#}
+{#            {{ form.id }}#}
+{#            {{ form.name }}#}
 {#            <p> Имя игрока: {{ form.name.value }}</p>#}
 {#            <div class="fieldWrapper">#}
-{#                {{ form.subject.errors }}#}
 {#                <label for="{{ form.team.id_for_label }}" class="">Команда игрока:</label>#}
 {#                <select name="{{ form.team.html_name }}">#}
 {#                    {% for choice in choices %}#}
-{#                        <option value="{{ choice.pk }}">{{ choice.name }}</option>#}
+{#                        {% if form.team.value == choice.pk %}#}
+{#                            <option value="{{ choice.pk }}" selected>{{ choice.name }}</option>#}
+{#                        {% else %}#}
+{#                            <option value="{{ choice.pk }}">{{ choice.name }}</option>#}
+{#                        {% endif %}#}
 {#                    {% endfor %}#}
 {#                </select>#}
 {#            </div>#}
@@ -201,6 +215,15 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <form method="post">
+                {{ formset.management_form }}
+                {% if formset.errors %}
+                    {% for errors in formset.errors %}
+                        {% for error in errors.values %}
+                            {{ error }}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {{ formset.non_field_errors }}
                 {% load crispy_forms_tags %}
                 {% csrf_token %}
                 <div class="modal-header">
@@ -224,9 +247,15 @@
                                 <td>
                                     <div class="fieldWrapper">
                                         {{ form.subject.errors }}
+                                        {{ form.id }}
+                                        {{ form.name }}
                                         <select name="{{ form.team.html_name }}">
                                             {% for choice in choices %}
-                                                <option value="{{ choice.pk }}">{{ choice.name }}</option>
+                                                {% if form.team.value == choice.pk %}
+                                                    <option value="{{ choice.pk }}" selected>{{ choice.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ choice.pk }}">{{ choice.name }}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>

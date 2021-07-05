@@ -23,6 +23,9 @@ class Team(models.Model):
     wip2 = models.IntegerField(name='wip_limit2', null=True, blank=True)
     wip3 = models.IntegerField(name='wip_limit3', null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 # Primary usage - statistics (graph plotting)
 class Day(models.Model):
@@ -41,9 +44,9 @@ class Player(models.Model):
     # nickname
     name = models.CharField(max_length=20, default='name')
     # id of the correspondent team
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='Команда игрока')
     # is the player spectator
-    spectator = models.BooleanField(default=False)
+    spectator = models.BooleanField(default=False, verbose_name='Является ли игрок наблюдателем')
     # is the player creator of a room
     creator = models.BooleanField(default=False)
 

@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:room_id>/join', views.join_room, name='join'),
     path('<int:player_id>/waiting_room', views.waiting_room, name='waitingRoom'),
     path('<int:player_id>/waiting_room/players_check', views.players_check, name="playersCheck"),
+    # path('<int:player_id>/waiting_room/delete_player', views.delete_player, name="deletePlayer"),
     path('<int:player_id>/manage_players', views.manage_players, name='managePlayers'),
     path('<int:player_id>/start_game', views.start_game, name='startGame'),
     path('<int:player_id>/join_game', views.join_game, name='joinGame'),

@@ -72,18 +72,11 @@ $(function() {
 });
 
 function updateCharacterConfiguration(){
-    updateCharacterDraggable();
-    updateHeaderDroppable();
-}
-
-function updateCharacterDraggable(){
     $('.players').draggable({revert: 'invalid',
                     stop: function(event){
                     $(this).css("inset", "");
                     }});
-}
-
-function updateHeaderDroppable(){
+    updateCharacterDraggable();
     $("#header_container").droppable({
         accept: '.players',
         drop: function(event, ui){
@@ -91,7 +84,7 @@ function updateHeaderDroppable(){
             var child = $(this).children().last();
             child.removeAttr("style");
             child.css("position", "relative");
-            var role = characterDistinguish(child);
+            var role = characterDistinguishByID(child.attr("id"));
             moveCharacter(role, -1);
         }
     });
@@ -126,9 +119,8 @@ function placeCharacterAtSpecifiedCard(character, card_id, col_number){
     }
 }
 
-// returns the number which is code for specific character role
-function characterDistinguish(player){
-    switch(player.attr("id")){
+function characterDistinguishByID(player_id){
+    switch(player_id){
         case "anl_player0":
             return 0;
         case "anl_player1":

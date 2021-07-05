@@ -13,9 +13,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 
-    <script src="{% static 'board/js/cards.js' %}"></script>
-    <script src="{% static 'board/js/players.js' %}"></script>
-    <script src="{% static 'board/js/game.js' %}"></script>
     <script src="{% static 'board/js/waiting_room.js' %}"></script>
 
 
@@ -107,7 +104,7 @@
 
         <div class="row" >
             <div class="col-7 fw-light">
-                <p>#Игрок#, поделитесь этой ссылкой с вашими коллегами. Для начала игры требуется как минимум 6 игрока.</p>
+                <p>{{ player.name }}, поделитесь этой ссылкой с вашими коллегами. Для начала игры требуется как минимум 6 игрока.</p>
                 <p>Еще какого-нибудь текста сюда...</p>
                 <p>Прочитайте правила заранее, чтобы не отвлекаться на это во время игры!</p>
             </div>
@@ -222,6 +219,7 @@
     });
 
     game_id = {{ game }};
+    player_id = {{ player.pk }};
     new_players_check();
 </script>
 

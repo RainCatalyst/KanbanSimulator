@@ -1,6 +1,8 @@
 var current_version = 0;
 var team_id = 1;
 var current_day = 1;
+var player_collaboration_day = 5;
+var limits = [4, 4, 4];
 
 function backLogInitialPopulation(){
     $.ajax({
@@ -11,6 +13,13 @@ function backLogInitialPopulation(){
         success: function (response){
             var cards = JSON.parse(response["cards"]);
             current_effort = JSON.parse(response["team_effort"]);
+
+            var board_info = JSON.parse(response["board_info"]);
+            current_day = board_info["Age"];
+            limits[0] = board_info["Wip1"];
+            limits[1] = board_info["Wip2"];
+            limits[2] = board_info["Wip3"];
+
             for (var i = 0; i < cards.length; i++){
                 var card_element = createCardTemplate(cards[i]);
                 document.getElementById("backlog_container").innerHTML += card_element;

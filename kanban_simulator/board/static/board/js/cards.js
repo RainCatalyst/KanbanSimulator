@@ -85,7 +85,15 @@ function createExpediteCardTemplate(card_model){
 // droppable behavior for sub_containers
 $(function() {
     $('.droppable_anl_proc').droppable({
-        accept: '.draggable',
+        accept: function(draggable){
+        if (draggable.hasClass("draggable")){
+            if (getNumberOfChildNodesById("analytic_in_process_container") < limits[0]){
+                return true;
+            }
+            return false;
+        }
+        return false;
+        },
         drop: function(event, ui){
             $(this).append(ui.draggable[0]);
             var child = $(this).children().last();
@@ -97,12 +105,19 @@ $(function() {
             var row_num = $(this).children().length - 1;
             moveCard(column_num, row_num, id);
             abilityToAddCharacters(child);
-            //disableDrag(child);
         }
     });
 
     $('.droppable_dev_proc').droppable({
-        accept: '.draggable_to_dev',
+        accept: function(draggable){
+        if (draggable.hasClass("draggable_to_dev")){
+            if (getNumberOfChildNodesById("devop_in_process_container") < limits[1]){
+                return true;
+            }
+            return false;
+        }
+        return false;
+        },
         drop: function(event, ui){
             $(this).append(ui.draggable[0]);
             var child = $(this).children().last();
@@ -114,12 +129,19 @@ $(function() {
             var row_num = $(this).children().length - 1;
             moveCard(column_num, row_num, id);
             abilityToAddCharacters(child);
-            //disableDrag(child);
         }
     });
 
     $('.droppable_test_in_proc ').droppable({
-        accept: '.draggable_to_test',
+        accept: function(draggable){
+        if (draggable.hasClass("draggable_to_test")){
+            if (getNumberOfChildNodesById("test_in_process_container") < limits[2]){
+                return true;
+            }
+            return false;
+        }
+        return false;
+        },
         drop: function(event, ui){
             $(this).append(ui.draggable[0]);
             var child = $(this).children().last();
@@ -131,7 +153,6 @@ $(function() {
             var row_num = $(this).children().length - 1;
             moveCard(column_num, row_num, id);
             abilityToAddCharacters(child);
-            //disableDrag(child);
         }
     });
 
@@ -148,7 +169,6 @@ $(function() {
             var column_num = 7;
             var row_num = $(this).children().length - 1;
             moveCard(column_num, row_num, id);
-            //disableDrag(child);
         }
     });
 });
@@ -180,22 +200,35 @@ function abilityToAddCharacters(card){
     card.addClass("droppable_card");
 
     $('.droppable_card').droppable({
-        accept: '.players',
+        accept: function(draggable){
+            if (draggable.hasClass("players")){
+
+                var role = characterDistinguishByID(draggable.attr("id"))
+                var card_id = getIdByCardModel($(this));
+                var card = card_list[getIndexOfArrayCardById(card_id)];
+
+                 if (current_day >= player_collaboration_day || (card["column_number"] == 1 && (role == 0 || role == 1)) ||
+                (card["column_number"] == 3 && (role == 2 || role == 3 || role == 4)) ||
+                (card["column_number"] == 5 && (role == 5 || role == 6))){
+                    return true
+                }
+                return false
+            }
+            return false
+        },
         drop: function(event, ui){
+            var role = characterDistinguishByID($(ui.draggable).attr("id"))
             var card_id = getIdByCardModel($(this));
-            var card_cont_string = "#player_card_container_" + card_id;
-            //$(this).querySelector(card_cont_string).append(ui.draggable[0]);
-            var parent = $(card_cont_string)
+
+            var parent = $("#player_card_container_" + card_id)
             parent.append(ui.draggable[0]);
             var child = parent.children().last();
             child.css("inset", "");
 
-            var role = characterDistinguish(child);
             if (players_list[role] != card_id){
                 moveCharacter(role, card_id);
                 players_list[role] = card_id;
             }
-
     }});
 }
 
@@ -215,19 +248,8 @@ function addDraggableAbility(card, card_template){
         $(card_template).addClass("draggable");
     }
 
-    $('.draggable_to_dev').draggable({revert: 'invalid',
-                    stop: function(event){
-                    $(this).removeAttr("style");
-                    }});
-    $('.draggable_to_test').draggable({revert: 'invalid',
-                    stop: function(event){
-                    $(this).removeAttr("style");
-                    }});
-    $('.draggable_to_finish').draggable({revert: 'invalid',
-                    stop: function(event){
-                    $(this).removeAttr("style");
-                    }});
-    $('.draggable').draggable({revert: 'invalid',
+    $(".draggable_to_dev, .draggable_to_test, .draggable_to_finish, .draggable")
+        .draggable({revert: 'invalid',
                     stop: function(event){
                     $(this).removeAttr("style");
                     }});
@@ -257,11 +279,6 @@ function getIndexOfArrayCardById(id){
             return k;
     }
     return -1;
-}
-
-function disableDrag(card){
-    card.removeClass("ui-draggable");
-    card.removeClass("ui-draggable-handle");
 }
 
 function getPercentage(first, second){

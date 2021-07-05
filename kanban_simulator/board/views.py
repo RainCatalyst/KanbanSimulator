@@ -70,7 +70,7 @@ def populateBackLog(request):
         request_team = request.POST.get('team', 0)
 
         # testing purposes
-        # initial_conditions(request_team)
+        initial_conditions(request_team)
 
         cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                               'analytic_remaining', 'analytic_completed',
@@ -78,8 +78,23 @@ def populateBackLog(request):
                                                               'test_remaining', 'test_completed',
                                                               'column_number', 'row_number')
 
+        team = Team.objects.get(pk=request_team)
+
+        # Team start day and wip limits (don't forget to change it later)
+        team.dayNum = 1
+        team.wip_limit1 = 4
+        team.wip_limit2 = 4
+        team.wip_limit3 = 4
+        team.save()
+
+        board_info = {"Age": team.dayNum,
+                      "Wip1": team.wip_limit1,
+                      "Wip2": team.wip_limit2,
+                      "Wip3": team.wip_limit3}
+
         return JsonResponse(
-            {"cards": json.dumps(list(cards)), "team_effort": json.dumps(generate_random_effort_for_whole_team())},
+            {"cards": json.dumps(list(cards)), "board_info": json.dumps(board_info),
+             "team_effort": json.dumps(generate_random_effort_for_whole_team())},
             status=200)
 
     return JsonResponse({"error": ""}, status=400)
@@ -330,3 +345,22 @@ def rules(request):
 # to be added
 def news(request):
     return
+
+# @csrf_exempt
+# def delete_player(request, player_id):
+#     if request.method == "POST":
+#         #player = request.POST.get("player", None)
+#         print(player_id)
+#         player = Player.objects.get(pk=int(player_id))
+#         player.delete()
+#         game = player.team.game
+#         game.version += 1
+#             #
+#             #
+#             # Player.objects.get(pk=player_id).delete()
+#             # game_id = player.team.game.pk
+#             # game = Room.objects.get(pk=game_id)
+#             # game.version += 1
+#             # game.save()
+#
+#     return JsonResponse({}, status=200)

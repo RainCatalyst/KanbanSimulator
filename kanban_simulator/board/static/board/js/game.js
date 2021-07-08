@@ -27,6 +27,13 @@ function backLogInitialPopulation(){
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
+                cards[i]['row_number'] = i;
+                cards[i]['column_number'] = 0;
+                //console.log("BV: " + cards[i]['business_value']);
+                if (cards[i]['business_value'] == null){
+                    cards[i]['business_value'] = 10;
+                }
+                var card_element = createCardTemplate(cards[i]);
 
                 var card_element = createCardTemplate(cards[i]);
                 switch (cards[i]["column_number"]){
@@ -35,6 +42,8 @@ function backLogInitialPopulation(){
                         break;
                     case 1:
                         document.getElementById("analytic_in_process_container").innerHTML += card_element;
+                        card_element.removeClass("no_droppable_card");
+                        card_element.addClass("")
                         break;
                     case 2:
                         document.getElementById("analytic_completed_container").innerHTML += card_element;
@@ -55,19 +64,6 @@ function backLogInitialPopulation(){
                         document.getElementById("finish_container").innerHTML += card_element;
                         break;
                 }
-                cards[i]['row_number'] = i;
-                // cards[i]['column_number'] = 0;
-                // cards[i]['business_value'] = 10;
-
-                cards[i]['row_number'] = i;
-                cards[i]['column_number'] = 0;
-                console.log("BV: " + cards[i]['business_value']);
-                if (cards[i]['business_value'] == null){
-                    cards[i]['business_value'] = 10;
-                }
-                var card_element = createCardTemplate(cards[i]);
-                document.getElementById("backlog_container").innerHTML += card_element;
-                //cards[i]['business_value'] = 10;
 
                 card_list.push(cards[i]);
             }
@@ -207,8 +203,6 @@ function start_new_day(){
 $(function() {
     // description of droppable property of the header(initial place for characters)
     updateCharacterConfiguration();
-
-    performVersionCheck();
 
     $('#day_num_title').text("День #" + current_day);
 });

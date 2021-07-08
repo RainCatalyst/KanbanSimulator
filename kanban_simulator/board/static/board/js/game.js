@@ -28,13 +28,37 @@ function backLogInitialPopulation(){
             for (var i = 0; i < cards.length; i++){
                 cards[i]['row_number'] = i;
                 cards[i]['column_number'] = 0;
-                console.log("BV: " + cards[i]['business_value']);
+                //console.log("BV: " + cards[i]['business_value']);
                 if (cards[i]['business_value'] == null){
                     cards[i]['business_value'] = 10;
                 }
                 var card_element = createCardTemplate(cards[i]);
-                document.getElementById("backlog_container").innerHTML += card_element;
-                //cards[i]['business_value'] = 10;
+                switch (cards[i]["column_number"]){
+                    case 0:
+                        document.getElementById("backlog_container").innerHTML += card_element;
+                        break;
+                    case 1:
+                        document.getElementById("analytic_in_process_container").innerHTML += card_element;
+                        break;
+                    case 2:
+                        document.getElementById("analytic_completed_container").innerHTML += card_element;
+                        break;
+                    case 3:
+                        document.getElementById("devop_in_process_container").innerHTML += card_element;
+                        break;
+                    case 4:
+                        document.getElementById("devop_completed_container").innerHTML += card_element;
+                        break;
+                    case 5:
+                        document.getElementById("test_in_process_container").innerHTML += card_element;
+                        break;
+                    case 6:
+                        document.getElementById("test_completed_container").innerHTML += card_element;
+                        break;
+                    case 7:
+                        document.getElementById("finish_container").innerHTML += card_element;
+                        break;
+                }
                 card_list.push(cards[i]);
             }
 
@@ -283,5 +307,9 @@ function compare_cards(card_a, card_b) {
 
 function getNumberOfChildNodesById(id){
     return document.getElementById(id).childElementCount;
+}
+
+function call(){
+    $('#AlertCardsModal').modal('toggle');
 }
 

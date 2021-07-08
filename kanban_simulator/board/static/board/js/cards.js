@@ -78,8 +78,8 @@ function createExpediteCardTemplate(card_model){
 
                             '</div>' +
 
-                            '<div class="card-footer bg-warning border-dark text-end p-1 pe-2 fw-light fst-italic">День #' + card_model["age"] + '</div>' +
-            '</div>';
+                            '<div class="card-footer bg-warning border-dark d-flex flex-row p-1 pe-2 fw-light fst-italic"><div class="me-auto"><small>value: 124</small></div><div class="ms-auto"><small>День #' +card_model["age"] + '</small></div></div>' +
+        '</div>';
 }
 
 // droppable behavior for sub_containers

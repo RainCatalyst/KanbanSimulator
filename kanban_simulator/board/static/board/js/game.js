@@ -25,6 +25,7 @@ function backLogInitialPopulation(){
                 document.getElementById("backlog_container").innerHTML += card_element;
                 cards[i]['row_number'] = i;
                 cards[i]['column_number'] = 0;
+                cards[i]['business_value'] = 10;
                 card_list.push(cards[i]);
             }
 
@@ -115,6 +116,15 @@ function start_new_day(){
         for (var k = 0; k < card_list.length; k ++){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
+
+            /*    if (card_list[k]["age"] == 8){
+                card_list[k]["business_value"] *= 0.5;
+            }else if (card_list[k]["age"] == 9){
+                card_list[k]["business_value"] *= 0.25;
+            }else if (card_list[k]["age"] > 9){
+                card_list[k]["business_value"] = 0;
+            }*/
+
             }
         }
 

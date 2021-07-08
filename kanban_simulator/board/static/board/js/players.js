@@ -76,7 +76,6 @@ function updateCharacterConfiguration(){
                     stop: function(event){
                     $(this).css("inset", "");
                     }});
-    updateCharacterDraggable();
     $("#header_container").droppable({
         accept: '.players',
         drop: function(event, ui){

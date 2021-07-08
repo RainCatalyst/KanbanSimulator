@@ -21,17 +21,13 @@ function backLogInitialPopulation(){
 
             var board_info = JSON.parse(response["board_info"]);
             current_day = board_info["Age"];
+            $('#day_num_title').text("День #" + current_day);
             limits[0] = board_info["Wip1"];
             limits[1] = board_info["Wip2"];
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
-                cards[i]['row_number'] = i;
-                cards[i]['column_number'] = 0;
-                //console.log("BV: " + cards[i]['business_value']);
-                if (cards[i]['business_value'] == null){
-                    cards[i]['business_value'] = 10;
-                }
+
                 var card_element = createCardTemplate(cards[i]);
                 switch (cards[i]["column_number"]){
                     case 0:
@@ -59,6 +55,20 @@ function backLogInitialPopulation(){
                         document.getElementById("finish_container").innerHTML += card_element;
                         break;
                 }
+                cards[i]['row_number'] = i;
+                // cards[i]['column_number'] = 0;
+                // cards[i]['business_value'] = 10;
+
+                cards[i]['row_number'] = i;
+                cards[i]['column_number'] = 0;
+                console.log("BV: " + cards[i]['business_value']);
+                if (cards[i]['business_value'] == null){
+                    cards[i]['business_value'] = 10;
+                }
+                var card_element = createCardTemplate(cards[i]);
+                document.getElementById("backlog_container").innerHTML += card_element;
+                //cards[i]['business_value'] = 10;
+
                 card_list.push(cards[i]);
             }
 

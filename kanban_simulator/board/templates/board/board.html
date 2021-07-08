@@ -276,16 +276,32 @@
         </div>
     </div>
 
-{#<div class="modal fade" id="AlertModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"#}
-{#     aria-labelledby="AlertModalLabel" aria-hidden="true">#}
+{#<div class="modal fade" id="AlertCardsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"#}
+{#     aria-labelledby="AlertCardsModalLabel" aria-hidden="true">#}
 {#    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">#}
 {#        <div class="modal-content">#}
 {#            <div class="modal-header bg-warning">#}
-{#                <h5 class="modal-title" id="AlertModalLabel">Уведомление!</h5>#}
+{#                <h5 class="modal-title" id="AlertCardsModalLabel">Уведомление!</h5>#}
 {#            </div>#}
 {#            <div class="modal-body">#}
-{#                <p>Тебе пришло новое уведомление!</p>#}
-{#                <p>Посмотри, вдруг там что-то важное!</p>#}
+{#                <p>Появились новые карточки</p>#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+{#<div class="modal fade" id="AlertExpediteCardsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"#}
+{#     aria-labelledby="AlertExpediteCardsModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header bg-warning">#}
+{#                <h5 class="modal-title" id="AlertExpediteCardsModalLabel">Уведомление!</h5>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <p>Появились новые Expedite карточки!</p>#}
 {#            </div>#}
 {#            <div class="modal-footer">#}
 {#                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>#}
@@ -320,7 +336,12 @@
 </script>
 
 {#<script>#}
-{#    var myModal = new bootstrap.Modal(document.getElementById('AlertModal'), {})#}
+{#    var myModal = new bootstrap.Modal(document.getElementById('AlertCardsModal'), {})#}
+{#    myModal.show()#}
+{#</script>#}
+
+{#<script>#}
+{#    var myModal = new bootstrap.Modal(document.getElementById('AlertExpediteCardsModal'), {})#}
 {#    myModal.show()#}
 {#</script>#}
 

@@ -9,7 +9,7 @@ from .forms import CreateRoomForm, JoinRoomForm, PlayerFormSet
 import random
 
 NUMBER_OF_CHARACTERS = 7
-CARDS_IN_GAME = 10
+CARDS_IN_GAME = 30
 
 
 def index(request):
@@ -319,8 +319,6 @@ def start_game(request, player_id):
             chosen_indexes.add(j)
             number_found = True
 
-    # start day
-    start_day = 1
     for team in team_set:
         # creating cards for each team
         row = 0
@@ -350,7 +348,7 @@ def start_game(request, player_id):
                 develop_completed = 0
                 test_completed = 0
 
-            new_card = Card(title=card.title, team=team, start_day=start_day, analytic_remaining=card.analytic_points,
+            new_card = Card(title=card.title, team=team, start_day=i//15*9+1, analytic_remaining=card.analytic_points,
                             analytic_completed=analytic_completed, develop_remaining=card.develop_points,
                             develop_completed=develop_completed, test_remaining=card.test_points,
                             test_completed=test_completed, column_number=0 if i > 5 else i // 2 * 2 + 1,
@@ -364,11 +362,6 @@ def start_game(request, player_id):
             character = Character(team=team, role=i)
             character.save()
 
-        # changing the start day
-        if start_day == 1:
-            start_day = 15
-        else:
-            start_day = 1
 
     room.ready = True
     room.save()

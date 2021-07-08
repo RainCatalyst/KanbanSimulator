@@ -16,16 +16,42 @@ function backLogInitialPopulation(){
 
             var board_info = JSON.parse(response["board_info"]);
             current_day = board_info["Age"];
+            $('#day_num_title').text("День #" + current_day);
             limits[0] = board_info["Wip1"];
             limits[1] = board_info["Wip2"];
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
                 var card_element = createCardTemplate(cards[i]);
-                document.getElementById("backlog_container").innerHTML += card_element;
+                switch (cards[i]["column_number"]){
+                    case 0:
+                        document.getElementById("backlog_container").innerHTML += card_element;
+                        break;
+                    case 1:
+                        document.getElementById("analytic_in_process_container").innerHTML += card_element;
+                        break;
+                    case 2:
+                        document.getElementById("analytic_completed_container").innerHTML += card_element;
+                        break;
+                    case 3:
+                        document.getElementById("devop_in_process_container").innerHTML += card_element;
+                        break;
+                    case 4:
+                        document.getElementById("devop_completed_container").innerHTML += card_element;
+                        break;
+                    case 5:
+                        document.getElementById("test_in_process_container").innerHTML += card_element;
+                        break;
+                    case 6:
+                        document.getElementById("test_completed_container").innerHTML += card_element;
+                        break;
+                    case 7:
+                        document.getElementById("finish_container").innerHTML += card_element;
+                        break;
+                }
                 cards[i]['row_number'] = i;
-                cards[i]['column_number'] = 0;
-                cards[i]['business_value'] = 10;
+                // cards[i]['column_number'] = 0;
+                // cards[i]['business_value'] = 10;
                 card_list.push(cards[i]);
             }
 

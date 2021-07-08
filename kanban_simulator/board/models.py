@@ -79,13 +79,13 @@ class UserStory(models.Model):
 
 
 class Card(models.Model):
-    # user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
-
     # Card title
     title = models.CharField(max_length=20, null=True)
 
     # id of the correspondent team
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # day when cart is added to backlog
+    start_day = models.IntegerField(null=True)
     # age of the current card
     age = models.IntegerField(default=0)
     # Expedite factor

@@ -87,7 +87,7 @@ $(function() {
     $('.droppable_anl_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable")){
-            if (getNumberOfChildNodesById("analytic_in_process_container") < limits[0]){
+            if (getNumberOfChildNodesById("analytic_in_process_container") + getNumberOfChildNodesById("analytic_completed_container") < limits[0]){
                 return true;
             }
             return false;
@@ -111,7 +111,7 @@ $(function() {
     $('.droppable_dev_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_dev")){
-            if (getNumberOfChildNodesById("devop_in_process_container") < limits[1]){
+            if (getNumberOfChildNodesById("devop_in_process_container") + getNumberOfChildNodesById("devop_completed_container") < limits[1]){
                 return true;
             }
             return false;
@@ -135,7 +135,7 @@ $(function() {
     $('.droppable_test_in_proc ').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_test")){
-            if (getNumberOfChildNodesById("test_in_process_container") < limits[2]){
+            if (getNumberOfChildNodesById("test_in_process_container") + getNumberOfChildNodesById("test_completed_container") < limits[2]){
                 return true;
             }
             return false;

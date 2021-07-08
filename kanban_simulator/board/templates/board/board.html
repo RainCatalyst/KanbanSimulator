@@ -181,7 +181,6 @@
 
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
 
-               
                 <li class="nav-item dropdown pe-2">
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Статистика</button>
 
@@ -277,6 +276,24 @@
         </div>
     </div>
 
+{#<div class="modal fade" id="AlertModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"#}
+{#     aria-labelledby="AlertModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header bg-warning">#}
+{#                <h5 class="modal-title" id="AlertModalLabel">Уведомление!</h5>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <p>Тебе пришло новое уведомление!</p>#}
+{#                <p>Посмотри, вдруг там что-то важное!</p>#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
@@ -301,6 +318,11 @@
     console.log(e);
     });
 </script>
+
+{#<script>#}
+{#    var myModal = new bootstrap.Modal(document.getElementById('AlertModal'), {})#}
+{#    myModal.show()#}
+{#</script>#}
 
 </body>
 </html>

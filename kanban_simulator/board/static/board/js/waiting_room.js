@@ -7,15 +7,7 @@ function player_template(player, count){
     return '<tr>' +
                     '<th scope="row">' + count +'</th>' +
                     '<td>' + player["name"] + '</td>' +
-                    '<td>' + player["team_number"] + '</td>' +
-                    '<td>' + isSpectator(player) + '</td>' +
                     '</tr>';
-}
-
-function isSpectator(player){
-    if (player["spectator"])
-        return "Да";
-    return "Нет";
 }
 
 function new_players_check(){

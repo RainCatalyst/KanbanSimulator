@@ -4,6 +4,11 @@ var current_day = 1;
 var player_collaboration_day = 5;
 var limits = [4, 4, 4];
 
+// arrays of days
+var analytic_completed_tasks = [];
+var developer_completed_tasks = [];
+var test_completed_tasks = [];
+
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
@@ -22,6 +27,7 @@ function backLogInitialPopulation(){
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
+
                 var card_element = createCardTemplate(cards[i]);
                 switch (cards[i]["column_number"]){
                     case 0:
@@ -52,6 +58,17 @@ function backLogInitialPopulation(){
                 cards[i]['row_number'] = i;
                 // cards[i]['column_number'] = 0;
                 // cards[i]['business_value'] = 10;
+
+                cards[i]['row_number'] = i;
+                cards[i]['column_number'] = 0;
+                console.log("BV: " + cards[i]['business_value']);
+                if (cards[i]['business_value'] == null){
+                    cards[i]['business_value'] = 10;
+                }
+                var card_element = createCardTemplate(cards[i]);
+                document.getElementById("backlog_container").innerHTML += card_element;
+                //cards[i]['business_value'] = 10;
+
                 card_list.push(cards[i]);
             }
 
@@ -124,16 +141,19 @@ function start_new_day(){
                     card_list[changed_cards[i]]["column_number"] += 1;
                     card_list[changed_cards[i]]["row_number"] = first_empty_row_test_comp;
                     first_empty_row_test_comp += 1;
+                    test_completed_tasks.push(current_day);
                 }else if (card_list[changed_cards[i]]["develop_completed"] >= card_list[changed_cards[i]]["develop_remaining"]){
                     dev_comp += 1;
                     card_list[changed_cards[i]]["column_number"] += 1;
                     card_list[changed_cards[i]]["row_number"] = first_empty_row_dev_comp;
                     first_empty_row_dev_comp += 1;
+                    developer_completed_tasks.push(current_day);
                 }else if (card_list[changed_cards[i]]["analytic_completed"] >= card_list[changed_cards[i]]["analytic_remaining"]){
                     anl_comp += 1;
                     card_list[changed_cards[i]]["column_number"] += 1;
                     card_list[changed_cards[i]]["row_number"] = first_empty_row_anl_comp;
                     first_empty_row_anl_comp += 1;
+                    analytic_completed_tasks.push(current_day);
                 }
             }
         }
@@ -142,15 +162,18 @@ function start_new_day(){
         for (var k = 0; k < card_list.length; k ++){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
+            if (card_list[k]["is_expedite"]){
+                if (card_list[k]["age"] >= 5){
+                    card_list[k]["business_value"] = 0;
+                }
+            }else{
+                if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
+                }else if (card_list[k]["age"] > 9){
+                    card_list[k]["business_value"] = 0;
+            }
 
-            /*    if (card_list[k]["age"] == 8){
-                card_list[k]["business_value"] *= 0.5;
-            }else if (card_list[k]["age"] == 9){
-                card_list[k]["business_value"] *= 0.25;
-            }else if (card_list[k]["age"] > 9){
-                card_list[k]["business_value"] = 0;
-            }*/
-
+            }
             }
         }
 
@@ -271,7 +294,12 @@ function removeAllChildNodes(parent) {
 
 // needed for adding updated (from server) cards to parent column
 function addCardToParent(parent, card){
-    document.getElementById(parent).innerHTML += createCardTemplate(card);
+    if (card["is_expedite"]){
+        document.getElementById(parent).innerHTML += createExpediteCardTemplate(card);
+    }else{
+        document.getElementById(parent).innerHTML += createCardTemplate(card);
+    }
+
     card_template = document.getElementById('kb_card_' + card["pk"]);
     addDraggableAbility(card, card_template);
     if (card["column_number"] % 2 == 1 && card["column_number"] != 7){

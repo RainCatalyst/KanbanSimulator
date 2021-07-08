@@ -38,7 +38,7 @@ function createCardTemplate(card_model){
 
                             '</div>' +
 
-                            '<div class="card-footer border-success text-end p-1 pe-2 fw-light fst-italic">День #' +card_model["age"] + '</div>' +
+                            '<div class="card-footer border-success d-flex flex-row p-1 pe-2 fw-light fst-italic"><div class="me-auto"><small>value: ' + card_model["business_value"] + '</small></div><div class="ms-auto"><small>День #' +card_model["age"] + '</small></div></div>' +
             '</div>';
 }
 
@@ -78,8 +78,8 @@ function createExpediteCardTemplate(card_model){
 
                             '</div>' +
 
-                            '<div class="card-footer bg-warning border-dark text-end p-1 pe-2 fw-light fst-italic">День #' + card_model["age"] + '</div>' +
-            '</div>';
+                            '<div class="card-footer bg-warning border-dark d-flex flex-row p-1 pe-2 fw-light fst-italic"><div class="me-auto"><small>value: ' + card_model["business_value"] + '</small></div><div class="ms-auto"><small>День #' +card_model["age"] + '</small></div></div>' +
+        '</div>';
 }
 
 // droppable behavior for sub_containers
@@ -87,7 +87,7 @@ $(function() {
     $('.droppable_anl_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable")){
-            if (getNumberOfChildNodesById("analytic_in_process_container") < limits[0]){
+            if (getNumberOfChildNodesById("analytic_in_process_container") + getNumberOfChildNodesById("analytic_completed_container") < limits[0]){
                 return true;
             }
             return false;
@@ -111,7 +111,7 @@ $(function() {
     $('.droppable_dev_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_dev")){
-            if (getNumberOfChildNodesById("devop_in_process_container") < limits[1]){
+            if (getNumberOfChildNodesById("devop_in_process_container") + getNumberOfChildNodesById("devop_completed_container") < limits[1]){
                 return true;
             }
             return false;
@@ -135,7 +135,7 @@ $(function() {
     $('.droppable_test_in_proc ').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_test")){
-            if (getNumberOfChildNodesById("test_in_process_container") < limits[2]){
+            if (getNumberOfChildNodesById("test_in_process_container") + getNumberOfChildNodesById("test_completed_container") < limits[2]){
                 return true;
             }
             return false;

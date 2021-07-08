@@ -76,7 +76,8 @@ def populateBackLog(request):
                                                               'analytic_remaining', 'analytic_completed',
                                                               'develop_remaining', 'develop_completed',
                                                               'test_remaining', 'test_completed',
-                                                              'column_number', 'row_number')
+                                                              'column_number', 'row_number',
+                                                              'business_value')
 
         team = Team.objects.get(pk=request_team)
 
@@ -121,7 +122,9 @@ def start_new_day(request):
                                                           develop_completed=card["develop_completed"],
                                                           test_completed=card["test_completed"],
                                                           row_number=card["row_number"],
-                                                          column_number=card["column_number"])
+                                                          column_number=card["column_number"],
+                                                          business_value=card["business_value"])
+
             for i in range(len(characters)):
                 Character.objects.filter(team=team, role=i).update(card_id=characters[i])
 
@@ -193,7 +196,7 @@ def version_check(request):
                                                                  'analytic_remaining', 'analytic_completed',
                                                                  'develop_remaining', 'develop_completed',
                                                                  'test_remaining', 'test_completed',
-                                                                 'column_number', 'row_number')
+                                                                 'column_number', 'row_number', 'business_value')
             characters = Character.objects.filter(team=server_team).values('role', 'card_id')
             board_info = {"version": server_team.version,
                           "Age": server_team.dayNum,

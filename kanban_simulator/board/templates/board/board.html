@@ -182,19 +182,40 @@
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
 
                 <li class="nav-item dropdown pe-2">
-                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onclick="calculateBV()">Статистика</button>
+                    <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal" data-bs-target="#StatisticsModal">Статистика</button>
+
+                    <div class="modal fade" id="StatisticsModal" tabindex="-1" aria-labelledby="StatisticsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="StatisticsModalLabel">Статистика команды</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="alert alert-info text-center font-monospace" role="alert">
+                                        БИЗНЕС ВАЛЬЮ: 5261347238
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card border-success">
+                                                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card border-success">
+                                                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-                    <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                        <div class="offcanvas-header border-bottom">
-                            <h5 id="offcanvasRightLabel">Здесь должно быть какое-то меню</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
-                        </div>
-                        <div class="offcanvas-body" onload="calculateBV()" onclick="calculateBV()">
 
-                            <!--<p>Игрок №1 - Чел1</p>
-                            <p>Игрок №2 - Чел2</p>
-                            <p>Игрок №3 - Чел3</p>-->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

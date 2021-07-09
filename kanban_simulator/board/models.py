@@ -19,9 +19,9 @@ class Team(models.Model):
     dayNum = models.IntegerField(default=1)
 
     # WIP limits for Analytics, Devops, Testers respectively
-    wip1 = models.IntegerField(name='wip_limit1', default=9999999)
-    wip2 = models.IntegerField(name='wip_limit2', default=9999999)
-    wip3 = models.IntegerField(name='wip_limit3', default=9999999)
+    wip1 = models.IntegerField(name='wip_limit1', default=4)
+    wip2 = models.IntegerField(name='wip_limit2', default=4)
+    wip3 = models.IntegerField(name='wip_limit3', default=4)
 
     def __str__(self):
         return self.name

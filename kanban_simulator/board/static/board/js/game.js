@@ -223,9 +223,10 @@ $(function() {
      //var myHeading = '<p>Business value: ' + BV + '</p>';
      //$("#bv_container").html(myHeading);
      //$('#foreground').hide();
-     alert("dialog show");
+     //alert("dialog show");
      cumulativeGraph();
      barGraph();
+     calculateBV();
      $('#StatisticsModal').modal('toggle');
      //document.getElementById('foreground').style.display = 'none';
     });
@@ -352,6 +353,7 @@ function calculateBV(){
         }
     }
     BV = sum;
+    document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
     //document.getElementsByClassName("offcanvas-body").innerHTML += '<p>Business value: ' + sum + '</p>';
 }
 

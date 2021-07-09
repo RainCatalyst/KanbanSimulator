@@ -102,10 +102,10 @@ def populateBackLog(request):
 
         # Team start day and wip limits (don't forget to change it later)
         # team.dayNum = 1
-        # team.wip_limit1 = 4
-        # team.wip_limit2 = 4
-        # team.wip_limit3 = 4
-        # team.save()
+        team.wip_limit1 = 4
+        team.wip_limit2 = 4
+        team.wip_limit3 = 4
+        team.save()
 
         board_info = {"Age": team.dayNum,
                       "Wip1": team.wip_limit1,

@@ -1,8 +1,9 @@
 var current_version = 0;
 var team_id = 1;
 var current_day = 1;
-var player_collaboration_day = 5;
+var player_collaboration_day = 10;
 var limits = [4, 4, 4];
+var BV = 0;
 
 // arrays of days
 var analytic_completed_tasks = [];
@@ -27,7 +28,7 @@ function backLogInitialPopulation(){
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
-                // cards[i]['row_number'] = i;
+                //cards[i]['row_number'] = i;
                 //cards[i]['column_number'] = 0;
                 //console.log("BV: " + cards[i]['business_value']);
                 if (cards[i]['business_value'] == null){
@@ -74,6 +75,7 @@ function backLogInitialPopulation(){
                     }});
 
             droppableAbility();
+            allowToDrop();
 
 
     }});
@@ -317,5 +319,17 @@ function getNumberOfChildNodesById(id){
 
 function call(){
     $('#AlertCardsModal').modal('toggle');
+}
+
+function calculateBV(){
+
+    var sum = 0;
+    for (var i = 0; i < card_list.length; i ++){
+        if (card_list[i]["column_number"] == 7){
+            sum += card_list[i]["business_value"];
+        }
+    }
+    BV = sum;
+    document.getElementsByClassName("offcanvas-body").innerHTML += '<p>Business value: ' + sum + '</p>';
 }
 

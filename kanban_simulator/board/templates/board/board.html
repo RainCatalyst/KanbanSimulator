@@ -32,7 +32,7 @@
 
     {% endif %}
 
-    <div class="container-fluid bg-dark">
+    <div class="container-fluid bg-dark" id="shapka">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-0">
             <a href="{% url 'board:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none">
 <!--            <svg class="bi me-2" width="40" height="32"><use xlink:href="#"/></svg>-->
@@ -41,6 +41,12 @@
 
             <div class="d-grid gap-2 d-md-block">
                 <a class="btn btn-outline-primary" href="{% url 'board:home' %}" role="button">Домой</a>
+
+                {% if player.spectator %}
+
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#StatisticsModal" id="stat_show">Статистика</button>
+
+                {% endif %}
                 <button class="btn btn-outline-light" data-clipboard-text="http://127.0.0.1:8000{% url 'board:joinGame' player.pk %}">Скопировать ссылку</button>
 
                 <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#RulesModal">Правила игры</button>
@@ -189,7 +195,12 @@
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
 
                 <li class="nav-item dropdown pe-2">
-                    <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal" data-bs-target="#StatisticsModal" id="stat_show">Статистика</button>
+
+                    {% if not player.spectator %}
+
+                        <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal" data-bs-target="#StatisticsModal" id="stat_show">Статистика</button>
+
+                    {% endif %}
 
                     <div class="modal fade" id="StatisticsModal" tabindex="-1" aria-labelledby="StatisticsModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">

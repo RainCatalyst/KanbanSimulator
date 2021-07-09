@@ -29,27 +29,27 @@ body {
     position:absolute;
     height:100%;
     width:100%;
-    background-color:#ff0000;
+    background-color: #ff0000;
     opacity:0.3;
     z-index: 10000;
 }
 
-#firstChart{
-    height: 400px
-    width: 400px
-}
+/*#firstChart{*/
+/*    height: 100px;*/
+/*    width: 100px;*/
+/*}*/
 
-#secondChart{
-    height: 400px
-    width: 400px
-}
+/*#secondChart{*/
+/*    height: 100px;*/
+/*    width: 100px;*/
+/*}*/
 
-#firstChartContainer{
-    max-width: 400px;
-    max-height: 400px;
-}
+/*#firstChartContainer{*/
+/*    max-width: 400px;*/
+/*    max-height: 400px;*/
+/*}*/
 
-#secondChartContainer{
-    max-width: 400px;
-    max-height: 400px;
-}
+/*#secondChartContainer{*/
+/*    max-width: 400px;*/
+/*    max-height: 400px;*/
+/*}*/

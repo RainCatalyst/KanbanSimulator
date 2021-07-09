@@ -26,7 +26,11 @@
 </head>
 <body class="bg-dark">
 
-    <!--<div id="foreground"></div>-->
+    {% if player.spectator %}
+
+        <div id="foreground"></div>
+
+    {% endif %}
 
     <div class="container-fluid bg-dark">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-0">
@@ -187,7 +191,7 @@
                 <li class="nav-item dropdown pe-2">
                     <button type="button" class="btn btn-outline-light text-dark" id="stat_show">Статистика</button>
 
-                    <div class="modal fade" id="StatisticsModal" tabindex="-1" aria-labelledby="StatisticsModalLabel" aria-hidden="true" style="z-index: 1002!important">
+                    <div class="modal fade" id="StatisticsModal" tabindex="-1" aria-labelledby="StatisticsModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -199,17 +203,27 @@
                                         БИЗНЕС ВАЛЬЮ: 5261347238
                                     </div>
 
+{#                                    <div class="d-flex">#}
+{##}
+{#                                        <div class="flex=fill" id="firstChartContainer">#}
+{#                                            <canvas id="firstChart"></canvas>#}
+{#                                        </div>#}
+{##}
+{#                                        <div class="flex=fill" id="secondChartContainer">#}
+{#                                            <canvas id="secondChart"></canvas>#}
+{#                                        </div>#}
+{#                                        #}
+{#                                    </div>#}
+
                                     <div class="row">
                                         <div class="col">
-                                            <div class="border-success" id="firstChartContainer">
-                                                <!--<img src="{% static 'board/images/image.jpg' %}" alt="first-image">-->
-                                                <canvas id="firstChart" width="300px" height="300px"></canvas>
+                                            <div class="border-success">
+                                                <canvas id="firstChart"></canvas>
                                             </div>
                                         </div>
                                         <div class="col">
-                                            <div class="border-success" id="secondChartContainer">
-                                                <!--<img src="{% static 'board/images/image.jpg' %}" alt="first-image">-->
-                                                <canvas id="secondChart" width="300px" height="300px"></canvas>
+                                            <div class="border-success">
+                                                <canvas id="secondChart"></canvas>
                                             </div>
                                         </div>
                                     </div>

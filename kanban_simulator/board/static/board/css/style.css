@@ -33,23 +33,3 @@ body {
     opacity:0.3;
     z-index: 1000;
 }
-
-#firstChart{
-    height: 400px
-    width: 400px
-}
-
-#secondChart{
-    height: 400px
-    width: 400px
-}
-
-#firstChartContainer{
-    max-width: 400px;
-    max-height: 400px;
-}
-
-#secondChartContainer{
-    max-width: 400px;
-    max-height: 400px;
-}

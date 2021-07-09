@@ -31,8 +31,7 @@ body {
     width:100%;
     background-color:#ff0000;
     opacity:0.3;
-    z-index: 1000;
-    pointer-events:none;
+    z-index: 10000;
 }
 
 #firstChart{

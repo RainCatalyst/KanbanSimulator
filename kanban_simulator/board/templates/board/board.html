@@ -26,7 +26,11 @@
 </head>
 <body class="bg-dark">
 
-    <div id="foreground"></div>
+    {% if player.spectator %}
+
+        <div id="foreground"></div>
+
+    {% endif %}
 
     <div class="container-fluid bg-dark">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-0">

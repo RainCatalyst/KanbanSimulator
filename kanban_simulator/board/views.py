@@ -30,10 +30,14 @@ def index(request):
             player_name = form.cleaned_data['name']
             spectator = form.cleaned_data['spectator']
             teams_num = form.cleaned_data['teams_num']
+            wip1 = form.cleaned_data['wip_limit1']
+            wip2 = form.cleaned_data['wip_limit2']
+            wip3 = form.cleaned_data['wip_limit3']
 
             # creating teams
             for i in range(teams_num):
-                new_team = Team(name='Команда ' + str(i), game=new_room, dayNum=FIRST_HALF_APPEARS)
+                new_team = Team(name='Команда ' + str(i), game=new_room, dayNum=FIRST_HALF_APPEARS, wip_limit1=wip1,
+                                wip_limit2=wip2, wip_limit3=wip3)
                 new_team.save()
 
             # creating player

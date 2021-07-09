@@ -4,8 +4,8 @@ var current_day = 1;
 var player_collaboration_day = 10;
 var limits = [4, 4, 4];
 var BV = 0;
-var bar_data = [];
-var line_data = [];
+var bar_data = [{"1": 0}, {"2": 0}, {"3": 0}, {"4": 0}];
+var line_data = [{"1": [1, 0, 0]}, {"2": [2, 1, 0]}, {"3": [3, 1, 0]}, {"4": [4, 2, 0]}];
 var lineChart;
 var barChart;
 
@@ -220,9 +220,12 @@ $(function() {
     $('#day_num_title').text("День #" + current_day);
 
     $(document).on("click", "#stat_show", function () {
-     var myHeading = '<p>Business value: ' + BV + '</p>';
-     $("#bv_container").html(myHeading);
-     $('#offcanvasRight').modal('toggle');
+     //var myHeading = '<p>Business value: ' + BV + '</p>';
+     //$("#bv_container").html(myHeading);
+     alert("dialog show");
+     cumulativeGraph();
+     barGraph();
+     $('#StatisticsModal').modal('toggle');
     });
 });
 
@@ -355,7 +358,9 @@ function cumulativeGraph(){
     if (lineChart != null){
         lineChart.destroy();
     }
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('firstChart').getContext('2d');
+    ctx.height = 400;
+    ctx.width = 400;
     var labels = Object.keys(line_data);
 
     var anl_data = [];
@@ -400,7 +405,18 @@ function cumulativeGraph(){
               },
     borderColor: 'rgb(255, 0, 0)',
     tension: 0.1
-  }]
+  }],
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true
+            }
+        }]
+    }
+}
 };
 lineChart = new Chart(ctx, {
     type: 'line',
@@ -413,7 +429,9 @@ function barGraph(){
     if (barChart != null){
         barChart.destroy();
     }
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('secondChart').getContext('2d');
+    ctx.height = 400;
+    ctx.width = 400;
     var labels = Object.keys(bar_data);
 
     var anl_data = [];
@@ -431,13 +449,19 @@ function barGraph(){
   {
     label: 'Completed tasks',
     data: ds,
-    /*fill: {
-                target: 'origin',
-                above: 'rgb(0, 0, 255)'
-              },
-    borderColor: 'rgb(0, 0, 255)',
-    tension: 0.1*/
-  }]
+
+  }],
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true
+            }
+        }]
+    }
+}
 };
 barChart = new Chart(ctx, {
     type: 'bar',

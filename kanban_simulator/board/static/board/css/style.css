@@ -34,3 +34,23 @@ body {
     z-index: 1000;
     pointer-events:none;
 }
+
+#firstChart{
+    height: 400px
+    width: 400px
+}
+
+#secondChart{
+    height: 400px
+    width: 400px
+}
+
+#firstChartContainer{
+    max-width: 400px;
+    max-height: 400px;
+}
+
+#secondChartContainer{
+    max-width: 400px;
+    max-height: 400px;
+}

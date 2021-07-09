@@ -82,7 +82,7 @@ def populateBackLog(request):
         if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or \
                 team.dayNum == SECOND_EXPEDITE or team.dayNum == THIRD_EXPEDITE:
             cards_to_order = cards.filter(column_number=0).order_by('row_number')
-            max_row_num = cards_to_order.last()['row_number']
+            max_row_num = cards_to_order.last().row_number
 
             i = 0
             while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:

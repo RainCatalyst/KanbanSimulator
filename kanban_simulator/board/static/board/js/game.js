@@ -27,7 +27,7 @@ function backLogInitialPopulation(){
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
-                cards[i]['row_number'] = i;
+                // cards[i]['row_number'] = i;
                 //cards[i]['column_number'] = 0;
                 //console.log("BV: " + cards[i]['business_value']);
                 if (cards[i]['business_value'] == null){

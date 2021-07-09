@@ -178,9 +178,13 @@ function start_new_day(){
             }else{
                 if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
                     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
-                }else if (card_list[k]["age"] > 9){
+                }else if (card_list[k]["age"] == 10){
                     card_list[k]["business_value"] = 0;
-            }
+                }else if (card_list[k]["age"] == 11){
+                    card_list[k]["business_value"] = -5;
+                }else if (card_list[k]["age"] > 11){
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 1.5);
+                }
 
             }
             }

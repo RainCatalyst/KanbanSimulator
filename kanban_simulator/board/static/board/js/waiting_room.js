@@ -18,7 +18,19 @@ function new_players_check(){
                 'version': current_version},
         success: function(response){
             var syn = JSON.parse(response["SYN"]);
-            if (!syn){
+            var ready = JSON.parse(response["ready"]);
+            console.log(ready);
+            if (ready){
+                $.ajax({
+                    type: "GET",
+                    url: 'join_game',
+                    data: {},
+                    success: function (response){
+                        window.location = "join_game";
+                    }
+                });
+            }else{
+                if (!syn){
                 var players = JSON.parse(response["players"]);
                 current_version = JSON.parse(response["version"]);
 
@@ -27,8 +39,9 @@ function new_players_check(){
                 for (var i = 0; i < players.length; i++){
                     document.getElementById("players_container").innerHTML += player_template(players[i], i + 1);
                 }
+                }
+                setTimeout(new_players_check, 1000);
             }
-            setTimeout(new_players_check, 1000);
         }
 
     });

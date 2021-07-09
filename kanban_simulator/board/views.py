@@ -288,9 +288,9 @@ def players_check(request, player_id):
                                        "spectator": player.spectator})
 
             return JsonResponse({"players": json.dumps(list(player_set)),
-                                 "version": server_version, "SYN": False}, status=200)
+                                 "version": server_version, "SYN": False, "ready": game.ready}, status=200)
         else:
-            return JsonResponse({"SYN": True}, status=200)
+            return JsonResponse({"SYN": True, "ready": game.ready}, status=200)
 
     return JsonResponse({"Error": "error"}, status=400)
 
@@ -473,6 +473,7 @@ def start_game(request, player_id):
 
 def join_game(request, player_id):
     player = Player.objects.get(pk=player_id)
+    print("JOIN GAME")
     if player.team.game.ready:
         return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
 

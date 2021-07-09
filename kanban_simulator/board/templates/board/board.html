@@ -25,6 +25,8 @@
 </head>
 <body class="bg-dark">
 
+    <div id="foreground"></div>
+
     <div class="container-fluid bg-dark">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-0">
             <a href="{% url 'board:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none">
@@ -198,12 +200,12 @@
 
                                     <div class="row">
                                         <div class="col">
-                                            <div class="card border-success">
+                                            <div class="card border-success text-center">
                                                 <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
                                             </div>
                                         </div>
                                         <div class="col">
-                                            <div class="card border-success">
+                                            <div class="card border-success text-center">
                                                 <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
                                             </div>
                                         </div>

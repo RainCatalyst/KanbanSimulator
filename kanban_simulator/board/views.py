@@ -10,6 +10,12 @@ import random
 
 NUMBER_OF_CHARACTERS = 7
 CARDS_IN_GAME = 30
+EXPEDITE_CARDS = 3
+FIRST_HALF_APPEARS = 5
+SECOND_HALF_APPEARS = 10
+FIRST_EXPEDITE = 8
+SECOND_EXPEDITE = 13
+THIRD_EXPEDITE = 16
 
 
 def index(request):
@@ -27,7 +33,7 @@ def index(request):
 
             # creating teams
             for i in range(teams_num):
-                new_team = Team(name='Команда ' + str(i), game=new_room, dayNum=5)
+                new_team = Team(name='Команда ' + str(i), game=new_room, dayNum=FIRST_HALF_APPEARS)
                 new_team.save()
 
             # creating player
@@ -73,6 +79,19 @@ def populateBackLog(request):
         # initial_conditions(request_team)
         team = Team.objects.get(pk=request_team)
         cards = Card.objects.filter(start_day__lte=team.dayNum, team=request_team)
+        if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or \
+                team.dayNum == SECOND_EXPEDITE or team.dayNum == THIRD_EXPEDITE:
+            cards_to_order = cards.filter(column_number=0).order_by('row_number')
+            max_row_num = cards_to_order.last().row_number
+
+            i = 0
+            while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:
+                card = cards_to_order[i]
+                card.row_number = max_row_num + 1
+                card.save()
+                max_row_num += 1
+                i += 1
+
         cards = cards.values('pk', 'title', 'start_day', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
                              'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
                              'test_completed', 'column_number', 'row_number', 'business_value')
@@ -188,11 +207,33 @@ def version_check(request):
         input_team = request.POST.get('team_id', -1)
         server_team = Team.objects.get(pk=input_team)
         if int(server_team.version) > int(input_version):
-            cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
-                                                                 'analytic_remaining', 'analytic_completed',
-                                                                 'develop_remaining', 'develop_completed',
-                                                                 'test_remaining', 'test_completed',
-                                                                 'column_number', 'row_number', 'business_value')
+            cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum).values('pk', 'title',
+                                                                                                    'age',
+                                                                                                    'is_expedite',
+                                                                                                    'ready_day',
+                                                                                                    'analytic_remaining',
+                                                                                                    'analytic_completed',
+                                                                                                    'develop_remaining',
+                                                                                                    'develop_completed',
+                                                                                                    'test_remaining',
+                                                                                                    'test_completed',
+                                                                                                    'column_number',
+                                                                                                    'row_number',
+                                                                                                    'business_value')
+            if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
+                    server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or\
+                    server_team.dayNum == THIRD_EXPEDITE:
+                cards_to_order = cards.filter(column_number=0).order_by('row_number')
+                max_row_num = cards_to_order.last().row_number
+
+                i = 0
+                while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:
+                    card = cards_to_order[i]
+                    card.row_number = max_row_num + 1
+                    card.save()
+                    max_row_num += 1
+                    i += 1
+
             characters = Character.objects.filter(team=server_team).values('role', 'card_id')
             board_info = {"version": server_team.version,
                           "Age": server_team.dayNum,
@@ -315,11 +356,25 @@ def start_game(request, player_id):
             chosen_indexes.add(j)
             number_found = True
 
+    # generating expedite cards
+    chosen_indexes.clear()
+    user_stories = UserStory.objects.filter(is_expedite=True)
+    for i in range(EXPEDITE_CARDS):
+        number_found = False
+        while not number_found:
+            j = random.randint(0, len(user_stories) - 1)
+            if j in chosen_indexes:
+                continue
+
+            cards_set.append(user_stories[j])
+            chosen_indexes.add(j)
+            number_found = True
+
     # generating initial conditions
     analytic_completed = []
     develop_completed = []
     test_completed = []
-    for i in range(len(cards_set)):
+    for i in range(CARDS_IN_GAME):
         card = cards_set[i]
         if i > 5:
             analytic_completed.append(0)
@@ -337,26 +392,39 @@ def start_game(request, player_id):
             analytic_completed.append(random.randint(0, card.analytic_points - 1))
             develop_completed.append(0)
             test_completed.append(0)
+
+    # creating cards for each team
     for team in team_set:
         # creating cards for each team
-        row = 0
         # if i = 0 or 1
         # card is in analytic column
         # if i = 2 or 3
         # card is in develop column
         # if i = 4 or 5
         # card is in test column
-        for i in range(len(cards_set)):
+        for i in range(CARDS_IN_GAME):
             card = cards_set[i]
-            new_card = Card(title=card.title, team=team, start_day=i // 15 * 9 + 1, age=4 if i < 15 else 0,
+            new_card = Card(title=card.title, team=team, start_day=i // 15 * (SECOND_HALF_APPEARS - 1) + 1,
+                            age=FIRST_HALF_APPEARS - 1 if i < 6 else 0,
                             analytic_remaining=card.analytic_points, analytic_completed=analytic_completed[i],
                             develop_remaining=card.develop_points, develop_completed=develop_completed[i],
                             test_remaining=card.test_points, test_completed=test_completed[i],
-                            column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=row if i > 5 else i % 2,
+                            column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=0 if i > 5 else i % 2,
                             business_value=card.business_value)
             new_card.save()
-            if i > 5:
-                row = row + 1
+
+        for i in range(EXPEDITE_CARDS):
+            card = cards_set[i + CARDS_IN_GAME]
+            if i == 0:
+                start_day = FIRST_EXPEDITE
+            elif i == 1:
+                start_day = SECOND_EXPEDITE
+            else:
+                start_day = THIRD_EXPEDITE
+            new_card = Card(title=card.title, team=team, start_day=start_day, age=0,
+                            analytic_remaining=card.analytic_points, develop_remaining=card.develop_points,
+                            test_remaining=card.test_points, business_value=card.business_value)
+            new_card.save()
 
         # creating characters for each team
         for i in range(7):

@@ -4,6 +4,10 @@ var current_day = 1;
 var player_collaboration_day = 10;
 var limits = [4, 4, 4];
 var BV = 0;
+var bar_data = [];
+var line_data = [];
+var lineChart;
+var barChart;
 
 // arrays of days
 var analytic_completed_tasks = [];
@@ -14,7 +18,6 @@ function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
         url: "populate_backlog",
-        // data: {room: "0", team: team_id},
         data: {team: team_id},
         success: function (response){
             var cards = JSON.parse(response["cards"]);
@@ -28,9 +31,6 @@ function backLogInitialPopulation(){
             limits[2] = board_info["Wip3"];
 
             for (var i = 0; i < cards.length; i++){
-                //cards[i]['row_number'] = i;
-                //cards[i]['column_number'] = 0;
-                //console.log("BV: " + cards[i]['business_value']);
                 if (cards[i]['business_value'] == null){
                     cards[i]['business_value'] = 10;
                 }
@@ -42,27 +42,36 @@ function backLogInitialPopulation(){
                         break;
                     case 1:
                         document.getElementById("analytic_in_process_container").innerHTML += card_element;
-                        var new_card_elem = document.getElementById("kb_card_" + cards[i]['pk']);
-                        //new_card_elem.removeClass("no_droppable_card");
-                        //new_card_elem.addClass("droppable_anl_proc");
                         break;
                     case 2:
                         document.getElementById("analytic_completed_container").innerHTML += card_element;
+                        //analytic_completed_tasks.push(current_day);
                         break;
                     case 3:
                         document.getElementById("devop_in_process_container").innerHTML += card_element;
+                        analytic_completed_tasks.push(current_day);
                         break;
                     case 4:
                         document.getElementById("devop_completed_container").innerHTML += card_element;
+                        //analytic_completed_tasks.push(current_day - 1);
+                        //developer_completed_tasks.push(current_day);
                         break;
                     case 5:
                         document.getElementById("test_in_process_container").innerHTML += card_element;
+                        //analytic_completed_tasks.push(current_day - 1);
+                        //developer_completed_tasks.push(current_day);
                         break;
                     case 6:
                         document.getElementById("test_completed_container").innerHTML += card_element;
+                        //analytic_completed_tasks.push(current_day - 2);
+                        //developer_completed_tasks.push(current_day - 1);
+                        //test_completed_tasks.push(current_day);
                         break;
                     case 7:
                         document.getElementById("finish_container").innerHTML += card_element;
+                        //analytic_completed_tasks.push(current_day - 2);
+                        //developer_completed_tasks.push(current_day - 1);
+                        //test_completed_tasks.push(current_day);
                         break;
                 }
 
@@ -209,6 +218,12 @@ $(function() {
     updateCharacterConfiguration();
 
     $('#day_num_title').text("День #" + current_day);
+
+    $(document).on("click", "#stat_show", function () {
+     var myHeading = '<p>Business value: ' + BV + '</p>';
+     $("#bv_container").html(myHeading);
+     $('#offcanvasRight').modal('toggle');
+    });
 });
 
 // function for inter-player synchronization
@@ -224,6 +239,8 @@ function performVersionCheck(){
                 var cards = JSON.parse(response["cards"]);
                 var characters = JSON.parse(response["characters"]);
                 var board_info = JSON.parse(response["board_info"]);
+                bar_data = JSON.parse(response["bar_data"]);
+                line_data = JSON.parse(response["line_data"]);
 
                 current_version = board_info["version"];
                 current_day = board_info["Age"];
@@ -330,6 +347,102 @@ function calculateBV(){
         }
     }
     BV = sum;
-    document.getElementsByClassName("offcanvas-body").innerHTML += '<p>Business value: ' + sum + '</p>';
+    //document.getElementsByClassName("offcanvas-body").innerHTML += '<p>Business value: ' + sum + '</p>';
+}
+
+
+function cumulativeGraph(){
+    if (lineChart != null){
+        lineChart.destroy();
+    }
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var labels = Object.keys(line_data);
+
+    var anl_data = [];
+    var dev_data = [];
+    var test_data = [];
+
+    for (var i =0; i < line_data.length; i++){
+        var pDay = Object.values(line_data[i])[0];
+        anl_data.push(pDay[0]);
+        dev_data.push(pDay[1]);
+        test_data.push(pDay[2]);
+    }
+    var data = {
+  labels: labels,
+  datasets: [
+  {
+    label: 'Test tasks',
+    data: test_data,
+    fill: {
+                target: 'origin',
+                above: 'rgb(0, 255, 0)'
+              },
+    borderColor: 'rgb(0, 255, 0)',
+    tension: 0.1
+  },
+  {
+    label: 'Develop tasks',
+    data: dev_data,
+    fill: {
+                target: 'origin',
+                above: 'rgb(0, 0, 255)'
+              },
+    borderColor: 'rgb(0, 0, 255)',
+    tension: 0.1
+  },
+  {
+    label: 'Analytic tasks',
+    data: anl_data,
+    fill: {
+                target: 'origin',
+                above: 'rgb(255, 0, 0)'
+              },
+    borderColor: 'rgb(255, 0, 0)',
+    tension: 0.1
+  }]
+};
+lineChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+});
+
+}
+
+function barGraph(){
+    if (barChart != null){
+        barChart.destroy();
+    }
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var labels = Object.keys(bar_data);
+
+    var anl_data = [];
+    var dev_data = [];
+    var test_data = [];
+
+    var ds = [];
+
+    for (var i =0; i < bar_data.length; i++){
+        ds.push(Object.values(bar_data[i])[0]);
+    }
+    var data = {
+  labels: labels,
+  datasets: [
+  {
+    label: 'Completed tasks',
+    data: ds,
+    /*fill: {
+                target: 'origin',
+                above: 'rgb(0, 0, 255)'
+              },
+    borderColor: 'rgb(0, 0, 255)',
+    tension: 0.1*/
+  }]
+};
+barChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+});
+
 }
 

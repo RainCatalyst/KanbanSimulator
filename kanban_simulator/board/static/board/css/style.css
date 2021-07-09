@@ -24,3 +24,13 @@ body {
     z-index: 100;
     padding: 3px;
 }
+
+#foreground{
+    position:absolute;
+    height:100%;
+    width:100%;
+    background-color:#ff0000;
+    opacity:0.3;
+    z-index: 1000;
+    pointer-events:none;
+}

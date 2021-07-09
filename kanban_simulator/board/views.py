@@ -208,6 +208,26 @@ def version_check(request):
         server_team = Team.objects.get(pk=input_team)
         if int(server_team.version) > int(input_version):
             cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum)
+
+            days = Day.objects.filter(team=server_team).order_by("age")
+            bar_data = []
+            line_data = []
+            processed_days = []
+            for day in days:
+                if day.age not in processed_days:
+                    bar_data.append({str(day.age): day.test_completed_tasks})
+                    line_data.append(
+                        {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
+                processed_days.append(day.age)
+
+            for i in range(1, len(line_data)):
+                vals = list(line_data[i].values())[0]
+                prev_vals = list(line_data[i - 1].values())[0]
+                line_data[i] = {
+                    list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
+                                                   vals[1] + prev_vals[1],
+                                                   vals[2] + prev_vals[2]]}
+
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
                     server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
@@ -233,7 +253,10 @@ def version_check(request):
                           "Wip3": server_team.wip_limit3}
             return JsonResponse({"cards": json.dumps(list(cards)),
                                  "characters": json.dumps(list(characters)),
-                                 "board_info": json.dumps(board_info), "SYN": False}, status=200)
+                                 "board_info": json.dumps(board_info),
+                                 "bar_data": json.dumps(bar_data),
+                                 "line_data": json.dumps(line_data),
+                                 "SYN": False}, status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)
 
@@ -421,6 +444,23 @@ def start_game(request, player_id):
         for i in range(7):
             character = Character(team=team, role=i)
             character.save()
+
+        # creating statistics for each team
+        day1 = Day(age=1, team=team, anl_completed_tasks=1, dev_completed_tasks=0,
+                   test_completed_tasks=0)
+        day1.save()
+
+        day2 = Day(age=2, team=team, anl_completed_tasks=1, dev_completed_tasks=1,
+                   test_completed_tasks=0)
+        day2.save()
+
+        day3 = Day(age=3, team=team, anl_completed_tasks=1, dev_completed_tasks=0,
+                   test_completed_tasks=0)
+        day3.save()
+
+        day4 = Day(age=4, team=team, anl_completed_tasks=1, dev_completed_tasks=1,
+                   test_completed_tasks=0)
+        day4.save()
 
     room.ready = True
     room.save()

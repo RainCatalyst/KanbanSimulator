@@ -222,10 +222,12 @@ $(function() {
     $(document).on("click", "#stat_show", function () {
      //var myHeading = '<p>Business value: ' + BV + '</p>';
      //$("#bv_container").html(myHeading);
+     //$('#foreground').hide();
      alert("dialog show");
      cumulativeGraph();
      barGraph();
      $('#StatisticsModal').modal('toggle');
+     //document.getElementById('foreground').style.display = 'none';
     });
 });
 
@@ -449,7 +451,6 @@ function barGraph(){
   {
     label: 'Completed tasks',
     data: ds,
-
   }],
   options: {
     responsive: true,

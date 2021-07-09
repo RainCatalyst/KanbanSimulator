@@ -107,3 +107,6 @@ class Card(models.Model):
     row_number = models.IntegerField(default=0)
 
     business_value = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.title

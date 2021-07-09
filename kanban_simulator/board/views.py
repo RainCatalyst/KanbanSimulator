@@ -71,15 +71,11 @@ def populateBackLog(request):
 
         # testing purposes
         # initial_conditions(request_team)
-
-        cards = Card.objects.filter(team=request_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
-                                                              'analytic_remaining', 'analytic_completed',
-                                                              'develop_remaining', 'develop_completed',
-                                                              'test_remaining', 'test_completed',
-                                                              'column_number', 'row_number',
-                                                              'business_value')
-
         team = Team.objects.get(pk=request_team)
+        cards = Card.objects.filter(start_day__lte=team.dayNum, team=request_team)
+        cards = cards.values('pk', 'title', 'start_day', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
+                             'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
+                             'test_completed', 'column_number', 'row_number', 'business_value')
 
         # Team start day and wip limits (don't forget to change it later)
         # team.dayNum = 1
@@ -192,7 +188,7 @@ def version_check(request):
         input_team = request.POST.get('team_id', -1)
         server_team = Team.objects.get(pk=input_team)
         if int(server_team.version) > int(input_version):
-            cards = Card.objects.filter(team=server_team).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
+            cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum).values('pk', 'title', 'age', 'is_expedite', 'ready_day',
                                                                  'analytic_remaining', 'analytic_completed',
                                                                  'develop_remaining', 'develop_completed',
                                                                  'test_remaining', 'test_completed',
@@ -348,11 +344,12 @@ def start_game(request, player_id):
                 develop_completed = 0
                 test_completed = 0
 
-            new_card = Card(title=card.title, team=team, start_day=i//15*9+1, analytic_remaining=card.analytic_points,
-                            analytic_completed=analytic_completed, develop_remaining=card.develop_points,
-                            develop_completed=develop_completed, test_remaining=card.test_points,
-                            test_completed=test_completed, column_number=0 if i > 5 else i // 2 * 2 + 1,
-                            row_number=row if i > 5 else i % 2, business_value=card.business_value)
+            new_card = Card(title=card.title, team=team, start_day=i // 15 * 9 + 1, age=4 if i < 15 else 0,
+                            analytic_remaining=card.analytic_points, analytic_completed=analytic_completed,
+                            develop_remaining=card.develop_points, develop_completed=develop_completed,
+                            test_remaining=card.test_points, test_completed=test_completed,
+                            column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=row if i > 5 else i % 2,
+                            business_value=card.business_value)
             new_card.save()
             if i > 5:
                 row = row + 1
@@ -361,7 +358,6 @@ def start_game(request, player_id):
         for i in range(7):
             character = Character(team=team, role=i)
             character.save()
-
 
     room.ready = True
     room.save()

@@ -182,7 +182,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
 
                 <li class="nav-item dropdown pe-2">
-                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Статистика</button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onclick="calculateBV()">Статистика</button>
 
 
                     <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -190,10 +190,11 @@
                             <h5 id="offcanvasRightLabel">Здесь должно быть какое-то меню</h5>
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
                         </div>
-                        <div class="offcanvas-body">
-                            <p>Игрок №1 - Чел1</p>
+                        <div class="offcanvas-body" onload="calculateBV()" onclick="calculateBV()">
+
+                            <!--<p>Игрок №1 - Чел1</p>
                             <p>Игрок №2 - Чел2</p>
-                            <p>Игрок №3 - Чел3</p>
+                            <p>Игрок №3 - Чел3</p>-->
                         </div>
                     </div>
 

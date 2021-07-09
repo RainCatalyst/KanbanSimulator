@@ -88,12 +88,19 @@ function createExpediteCardTemplate(card_model){
 
 // droppable behavior for sub_containers
 $(function() {
-    $('.droppable_anl_proc').droppable({
+    allowToDrop();
+});
+
+function allowToDrop(){
+
+$('.droppable_anl_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable")){
-            if (getNumberOfChildNodesById("analytic_in_process_container") + getNumberOfChildNodesById("analytic_completed_container") < limits[0]){
+            console.log("it is draggable");
+            if (parseInt(getNumberOfChildNodesById("analytic_in_process_container")) + parseInt(getNumberOfChildNodesById("analytic_completed_container")) < limits[0]){
                 return true;
             }
+            console.log("bigger than");
             return false;
         }
         return false;
@@ -175,7 +182,8 @@ $(function() {
             moveCard(column_num, row_num, id);
         }
     });
-});
+
+}
 
 // function which calls after moving card to the given position (server interaction)
 function moveCard(column_number, row_number, id){
@@ -311,7 +319,7 @@ function getProportion(first, second){
 }
 
 function test(){
-
+    alert("dsa");
 }
 
 

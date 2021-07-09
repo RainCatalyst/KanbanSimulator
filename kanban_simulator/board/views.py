@@ -207,24 +207,12 @@ def version_check(request):
         input_team = request.POST.get('team_id', -1)
         server_team = Team.objects.get(pk=input_team)
         if int(server_team.version) > int(input_version):
-            cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum).values('pk', 'title',
-                                                                                                    'age',
-                                                                                                    'is_expedite',
-                                                                                                    'ready_day',
-                                                                                                    'analytic_remaining',
-                                                                                                    'analytic_completed',
-                                                                                                    'develop_remaining',
-                                                                                                    'develop_completed',
-                                                                                                    'test_remaining',
-                                                                                                    'test_completed',
-                                                                                                    'column_number',
-                                                                                                    'row_number',
-                                                                                                    'business_value')
+            cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum)
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
-                    server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or\
+                    server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
                 cards_to_order = cards.filter(column_number=0).order_by('row_number')
-                max_row_num = cards_to_order.last()['row_number']
+                max_row_num = cards_to_order.last().row_number
 
                 i = 0
                 while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:
@@ -233,6 +221,9 @@ def version_check(request):
                     card.save()
                     max_row_num += 1
                     i += 1
+            cards = cards.values('pk', 'title', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
+                                 'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
+                                 'test_completed', 'column_number', 'row_number', 'business_value')
 
             characters = Character.objects.filter(team=server_team).values('role', 'card_id')
             board_info = {"version": server_team.version,

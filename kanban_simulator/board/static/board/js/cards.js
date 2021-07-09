@@ -3,7 +3,11 @@ var card_list = [];
 
 // html template creation function
 function createCardTemplate(card_model){
-    return '<div class="card border-success mb-3 kanban_card draggable no_droppable_card" id="kb_card_' + card_model["pk"] + '">' +
+    var class_name = "no_droppable_card";
+    if (card_model["column_number"] == 1 || card_model["column_number"] == 3 || card_model["column_number"] == 5){
+        class_name = "droppable_card";
+    }
+    return '<div class="card border-success mb-3 kanban_card draggable ' + class_name + '" id="kb_card_' + card_model["pk"] + '">' +
                             '<h6 class="card-header border-success text-start">' + card_model["title"] + '</h6>' +
                             '<div class="card-body p-1 text-start">' +
 
@@ -198,7 +202,11 @@ function moveCard(column_number, row_number, id){
 function abilityToAddCharacters(card){
     card.removeClass("no_droppable_card");
     card.addClass("droppable_card");
+    droppableAbility();
 
+}
+
+function droppableAbility(){
     $('.droppable_card').droppable({
         accept: function(draggable){
             if (draggable.hasClass("players")){

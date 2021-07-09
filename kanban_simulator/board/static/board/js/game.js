@@ -28,12 +28,11 @@ function backLogInitialPopulation(){
 
             for (var i = 0; i < cards.length; i++){
                 cards[i]['row_number'] = i;
-                cards[i]['column_number'] = 0;
+                //cards[i]['column_number'] = 0;
                 //console.log("BV: " + cards[i]['business_value']);
                 if (cards[i]['business_value'] == null){
                     cards[i]['business_value'] = 10;
                 }
-                var card_element = createCardTemplate(cards[i]);
 
                 var card_element = createCardTemplate(cards[i]);
                 switch (cards[i]["column_number"]){
@@ -42,8 +41,9 @@ function backLogInitialPopulation(){
                         break;
                     case 1:
                         document.getElementById("analytic_in_process_container").innerHTML += card_element;
-                        card_element.removeClass("no_droppable_card");
-                        card_element.addClass("")
+                        var new_card_elem = document.getElementById("kb_card_" + cards[i]['pk']);
+                        //new_card_elem.removeClass("no_droppable_card");
+                        //new_card_elem.addClass("droppable_anl_proc");
                         break;
                     case 2:
                         document.getElementById("analytic_completed_container").innerHTML += card_element;
@@ -72,6 +72,8 @@ function backLogInitialPopulation(){
                     stop: function(event){
                     $(this).removeAttr("style");
                     }});
+
+            droppableAbility();
 
 
     }});

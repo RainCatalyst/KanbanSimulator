@@ -315,10 +315,31 @@ def start_game(request, player_id):
             chosen_indexes.add(j)
             number_found = True
 
+    # generating initial conditions
+    analytic_completed = []
+    develop_completed = []
+    test_completed = []
+    for i in range(len(cards_set)):
+        card = cards_set[i]
+        if i > 5:
+            analytic_completed.append(0)
+            develop_completed.append(0)
+            test_completed.append(0)
+        elif i > 3:
+            analytic_completed.append(card.analytic_points)
+            develop_completed.append(card.develop_points)
+            test_completed.append(random.randint(0, card.test_points - 1))
+        elif i > 1:
+            analytic_completed.append(card.analytic_points)
+            develop_completed.append(random.randint(0, card.develop_points - 1))
+            test_completed.append(0)
+        else:
+            analytic_completed.append(random.randint(0, card.analytic_points - 1))
+            develop_completed.append(0)
+            test_completed.append(0)
     for team in team_set:
         # creating cards for each team
         row = 0
-
         # if i = 0 or 1
         # card is in analytic column
         # if i = 2 or 3
@@ -327,27 +348,10 @@ def start_game(request, player_id):
         # card is in test column
         for i in range(len(cards_set)):
             card = cards_set[i]
-            if i > 5:
-                analytic_completed = 0
-                develop_completed = 0
-                test_completed = 0
-            elif i > 3:
-                analytic_completed = card.analytic_points
-                develop_completed = card.develop_points
-                test_completed = random.randint(0, card.test_points - 1)
-            elif i > 1:
-                analytic_completed = card.analytic_points
-                develop_completed = random.randint(0, card.develop_points - 1)
-                test_completed = 0
-            else:
-                analytic_completed = random.randint(0, card.analytic_points - 1)
-                develop_completed = 0
-                test_completed = 0
-
             new_card = Card(title=card.title, team=team, start_day=i // 15 * 9 + 1, age=4 if i < 15 else 0,
-                            analytic_remaining=card.analytic_points, analytic_completed=analytic_completed,
-                            develop_remaining=card.develop_points, develop_completed=develop_completed,
-                            test_remaining=card.test_points, test_completed=test_completed,
+                            analytic_remaining=card.analytic_points, analytic_completed=analytic_completed[i],
+                            develop_remaining=card.develop_points, develop_completed=develop_completed[i],
+                            test_remaining=card.test_points, test_completed=test_completed[i],
                             column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=row if i > 5 else i % 2,
                             business_value=card.business_value)
             new_card.save()

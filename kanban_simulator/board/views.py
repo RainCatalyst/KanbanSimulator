@@ -490,6 +490,8 @@ def rules(request):
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
     return render(request, 'board/finish.html')
+
+
 # to be added
 def news(request):
     return

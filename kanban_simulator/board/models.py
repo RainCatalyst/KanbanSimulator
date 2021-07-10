@@ -24,7 +24,7 @@ class Team(models.Model):
     wip3 = models.IntegerField(name='wip_limit3', default=4)
 
     def __str__(self):
-        return self.name
+        return self.name + '. ID комнаты: ' + str(self.game.pk)
 
 
 # Primary usage - statistics (graph plotting)
@@ -39,6 +39,9 @@ class Day(models.Model):
     dev_completed_tasks = models.IntegerField()
     test_completed_tasks = models.IntegerField()
 
+    def __str__(self):
+        return 'ID: ' + str(self.pk) + '. ' + self.team.__str__()
+
 
 class Player(models.Model):
     # nickname
@@ -49,6 +52,9 @@ class Player(models.Model):
     spectator = models.BooleanField(default=False, verbose_name='Является ли игрок наблюдателем')
     # is the player creator of a room
     creator = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Никнейм: ' + self.name + '. ID: ' + str(self.pk) + '. ' + self.team.__str__()
 
 
 class Character(models.Model):
@@ -76,6 +82,12 @@ class UserStory(models.Model):
     test_points = models.IntegerField()
 
     business_value = models.IntegerField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'User Stories'
 
 
 class Card(models.Model):
@@ -109,4 +121,4 @@ class Card(models.Model):
     business_value = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.title
+        return self.title + '. ' + self.team.__str__()

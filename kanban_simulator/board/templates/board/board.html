@@ -196,6 +196,8 @@
 
                 <li class="nav-item dropdown pe-2">
 
+                    <button type="button" class="btn btn-outline-secondary text-dark" data-bs-toggle="modal" data-bs-target="#WIPModal">Изменить WIP limit</button>
+
                     {% if not player.spectator %}
 
                         <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal" data-bs-target="#StatisticsModal" id="stat_show">Статистика</button>
@@ -236,6 +238,38 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="modal fade" id="WIPModal" tabindex="-1" aria-labelledby="WIPModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <form method="post">
+                                    {% load crispy_forms_tags %}
+                                    {% csrf_token %}
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="StartGameModalLabel">Изменение WIP limits</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            {{ form.wip_limit1|as_crispy_field }}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            {{ form.wip_limit2|as_crispy_field }}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            {{ form.wip_limit3|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </li>
             </ul>
@@ -324,7 +358,7 @@
                 <h5 class="modal-title" id="AlertCardsModalLabel">Уведомление!</h5>
             </div>
             <div class="modal-body">
-                <p>Появились новые карточки</p>
+                <p>Появились новые карточки!</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>

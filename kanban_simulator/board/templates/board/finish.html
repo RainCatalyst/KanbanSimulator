@@ -67,65 +67,6 @@
     </header>
 </div>
 
-
-<div class="container pt-5">
-    <div class="row">
-        <div class="col-7 fw-light text-center pt-5">
-            <h1>KaBam - новый удобный канбан симулятор.</h1>
-            <p class="mx-5 mt-5 mb-3">Мы даем возможность собираться в команды, соревнаться, узнавать тонкости Kanban и
-                весело проводить время</p>
-
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#RulesModal">
-                Ознакомиться с правилами
-            </button>
-            {#            <a class="btn btn-success" href="{% url 'board:createRoom' %}" role="button">Начать игру</a>#}
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#StartGameModal">Начать
-                игру
-            </button>
-        </div>
-
-        <div class="col-5 d-flex align-items-center pt-5">
-            <div class="card">
-                <img src="{% static 'board/images/image.jpg' %}" alt="first-image">
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="StartGameModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="StartGameModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <form method="post">
-                {% load crispy_forms_tags %}
-                {% csrf_token %}
-                <div class="modal-header">
-                    <h5 class="modal-title" id="StartGameModalLabel">Создание игры</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        {{ form.name|as_crispy_field }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.teams_num|as_crispy_field }}
-                    </div>
-
-                    <div class="mb-3 form-check ps-0">
-                        {{ form.spectator|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Создать комнату</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>

@@ -8,9 +8,6 @@ class CreateRoomForm(forms.Form):
                            widget=forms.TextInput(attrs={'placeholder': 'Введите свой никнейм'}))
     teams_num = forms.IntegerField(label='Количество команд:', min_value=0, max_value=10,
                                    widget=forms.NumberInput(attrs={'placeholder': 'Введите количество команд'}))
-    wip_limit1 = forms.IntegerField(label='WIP лимит 1', min_value=1, max_value=10, initial=4)
-    wip_limit2 = forms.IntegerField(label='WIP лимит 2', min_value=1, max_value=10, initial=4)
-    wip_limit3 = forms.IntegerField(label='WIP лимит 3', min_value=1, max_value=10, initial=4)
     spectator = forms.BooleanField(label='Быть наблюдателем?', required=False)
 
 
@@ -22,3 +19,9 @@ class JoinRoomForm(forms.Form):
 
 PlayerFormSet = modelformset_factory(Player, fields=("id", "name", "team", "spectator"),
                                      widgets={'name': forms.HiddenInput(), 'id': forms.HiddenInput}, extra=0)
+
+
+class ChangeWIPLimitsForm(forms.Form):
+    wip_limit1 = forms.IntegerField(label='WIP лимит 1:', min_value=1, max_value=10, initial=4)
+    wip_limit2 = forms.IntegerField(label='WIP лимит 2:', min_value=1, max_value=10, initial=4)
+    wip_limit3 = forms.IntegerField(label='WIP лимит 3:', min_value=1, max_value=10, initial=4)

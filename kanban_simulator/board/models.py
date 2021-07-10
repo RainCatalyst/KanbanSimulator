@@ -5,6 +5,7 @@ from django.db import models
 
 class Room(models.Model):
     ready = models.BooleanField(default=False)
+    started = models.BooleanField(default=False)
     version = models.IntegerField(default=0)
 
 

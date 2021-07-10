@@ -67,7 +67,10 @@ def board(request, player_id):
     else:
         form = ChangeWIPLimitsForm()
         player = Player.objects.get(pk=player_id)
-        return render(request, 'board/board.html', {'player': player, 'form': form})
+        cards = player.team.card_set
+        limits = [len(cards.filter(column_number=1)), len(cards.filter(column_number=3)),
+                  len(cards.filter(column_number=5))]
+        return render(request, 'board/board.html', {'player': player, 'form': form, 'limits': limits})
 
 
 # temporary function for testing (board clearing and etc.)

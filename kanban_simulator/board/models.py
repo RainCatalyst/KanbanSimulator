@@ -54,7 +54,7 @@ class Player(models.Model):
     creator = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'Никнейм: ' + self.name + '. ' + self.team.__str__()
+        return 'Никнейм: ' + self.name + '. ID: ' + str(self.pk) + '. ' + self.team.__str__()
 
 
 class Character(models.Model):

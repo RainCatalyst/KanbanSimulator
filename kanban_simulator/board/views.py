@@ -54,11 +54,15 @@ def board(request, player_id):
             wip1 = form.cleaned_data['wip_limit1']
             wip2 = form.cleaned_data['wip_limit2']
             wip3 = form.cleaned_data['wip_limit3']
-            team = Player(pk=player_id).team
+            player = Player.objects.get(pk=player_id)
+            team = player.team
             team.wip1 = wip1
             team.wip2 = wip2
             team.wip3 = wip3
             team.save()
+
+            new_form = ChangeWIPLimitsForm()
+            return render(request, 'board/board.html', {'player': player, 'form': new_form})
     else:
         form = ChangeWIPLimitsForm()
         player = Player.objects.get(pk=player_id)
@@ -489,6 +493,9 @@ def rules(request):
     return render(request, 'board/rules.html')
 
 
+def finish(request, player_id):
+    player = Player.objects.get(pk=player_id)
+    return render(request, 'board/finish.html')
 # to be added
 def news(request):
     return

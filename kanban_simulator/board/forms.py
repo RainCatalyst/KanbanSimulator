@@ -22,6 +22,6 @@ PlayerFormSet = modelformset_factory(Player, fields=("id", "name", "team", "spec
 
 
 class ChangeWIPLimitsForm(forms.Form):
-    wip_limit1 = forms.IntegerField(label='WIP лимит 1:', min_value=1, max_value=10)
-    wip_limit2 = forms.IntegerField(label='WIP лимит 2:', min_value=1, max_value=10)
-    wip_limit3 = forms.IntegerField(label='WIP лимит 3:', min_value=1, max_value=10)
+    wip_limit1 = forms.IntegerField(label='WIP лимит 1:', min_value=1, max_value=10, initial=4)
+    wip_limit2 = forms.IntegerField(label='WIP лимит 2:', min_value=1, max_value=10, initial=4)
+    wip_limit3 = forms.IntegerField(label='WIP лимит 3:', min_value=1, max_value=10, initial=4)

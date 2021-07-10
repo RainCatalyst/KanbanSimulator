@@ -1,0 +1,2 @@
+var lineChart;
+var barChart;

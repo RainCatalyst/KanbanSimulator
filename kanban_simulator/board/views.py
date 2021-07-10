@@ -489,6 +489,8 @@ def join_game(request, player_id):
 
     if player.team.game.ready:
         return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
+    else:
+        return render(request, 'board/error.html', {'error': "Создатель еще не запустил игру"})
 
 
 def rules(request):

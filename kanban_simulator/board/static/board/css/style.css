@@ -16,6 +16,10 @@ body {
   width: 0;
 }
 
+#fin::-webkit-scrollbar {
+  width: 0;
+}
+
 #temp2 {
   flex: 1;
 }

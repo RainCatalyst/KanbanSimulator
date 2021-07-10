@@ -33,7 +33,7 @@ def index(request):
 
             # creating teams
             for i in range(teams_num):
-                new_team = Team(name='Команда ' + str(i), game=new_room, dayNum=FIRST_HALF_APPEARS)
+                new_team = Team(name='Команда ' + str(i + 1), game=new_room, dayNum=FIRST_HALF_APPEARS)
                 new_team.save()
 
             # creating player

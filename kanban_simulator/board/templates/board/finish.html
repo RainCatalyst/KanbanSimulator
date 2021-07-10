@@ -67,7 +67,7 @@
     </header>
 </div>
 
-<div class="container pt-5">
+<div class="container pt-5 overflow-auto" id="fin">
     <div class="row">
         <div class="col-7">
             <ul class="nav nav-tabs">
@@ -103,15 +103,17 @@
 {#                </div>#}
 {#            </div>#}
 
-            <div class="row">
+            <div class="row p-2">
                 <div id="plot">
-                    <canvas id="firstChart"></canvas>
+{#                    <canvas id="firstChart"></canvas>#}
+                    <img src="{% static 'board/images/main-rule.png' %}" alt="first-image">
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row p-2">
                 <div id="plot">
-                    <canvas id="secondChart"></canvas>
+{#                    <canvas id="secondChart"></canvas>#}
+                    <img src="{% static 'board/images/main-rule.png' %}" alt="first-image">
                 </div>
             </div>
 
@@ -120,21 +122,19 @@
         </div>
 
         <div class="col-5">
-            <div class="container overflow-auto">
-                <table class="table table-hover">
-                    <thead class="table-success sticky-top">
-                        <tr class="">
-                            <th scope="col">#</th>
-                            <th scope="col">Команда</th>
-                            <th scope="col">Участники команды</th>
-                            <th scope="col">Бизнес валью</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr class="">
+                        <th scope="col">#</th>
+                        <th scope="col">Команда</th>
+                        <th scope="col">Участники команды</th>
+                        <th scope="col">Бизнес валью</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

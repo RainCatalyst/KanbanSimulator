@@ -56,9 +56,9 @@ def board(request, player_id):
             wip3 = form.cleaned_data['wip_limit3']
             player = Player.objects.get(pk=player_id)
             team = player.team
-            team.wip1 = wip1
-            team.wip2 = wip2
-            team.wip3 = wip3
+            team.wip_limit1 = wip1
+            team.wip_limit2 = wip2
+            team.wip_limit3 = wip3
             team.version += 1
             team.save()
 
@@ -305,10 +305,6 @@ def join_room(request, room_id):
         if form.is_valid():
             # get room to join
             room = get_object_or_404(Room, pk=room_id)
-            # make sure that it's legal to join the room
-            if room.ready:
-                return render(request, 'board/error.html',
-                              {'error': 'Извините, вы не можете присоединиться к этой комнате.'})
 
             # getting data from the form
             player_name = form.cleaned_data['name']
@@ -334,6 +330,12 @@ def join_room(request, room_id):
 
             return HttpResponseRedirect(reverse('board:waitingRoom', args=(new_player.pk,)))
     else:
+        # get room to join
+        room = get_object_or_404(Room, pk=room_id)
+        # make sure that it's legal to join the room
+        if room.started:
+            return render(request, 'board/error.html',
+                          {'error': 'Извините, вы не можете присоединиться к этой комнате.'})
         form = JoinRoomForm()
 
     return render(request, 'board/join_room.html', {'form': form})
@@ -353,7 +355,7 @@ def manage_players(request, player_id):
         return HttpResponseRedirect(reverse('board:startGame', args=(player_id,)))
     else:
         room = Player.objects.get(pk=player_id).team.game
-        room.ready = True
+        room.started = True
         room.save()
         players = Player.objects.filter(team_id__in=room.team_set.values('pk')).order_by('team_id')
         formset = PlayerFormSet(queryset=players)
@@ -477,14 +479,18 @@ def start_game(request, player_id):
                    test_completed_tasks=0)
         day4.save()
 
+    room.ready = True
+    room.save()
     return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
 
 
 def join_game(request, player_id):
     player = Player.objects.get(pk=player_id)
-    print("JOIN GAME")
+
     if player.team.game.ready:
         return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
+    else:
+        return render(request, 'board/error.html', {'error': "Создатель еще не запустил игру"})
 
 
 def rules(request):

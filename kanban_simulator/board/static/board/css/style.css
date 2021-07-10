@@ -37,3 +37,9 @@ body {
 #shapka {
     z-index: 1041;
 }
+
+body.waiting * { cursor: wait; }
+
+.border-success{
+    max-width: 500px;
+}

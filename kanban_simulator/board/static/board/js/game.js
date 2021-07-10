@@ -9,6 +9,12 @@ var line_data = [{"1": [1, 0, 0]}, {"2": [2, 1, 0]}, {"3": [3, 1, 0]}, {"4": [4,
 var lineChart;
 var barChart;
 
+var FIRST_HALF_APPEARS = 5;
+var SECOND_HALF_APPEARS = 10;
+var FIRST_EXPEDITE = 8;
+var SECOND_EXPEDITE = 13;
+var THIRD_EXPEDITE = 16;
+
 // arrays of days
 var analytic_completed_tasks = [];
 var developer_completed_tasks = [];
@@ -172,8 +178,12 @@ function start_new_day(){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
             if (card_list[k]["is_expedite"]){
-                if (card_list[k]["age"] >= 5){
+                if (card_list[k]["age"] == 5){
                     card_list[k]["business_value"] = 0;
+                }else if (card_list[k]["age"] == 6 ){
+                    card_list[k]["business_value"] = -8;
+                }else if (card_list[k]["age"] > 6){
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
                 }
             }else{
                 if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
@@ -187,6 +197,54 @@ function start_new_day(){
                 }
 
             }
+            }
+        }
+
+        var anl_in_proc = card_list.filter(x => x["column_number"] == 1).sort(compare_cards);
+        var dev_in_proc = card_list.filter(x => x["column_number"] == 3).sort(compare_cards);
+        var test_in_proc = card_list.filter(x => x["column_number"] == 5).sort(compare_cards);
+
+        for (var i = 0; i < anl_in_proc.length; i++){
+            anl_in_proc[i]["row_number"] = i;
+        }
+
+        for (var i = 0; i < dev_in_proc.length; i++){
+            dev_in_proc[i]["row_number"] = i;
+        }
+
+        for (var i = 0; i < test_in_proc.length; i++){
+            test_in_proc[i]["row_number"] = i;
+        }
+
+        for (var i = 0; i < card_list.length; i ++){
+            if (card_list[i]["column_number"] == 1){
+                for (var j = 0; j < anl_in_proc.length; j++){
+                    if (card_list[i]["pk"] == anl_in_proc[j]["pk"]){
+                        card_list[i]["row_number"] = anl_in_proc[j]["row_number"];
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            if (card_list[i]["column_number"] == 3){
+                for (var j = 0; j < dev_in_proc.length; j++){
+                    if (card_list[i]["pk"] == dev_in_proc[j]["pk"]){
+                        card_list[i]["row_number"] = dev_in_proc[j]["row_number"];
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            if (card_list[i]["column_number"] == 5){
+                for (var j = 0; j < test_in_proc.length; j++){
+                    if (card_list[i]["pk"] == test_in_proc[j]["pk"]){
+                        card_list[i]["row_number"] = test_in_proc[j]["row_number"];
+                        break;
+                    }
+                }
+                continue;
             }
         }
 
@@ -206,6 +264,11 @@ function start_new_day(){
                 var syn = JSON.parse(response["SYN"]);
                 if (syn){
                     current_day = JSON.parse(response["day_num"]);
+                    if (current_day == FIRST_EXPEDITE || current_day == SECOND_EXPEDITE || current_day == THIRD_EXPEDITE){
+                        showExpediteModal();
+                     }else if (current_day == SECOND_HALF_APPEARS){
+                        showNewCardsModal();
+                    }
                     current_effort = JSON.parse(response["team_effort"]);
                     $('#day_num_title').text("День #" + current_day);
                 }
@@ -246,6 +309,7 @@ function performVersionCheck(){
         success: function(response){
             var syn = JSON.parse(response["SYN"]);
             if (!syn){
+                document.body.classList.add('waiting');
                 var cards = JSON.parse(response["cards"]);
                 var characters = JSON.parse(response["characters"]);
                 var board_info = JSON.parse(response["board_info"]);
@@ -253,7 +317,15 @@ function performVersionCheck(){
                 line_data = JSON.parse(response["line_data"]);
 
                 current_version = board_info["version"];
-                current_day = board_info["Age"];
+                if (current_day != board_info["Age"]){
+                    current_day = board_info["Age"];
+                    if (current_day == FIRST_EXPEDITE || current_day == SECOND_EXPEDITE || current_day == THIRD_EXPEDITE){
+                        showExpediteModal();
+                     }else if (current_day == SECOND_HALF_APPEARS){
+                        showNewCardsModal();
+                    }
+                }
+
                 $('#day_num_title').text("День #" + current_day);
 
 
@@ -306,6 +378,7 @@ function performVersionCheck(){
                         characters[j]["card_id"], card_index == -1 ? 0 :card_list[card_index]["column_number"]);
                 }
                 updateCharacterConfiguration();
+                document.body.classList.remove('waiting');
             }
             setTimeout(performVersionCheck, 1000);
         }
@@ -344,8 +417,12 @@ function getNumberOfChildNodesById(id){
     return document.getElementById(id).childElementCount;
 }
 
-function call(){
+function showNewCardsModal(){
     $('#AlertCardsModal').modal('toggle');
+}
+
+function showExpediteModal(){
+    $('#AlertExpediteCardsModal').modal('toggle');
 }
 
 function calculateBV(){

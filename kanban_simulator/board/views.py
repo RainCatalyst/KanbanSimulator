@@ -441,7 +441,7 @@ def start_game(request, player_id):
                 start_day = THIRD_EXPEDITE
             new_card = Card(title=card.title, team=team, start_day=start_day, age=0,
                             analytic_remaining=card.analytic_points, develop_remaining=card.develop_points,
-                            test_remaining=card.test_points, business_value=card.business_value)
+                            test_remaining=card.test_points, business_value=card.business_value, is_expedite=True)
             new_card.save()
 
         # creating characters for each team

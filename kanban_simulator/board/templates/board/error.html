@@ -28,7 +28,7 @@
 
             <div class="d-grid gap-2 d-md-block">
                 <a class="btn btn-outline-primary" href="{% url 'board:home' %}" role="button">Домой</a>
-                <button class="btn btn-outline-light" data-clipboard-text="http://127.0.0.1:8000{% url 'board:join' player.team.game.pk %}">Скопировать ссылку</button>
+                <button class="btn btn-outline-light" data-clipboard-text="">Скопировать ссылку</button>
                 <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#RulesModal">Правила игры</button>
             </div>
         </header>
@@ -40,15 +40,15 @@
 
         <div class="row" >
             <div class="col-7 fw-light">
-                <p>{{ player.name }}, поделитесь этой ссылкой с вашими коллегами. Для начала игры требуется как минимум 6 игрока.</p>
+                <p>Игрок, поделитесь этой ссылкой с вашими коллегами. Для начала игры требуется как минимум 6 игрока.</p>
                 <p>Еще какого-нибудь текста сюда...</p>
                 <p>Прочитайте правила заранее, чтобы не отвлекаться на это во время игры!</p>
             </div>
 
             <div class="col-5 d-flex align-items-center">
                 <div class="input-group">
-                    <input type="text" class="form-control" disabled placeholder="http://127.0.0.1:8000{% url 'board:join' player.team.game.pk %}" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-clipboard-text="http://127.0.0.1:8000{% url 'board:join' player.team.game.pk %}">Copy to clipboard</button>
+                    <input type="text" class="form-control" disabled placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-clipboard-text="">Copy to clipboard</button>
                 </div>
             </div>
         </div>
@@ -77,8 +77,7 @@
                         <h5 class="modal-title" id="ErrorModalLabel">Ошибка подключение к игре</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Пшел отсюда нахрен!</p>
-                        <p>Тебя не пустят!</p>
+                        <p>{{ error }}</p>
                     </div>
                     <div class="modal-footer"></div>
             </div>

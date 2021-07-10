@@ -40,6 +40,6 @@ body {
 
 body.waiting * { cursor: wait; }
 
-.border-success{
+#plot {
     max-width: 500px;
 }

@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character, UserStory
-from .forms import CreateRoomForm, JoinRoomForm, PlayerFormSet
+from .forms import CreateRoomForm, JoinRoomForm, PlayerFormSet, ChangeWIPLimitsForm
 import random
 
 NUMBER_OF_CHARACTERS = 7
@@ -48,8 +48,21 @@ def index(request):
 
 @csrf_exempt
 def board(request, player_id):
-    player = Player.objects.get(pk=player_id)
-    return render(request, 'board/board.html', {'player': player})
+    if request.method == 'POST':
+        form = ChangeWIPLimitsForm(request.POST)
+        if form.is_valid():
+            wip1 = form.cleaned_data['wip_limit1']
+            wip2 = form.cleaned_data['wip_limit2']
+            wip3 = form.cleaned_data['wip_limit3']
+            team = Player(pk=player_id).team
+            team.wip1 = wip1
+            team.wip2 = wip2
+            team.wip3 = wip3
+            team.save()
+    else:
+        form = ChangeWIPLimitsForm()
+        player = Player.objects.get(pk=player_id)
+        return render(request, 'board/board.html', {'player': player, 'form': form})
 
 
 # temporary function for testing (board clearing and etc.)

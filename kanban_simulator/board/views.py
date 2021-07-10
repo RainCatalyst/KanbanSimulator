@@ -83,18 +83,16 @@ def populateBackLog(request):
         # initial_conditions(request_team)
         team = Team.objects.get(pk=request_team)
         cards = Card.objects.filter(start_day__lte=team.dayNum, team=request_team)
-        if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or \
+        if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or\
                 team.dayNum == SECOND_EXPEDITE or team.dayNum == THIRD_EXPEDITE:
             cards_to_order = cards.filter(column_number=0).order_by('row_number')
             max_row_num = cards_to_order.last().row_number
 
-            i = 0
-            while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:
-                card = cards_to_order[i]
-                card.row_number = max_row_num + 1
-                card.save()
-                max_row_num += 1
-                i += 1
+            for card in cards_to_order:
+                if card.row_number == -1:
+                    max_row_num += 1
+                    card.row_number = max_row_num
+                    card.save()
 
         cards = cards.values('pk', 'title', 'start_day', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
                              'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
@@ -238,13 +236,12 @@ def version_check(request):
                 cards_to_order = cards.filter(column_number=0).order_by('row_number')
                 max_row_num = cards_to_order.last().row_number
 
-                i = 0
-                while cards_to_order[i].row_number == 0 and cards_to_order[i + 1].row_number == 0:
-                    card = cards_to_order[i]
-                    card.row_number = max_row_num + 1
-                    card.save()
-                    max_row_num += 1
-                    i += 1
+                for card in cards_to_order:
+                    if card.row_number == -1:
+                        max_row_num += 1
+                        card.row_number = max_row_num
+                        card.save()
+
             cards = cards.values('pk', 'title', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
                                  'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
                                  'test_completed', 'column_number', 'row_number', 'business_value')
@@ -427,7 +424,7 @@ def start_game(request, player_id):
                             analytic_remaining=card.analytic_points, analytic_completed=analytic_completed[i],
                             develop_remaining=card.develop_points, develop_completed=develop_completed[i],
                             test_remaining=card.test_points, test_completed=test_completed[i],
-                            column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=0 if i > 5 else i % 2,
+                            column_number=0 if i > 5 else i // 2 * 2 + 1, row_number=-1 if i > 5 else i % 2,
                             business_value=card.business_value)
             new_card.save()
 
@@ -441,7 +438,8 @@ def start_game(request, player_id):
                 start_day = THIRD_EXPEDITE
             new_card = Card(title=card.title, team=team, start_day=start_day, age=0,
                             analytic_remaining=card.analytic_points, develop_remaining=card.develop_points,
-                            test_remaining=card.test_points, business_value=card.business_value, is_expedite=True)
+                            test_remaining=card.test_points, row_number=-1, business_value=card.business_value,
+                            is_expedite=True)
             new_card.save()
 
         # creating characters for each team

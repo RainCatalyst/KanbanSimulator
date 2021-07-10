@@ -59,6 +59,7 @@ def board(request, player_id):
             team.wip1 = wip1
             team.wip2 = wip2
             team.wip3 = wip3
+            team.version += 1
             team.save()
 
             new_form = ChangeWIPLimitsForm()
@@ -110,13 +111,6 @@ def populateBackLog(request):
         cards = cards.values('pk', 'title', 'start_day', 'age', 'is_expedite', 'ready_day', 'analytic_remaining',
                              'analytic_completed', 'develop_remaining', 'develop_completed', 'test_remaining',
                              'test_completed', 'column_number', 'row_number', 'business_value')
-
-        # Team start day and wip limits (don't forget to change it later)
-        # team.dayNum = 1
-        team.wip_limit1 = 4
-        team.wip_limit2 = 4
-        team.wip_limit3 = 4
-        team.save()
 
         board_info = {"Age": team.dayNum,
                       "Wip1": team.wip_limit1,
@@ -496,6 +490,8 @@ def rules(request):
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
     return render(request, 'board/finish.html')
+
+
 # to be added
 def news(request):
     return

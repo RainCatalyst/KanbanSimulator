@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
@@ -97,7 +97,7 @@ def populateBackLog(request):
         # initial_conditions(request_team)
         team = Team.objects.get(pk=request_team)
         cards = Card.objects.filter(start_day__lte=team.dayNum, team=request_team)
-        if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or\
+        if team.dayNum == FIRST_HALF_APPEARS or team.dayNum == SECOND_HALF_APPEARS or team.dayNum == FIRST_EXPEDITE or \
                 team.dayNum == SECOND_EXPEDITE or team.dayNum == THIRD_EXPEDITE:
             cards_to_order = cards.filter(column_number=0).order_by('row_number')
             max_row_num = cards_to_order.last().row_number
@@ -303,12 +303,16 @@ def join_room(request, room_id):
     if request.method == 'POST':
         form = JoinRoomForm(request.POST)
         if form.is_valid():
+            # get room to join
+            room = get_object_or_404(Room, pk=room_id)
+            # make sure that it's legal to join the room
+            if room.ready:
+                return render(request, 'board/error.html',
+                              {'error': 'Извините, вы не можете присоединиться к этой комнате.'})
+
             # getting data from the form
             player_name = form.cleaned_data['name']
             spectator = form.cleaned_data['spectator']
-
-            # get room to join
-            room = Room.objects.get(pk=room_id)
 
             # selecting team to join
             selected_team = room.team_set.first()
@@ -349,6 +353,8 @@ def manage_players(request, player_id):
         return HttpResponseRedirect(reverse('board:startGame', args=(player_id,)))
     else:
         room = Player.objects.get(pk=player_id).team.game
+        room.ready = True
+        room.save()
         players = Player.objects.filter(team_id__in=room.team_set.values('pk')).order_by('team_id')
         formset = PlayerFormSet(queryset=players)
         choices = room.team_set.all()
@@ -471,8 +477,6 @@ def start_game(request, player_id):
                    test_completed_tasks=0)
         day4.save()
 
-    room.ready = True
-    room.save()
     return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
 
 

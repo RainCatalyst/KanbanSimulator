@@ -80,10 +80,8 @@ function backLogInitialPopulation(){
 
             droppableAbility();
             allowToDrop();
-            performVersionCheck();
-
-
     }});
+    performVersionCheck();
 }
 
 

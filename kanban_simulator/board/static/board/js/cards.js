@@ -104,7 +104,7 @@ $('.droppable_anl_proc').droppable({
                 return true;
             }
             //console.log("it is draggable");
-            if (parseInt(getNumberOfChildNodesById("analytic_in_process_container")) + parseInt(getNumberOfChildNodesById("analytic_completed_container")) < limits[0]){
+            if (getAnalyticChildren() < limits[0]){
                 return true;
             }
             //console.log("bigger than");
@@ -132,7 +132,7 @@ $('.droppable_anl_proc').droppable({
             if (draggable.hasClass("expedite")){
                 return true;
             }
-            if (getNumberOfChildNodesById("devop_in_process_container") + getNumberOfChildNodesById("devop_completed_container") < limits[1]){
+            if (getDevChildren() < limits[1]){
                 return true;
             }
             return false;
@@ -159,7 +159,7 @@ $('.droppable_anl_proc').droppable({
             if (draggable.hasClass("expedite")){
                 return true;
             }
-            if (getNumberOfChildNodesById("test_in_process_container") + getNumberOfChildNodesById("test_completed_container") < limits[2]){
+            if (getTestChildren() < limits[2]){
                 return true;
             }
             return false;
@@ -329,6 +329,36 @@ function getProportion(first, second){
     }
     proportion += "/" + first;
     return proportion;
+}
+
+function getAnalyticChildren(){
+    var amount = 0;
+    for (var i = 0; i < card_list.length; i++){
+        if ((card_list[i]["column_number"] == 1 || card_list[i]["column_number"] == 2)&& !card_list[i]["is_expedite"]){
+            amount += 1;
+        }
+    }
+    return amount;
+}
+
+function getDevChildren(){
+    var amount = 0;
+    for (var i = 0; i < card_list.length; i++){
+        if ((card_list[i]["column_number"] == 3 || card_list[i]["column_number"] == 4) && !card_list[i]["is_expedite"]){
+            amount += 1;
+        }
+    }
+    return amount;
+}
+
+function getTestChildren(){
+    var amount = 0;
+    for (var i = 0; i < card_list.length; i++){
+        if ((card_list[i]["column_number"] == 5 || card_list[i]["column_number"] == 6) && !card_list[i]["is_expedite"]){
+            amount += 1;
+        }
+    }
+    return amount;
 }
 
 function test(){

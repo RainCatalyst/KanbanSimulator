@@ -298,6 +298,12 @@ function performVersionCheck(){
                 var cards = JSON.parse(response["cards"]);
                 var characters = JSON.parse(response["characters"]);
                 var board_info = JSON.parse(response["board_info"]);
+                limits[0] = board_info["Wip1"];
+                document.getElementById("anl_wip").innerHTML = limits[0];
+                limits[1] = board_info["Wip2"];
+                document.getElementById("dev_wip").innerHTML = limits[1];
+                limits[2] = board_info["Wip3"];
+                document.getElementById("test_wip").innerHTML = limits[2];
                 bar_data = JSON.parse(response["bar_data"]);
                 line_data = JSON.parse(response["line_data"]);
 

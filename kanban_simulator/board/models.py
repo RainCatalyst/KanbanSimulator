@@ -121,4 +121,4 @@ class Card(models.Model):
     business_value = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.title
+        return self.title + '. ' + self.team.__str__()

@@ -62,14 +62,7 @@ def board(request, player_id):
             team.version += 1
             team.save()
 
-            new_form = ChangeWIPLimitsForm()
-            player = Player.objects.get(pk=player_id)
-            cards = player.team.card_set
-            limits = [len(cards.filter(column_number=1)), len(cards.filter(column_number=3)),
-                      len(cards.filter(column_number=5))]
-            current = [wip1, wip2, wip3]
-            return render(request, 'board/board.html',
-                          {'player': player, 'form': new_form, 'limits': limits, 'current': current})
+            return HttpResponseRedirect(reverse('board:board', args=(player_id,)))
     else:
         form = ChangeWIPLimitsForm()
         player = Player.objects.get(pk=player_id)

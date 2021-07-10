@@ -56,9 +56,9 @@ def board(request, player_id):
             wip3 = form.cleaned_data['wip_limit3']
             player = Player.objects.get(pk=player_id)
             team = player.team
-            team.wip1 = wip1
-            team.wip2 = wip2
-            team.wip3 = wip3
+            team.wip_limit1 = wip1
+            team.wip_limit2 = wip2
+            team.wip_limit3 = wip3
             team.version += 1
             team.save()
 

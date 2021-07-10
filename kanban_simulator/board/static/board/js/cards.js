@@ -47,7 +47,11 @@ function createCardTemplate(card_model){
 }
 
 function createExpediteCardTemplate(card_model){
-    return '<div class="card border-dark mb-3 kanban_card draggable no_droppable_card" id="kb_card_' + card_model["pk"] + '" >' +
+    var class_name = "no_droppable_card";
+    if (card_model["column_number"] == 1 || card_model["column_number"] == 3 || card_model["column_number"] == 5){
+        class_name = "droppable_card";
+    }
+    return '<div class="card border-dark mb-3 kanban_card draggable expedite ' + class_name + '" id="kb_card_' + card_model["pk"] + '" >' +
                             '<h6 class="card-header bg-warning border-dark text-start">' + card_model["title"] + '</h6>' +
                             '<div class="card-body p-1 text-start">' +
 
@@ -78,7 +82,7 @@ function createExpediteCardTemplate(card_model){
                                     '<div class="ps-1 fw-light fst-italic d-flex align-items-center" style="font-size: 75%;">' + '<small>' + getProportion(card_model["test_remaining"], card_model["test_completed"]) + '</small>' + '</div>' +
                                 '</div>' +
 
-                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;"></div>' +
+                                '<div class="d-flex flex-row for_players border-top flex-wrap" style="min-height: 36px;" id="player_card_container_' +  card_model["pk"] + '"></div>' +
 
                             '</div>' +
 
@@ -96,11 +100,14 @@ function allowToDrop(){
 $('.droppable_anl_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable")){
-            console.log("it is draggable");
+            if (draggable.hasClass("expedite")){
+                return true;
+            }
+            //console.log("it is draggable");
             if (parseInt(getNumberOfChildNodesById("analytic_in_process_container")) + parseInt(getNumberOfChildNodesById("analytic_completed_container")) < limits[0]){
                 return true;
             }
-            console.log("bigger than");
+            //console.log("bigger than");
             return false;
         }
         return false;
@@ -122,6 +129,9 @@ $('.droppable_anl_proc').droppable({
     $('.droppable_dev_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_dev")){
+            if (draggable.hasClass("expedite")){
+                return true;
+            }
             if (getNumberOfChildNodesById("devop_in_process_container") + getNumberOfChildNodesById("devop_completed_container") < limits[1]){
                 return true;
             }
@@ -146,6 +156,9 @@ $('.droppable_anl_proc').droppable({
     $('.droppable_test_in_proc ').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable_to_test")){
+            if (draggable.hasClass("expedite")){
+                return true;
+            }
             if (getNumberOfChildNodesById("test_in_process_container") + getNumberOfChildNodesById("test_completed_container") < limits[2]){
                 return true;
             }

@@ -48,13 +48,6 @@ function new_players_check(){
 
 }
 
-/*window.addEventListener('beforeunload', function(e) {
-    e.preventDefault();
-    e.returnValue = '';
-    console.log(e);
-    //navigator.sendBeacon("waiting_room/delete_player");
-}, false);*/
-
 
 
 

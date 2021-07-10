@@ -51,7 +51,6 @@ function backLogInitialPopulation(){
                         break;
                     case 2:
                         document.getElementById("analytic_completed_container").innerHTML += card_element;
-                        //analytic_completed_tasks.push(current_day);
                         break;
                     case 3:
                         document.getElementById("devop_in_process_container").innerHTML += card_element;
@@ -59,25 +58,15 @@ function backLogInitialPopulation(){
                         break;
                     case 4:
                         document.getElementById("devop_completed_container").innerHTML += card_element;
-                        //analytic_completed_tasks.push(current_day - 1);
-                        //developer_completed_tasks.push(current_day);
                         break;
                     case 5:
                         document.getElementById("test_in_process_container").innerHTML += card_element;
-                        //analytic_completed_tasks.push(current_day - 1);
-                        //developer_completed_tasks.push(current_day);
                         break;
                     case 6:
                         document.getElementById("test_completed_container").innerHTML += card_element;
-                        //analytic_completed_tasks.push(current_day - 2);
-                        //developer_completed_tasks.push(current_day - 1);
-                        //test_completed_tasks.push(current_day);
                         break;
                     case 7:
                         document.getElementById("finish_container").innerHTML += card_element;
-                        //analytic_completed_tasks.push(current_day - 2);
-                        //developer_completed_tasks.push(current_day - 1);
-                        //test_completed_tasks.push(current_day);
                         break;
                 }
 
@@ -91,6 +80,7 @@ function backLogInitialPopulation(){
 
             droppableAbility();
             allowToDrop();
+            performVersionCheck();
 
 
     }});
@@ -287,15 +277,10 @@ $(function() {
     $('#day_num_title').text("День #" + current_day);
 
     $(document).on("click", "#stat_show", function () {
-     //var myHeading = '<p>Business value: ' + BV + '</p>';
-     //$("#bv_container").html(myHeading);
-     //$('#foreground').hide();
-     //alert("dialog show");
      cumulativeGraph();
      barGraph();
      calculateBV();
      $('#StatisticsModal').modal('toggle');
-     //document.getElementById('foreground').style.display = 'none';
     });
 });
 
@@ -426,7 +411,6 @@ function showExpediteModal(){
 }
 
 function calculateBV(){
-
     var sum = 0;
     for (var i = 0; i < card_list.length; i ++){
         if (card_list[i]["column_number"] == 7){
@@ -435,7 +419,6 @@ function calculateBV(){
     }
     BV = sum;
     document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
-    //document.getElementsByClassName("offcanvas-body").innerHTML += '<p>Business value: ' + sum + '</p>';
 }
 
 
@@ -459,55 +442,54 @@ function cumulativeGraph(){
         test_data.push(pDay[2]);
     }
     var data = {
-  labels: labels,
-  datasets: [
-  {
-    label: 'Test tasks',
-    data: test_data,
-    fill: {
+        labels: labels,
+        datasets: [
+        {
+            label: 'Test tasks',
+            data: test_data,
+            fill: {
                 target: 'origin',
                 above: 'rgb(0, 255, 0)'
-              },
-    borderColor: 'rgb(0, 255, 0)',
-    tension: 0.1
-  },
-  {
-    label: 'Develop tasks',
-    data: dev_data,
-    fill: {
+            },
+            borderColor: 'rgb(0, 255, 0)',
+            tension: 0.1
+        },
+        {
+            label: 'Develop tasks',
+            data: dev_data,
+            fill: {
                 target: 'origin',
                 above: 'rgb(0, 0, 255)'
-              },
-    borderColor: 'rgb(0, 0, 255)',
-    tension: 0.1
-  },
-  {
-    label: 'Analytic tasks',
-    data: anl_data,
-    fill: {
+            },
+            borderColor: 'rgb(0, 0, 255)',
+            tension: 0.1
+        },
+        {
+            label: 'Analytic tasks',
+            data: anl_data,
+            fill: {
                 target: 'origin',
                 above: 'rgb(255, 0, 0)'
-              },
-    borderColor: 'rgb(255, 0, 0)',
-    tension: 0.1
-  }],
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero:true
+            },
+            borderColor: 'rgb(255, 0, 0)',
+            tension: 0.1
+        }],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
             }
-        }]
-    }
-}
-};
-lineChart = new Chart(ctx, {
-    type: 'line',
-    data: data,
-});
-
+        }
+    };
+    lineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+    });
 }
 
 function barGraph(){
@@ -529,28 +511,27 @@ function barGraph(){
         ds.push(Object.values(bar_data[i])[0]);
     }
     var data = {
-  labels: labels,
-  datasets: [
-  {
-    label: 'Completed tasks',
-    data: ds,
-  }],
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero:true
+        labels: labels,
+        datasets: [
+        {
+            label: 'Completed tasks',
+            data: ds,
+        }],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
             }
-        }]
-    }
-}
-};
-barChart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
-});
-
+        }
+    };
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+    });
 }
 

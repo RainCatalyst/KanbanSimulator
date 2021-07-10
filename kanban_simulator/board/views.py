@@ -63,14 +63,23 @@ def board(request, player_id):
             team.save()
 
             new_form = ChangeWIPLimitsForm()
-            return render(request, 'board/board.html', {'player': player, 'form': new_form})
+            player = Player.objects.get(pk=player_id)
+            cards = player.team.card_set
+            limits = [len(cards.filter(column_number=1)), len(cards.filter(column_number=3)),
+                      len(cards.filter(column_number=5))]
+            current = [wip1, wip2, wip3]
+            return render(request, 'board/board.html',
+                          {'player': player, 'form': new_form, 'limits': limits, 'current': current})
     else:
         form = ChangeWIPLimitsForm()
         player = Player.objects.get(pk=player_id)
         cards = player.team.card_set
         limits = [len(cards.filter(column_number=1)), len(cards.filter(column_number=3)),
                   len(cards.filter(column_number=5))]
-        return render(request, 'board/board.html', {'player': player, 'form': form, 'limits': limits})
+        team = player.team
+        current = [team.wip_limit1, team.wip_limit2, team.wip_limit3]
+        return render(request, 'board/board.html',
+                      {'player': player, 'form': form, 'limits': limits, 'current': current})
 
 
 # temporary function for testing (board clearing and etc.)

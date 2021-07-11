@@ -21,6 +21,7 @@ urlpatterns = [
     path('<int:player_id>/join_game', views.join_game, name='joinGame'),
     path('rules', views.rules, name='rules'),
     path('<int:player_id>/finish', views.finish, name='finish'),
+    path('<int:player_id>/finish/commands_check', views.commands_check, name='commandsCheck'),
 
     # to be added
     path('news', views.news, name='news')

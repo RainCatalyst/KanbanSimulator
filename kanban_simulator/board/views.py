@@ -16,6 +16,7 @@ SECOND_HALF_APPEARS = 10
 FIRST_EXPEDITE = 8
 SECOND_EXPEDITE = 13
 THIRD_EXPEDITE = 16
+LAST_DAY = 26
 
 
 def index(request):
@@ -139,6 +140,7 @@ def start_new_day(request):
         team = Team.objects.get(pk=team_num)
         if int(day_num) == int(team.dayNum):
             cards = json.loads(request.POST.get('cards', []))
+            bv_sum = request.POST.get("BV", 0)
             characters = request.POST.getlist("characters[]", [])
             anl_comp = request.POST.get('anl_completed', 0)
             dev_comp = request.POST.get('dev_completed', 0)
@@ -162,6 +164,7 @@ def start_new_day(request):
             day.save()
             team.version += 1
             team.dayNum = int(day_num) + 1
+            team.business_value_sum = bv_sum
             team.save()
             return JsonResponse({"SYN": True, "day_num": int(day_num) + 1,
                                  "team_effort": json.dumps(generate_random_effort_for_whole_team())}, status=200)
@@ -223,25 +226,10 @@ def version_check(request):
         if int(server_team.version) > int(input_version):
             cards = Card.objects.filter(team=server_team, start_day__lte=server_team.dayNum)
 
-            days = Day.objects.filter(team=server_team).order_by("age")
-            bar_data = []
-            line_data = []
-            processed_days = []
-            for day in days:
-                if day.age not in processed_days:
-                    bar_data.append({str(day.age): day.test_completed_tasks})
-                    line_data.append(
-                        {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
-                processed_days.append(day.age)
-
-            for i in range(1, len(line_data)):
-                vals = list(line_data[i].values())[0]
-                prev_vals = list(line_data[i - 1].values())[0]
-                line_data[i] = {
-                    list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
-                                                   vals[1] + prev_vals[1],
-                                                   vals[2] + prev_vals[2]]}
-
+            # days = Day.objects.filter(team=server_team).order_by("age")
+            # bar_data = []
+            # line_data = []
+            bar_data, line_data = form_data_for_statistics(server_team)
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
                     server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
@@ -524,36 +512,54 @@ def finish(request, player_id):
     #                                                vals[2] + prev_vals[2]]}
     return render(request, 'board/finish.html')
 
-# @csrf_exempt
-# def commands_check(request, player_id):
-#     if request.method == "POST":
-#         teams_id = request.POST.getlist("teams", [])
-#         user_disp_commands = len(teams_id)
-#         server_ready_commands = Player.objects.get(pk=player_id).team.room.team_set
-#         print(len(se))
-#         if user_disp_commands != len(server_ready_commands):
 
+@csrf_exempt
+def commands_check(request, player_id):
+    if request.method == "POST":
+        teams_id = request.POST.getlist('teams[]', [])
+        user_disp_commands = len(teams_id)
+        server_ready_commands = Player.objects.get(pk=player_id).team.game.team_set.all().filter(dayNum=LAST_DAY)
+        print(len(server_ready_commands))
+        print(teams_id)
+        if user_disp_commands != len(server_ready_commands):
+            print("accessed")
+            graphics_data = []
+            teams = []
+            for team in server_ready_commands:
+                teams.append({"pk": team.pk, "bv": team.business_value_sum, "players": json.dumps(list(team.player_set.all().values('name')))})
+                # print(teams)
+                bar_data, line_data = form_data_for_statistics(team)
+                graphics_data.append({"pk": team.pk, "data": [bar_data, line_data]})
+            return JsonResponse({"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))}, status=200)
+        else:
+            return JsonResponse({"SYN": True}, status=200)
+
+    return JsonResponse({"Error": "error"}, status=400)
+
+
+def form_data_for_statistics(server_team):
+    days = Day.objects.filter(team=server_team).order_by("age")
+    bar_data = []
+    line_data = []
+    processed_days = []
+    for day in days:
+        if day.age not in processed_days:
+            bar_data.append({str(day.age): day.test_completed_tasks})
+            line_data.append(
+                {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
+        processed_days.append(day.age)
+
+    for i in range(1, len(line_data)):
+        vals = list(line_data[i].values())[0]
+        prev_vals = list(line_data[i - 1].values())[0]
+        line_data[i] = {
+            list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
+                                           vals[1] + prev_vals[1],
+                                           vals[2] + prev_vals[2]]}
+
+    return bar_data, line_data
 
 
 # to be added
 def news(request):
     return
-
-# @csrf_exempt
-# def delete_player(request, player_id):
-#     if request.method == "POST":
-#         #player = request.POST.get("player", None)
-#         print(player_id)
-#         player = Player.objects.get(pk=int(player_id))
-#         player.delete()
-#         game = player.team.game
-#         game.version += 1
-#             #
-#             #
-#             # Player.objects.get(pk=player_id).delete()
-#             # game_id = player.team.game.pk
-#             # game = Room.objects.get(pk=game_id)
-#             # game.version += 1
-#             # game.save()
-#
-#     return JsonResponse({}, status=200)

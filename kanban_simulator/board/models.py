@@ -24,6 +24,8 @@ class Team(models.Model):
     wip2 = models.IntegerField(name='wip_limit2', default=4)
     wip3 = models.IntegerField(name='wip_limit3', default=4)
 
+    business_value_sum = models.IntegerField(default=0)
+
     def __str__(self):
         return self.name + '. ID комнаты: ' + str(self.game.pk)
 

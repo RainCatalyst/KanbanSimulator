@@ -92,16 +92,20 @@ function updateCharacterConfiguration(){
 
     $(".players").dblclick(function(){
         var elem = $(this);
-        $(this).remove();
-        $("#header_container").append(elem);
-        moveCharacter(characterDistinguishByID(elem.attr("id")), -1);
+        var cur_role = characterDistinguishByID(elem.attr("id"));
+        if (players_list[cur_role] != -1){
+            $(this).remove();
+            $("#header_container").append(elem);
+            moveCharacter(cur_role, -1);
+            updateCharacterConfiguration();
+        }
     });
 }
 
 // functions which tells to server that the given character changed its position
 function moveCharacter(role, card_id){
     console.log("Character#" + role + " was moved on card#" + card_id);
-    players_list[role] == card_id;
+    players_list[role] = card_id;
     data = {"team_id": team_id,
             "role": role,
             "card_id": card_id};

@@ -191,7 +191,7 @@ function start_new_day(){
                 }
 
             }
-            }else if (card_list[k]["is_expedite"]){
+            }else if (card_list[k]["is_expedite"] || card_list[k]["column_number"] != last_column){
                 card_list[k]["age"] += 1;
                 if (card_list[k]["age"] == 5){
                     card_list[k]["business_value"] = 0;

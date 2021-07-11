@@ -504,7 +504,35 @@ def rules(request):
 
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
+    # days = player.team.day_set.order_by("age")
+    # bar_data = []
+    # line_data = []
+    # processed_days = []
+    # for day in days:
+    #     if day.age not in processed_days:
+    #             bar_data.append({str(day.age): day.test_completed_tasks})
+    #                 line_data.append(
+    #                     {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
+    #             processed_days.append(day.age)
+    #
+    #         for i in range(1, len(line_data)):
+    #             vals = list(line_data[i].values())[0]
+    #             prev_vals = list(line_data[i - 1].values())[0]
+    #             line_data[i] = {
+    #                 list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
+    #                                                vals[1] + prev_vals[1],
+    #                                                vals[2] + prev_vals[2]]}
     return render(request, 'board/finish.html')
+
+# @csrf_exempt
+# def commands_check(request, player_id):
+#     if request.method == "POST":
+#         teams_id = request.POST.getlist("teams", [])
+#         user_disp_commands = len(teams_id)
+#         server_ready_commands = Player.objects.get(pk=player_id).team.room.team_set
+#         print(len(se))
+#         if user_disp_commands != len(server_ready_commands):
+
 
 
 # to be added

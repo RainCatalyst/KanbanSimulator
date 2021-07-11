@@ -418,7 +418,7 @@
             <div class="modal-body">
                 <p>Появились новые карточки!</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer p-1">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
             </div>
         </div>
@@ -434,8 +434,26 @@
             </div>
             <div class="modal-body">
                 <p>Появились новые Expedite карточки!</p>
+                <p>Выполните их как можно скорее!</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer p-1">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AlertEndGameModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="AlertEndGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title" id="AlertEndGameModalLabel">Уведомление!</h5>
+            </div>
+            <div class="modal-body">
+                <p>Игра заканчивается завтра! Поторопитесь!</p>
+            </div>
+            <div class="modal-footer p-1">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
             </div>
         </div>
@@ -471,16 +489,6 @@
         console.log(e);
     });
 </script>
-
-{#<script>#}
-{#    var myModal = new bootstrap.Modal(document.getElementById('AlertCardsModal'), {})#}
-{#    myModal.show()#}
-{#</script>#}
-
-{#<script>#}
-{#    var myModal = new bootstrap.Modal(document.getElementById('AlertExpediteCardsModal'), {})#}
-{#    myModal.show()#}
-{#</script>#}
 
 </body>
 </html>

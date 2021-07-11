@@ -76,16 +76,25 @@ function updateCharacterConfiguration(){
                     stop: function(event){
                     $(this).css("inset", "");
                     }});
-    $("#header_container").droppable({
+    $("#big_header_container").droppable({
         accept: '.players',
         drop: function(event, ui){
-            $(this).append(ui.draggable[0]);
-            var child = $(this).children().last();
+            //$(this).append(ui.draggable[0]);
+            var parent = $("#header_container");
+            parent.append(ui.draggable[0]);
+            var child = parent.children().last();
             child.removeAttr("style");
             child.css("position", "relative");
             var role = characterDistinguishByID(child.attr("id"));
             moveCharacter(role, -1);
         }
+    });
+
+    $(".players").dblclick(function(){
+        var elem = $(this);
+        $(this).remove();
+        $("#header_container").append(elem);
+        moveCharacter(characterDistinguishByID(elem.attr("id")), -1);
     });
 }
 

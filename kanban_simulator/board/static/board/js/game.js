@@ -1,5 +1,6 @@
 var current_version = 0;
 var team_id = 1;
+var player_id = 0;
 var current_day = 1;
 var player_collaboration_day = 10;
 var limits = [4, 4, 4];
@@ -21,6 +22,8 @@ var developer_completed_tasks = [];
 var test_completed_tasks = [];
 
 var is_backlog_function_processed = false;
+
+var last_day = 26;
 
 function backLogInitialPopulation(){
     $.ajax({
@@ -188,6 +191,15 @@ function start_new_day(){
                 }
 
             }
+            }else if (card_list[k]["is_expedite"]){
+                card_list[k]["age"] += 1;
+                if (card_list[k]["age"] == 5){
+                    card_list[k]["business_value"] = 0;
+                }else if (card_list[k]["age"] == 6 ){
+                    card_list[k]["business_value"] = -8;
+                }else if (card_list[k]["age"] > 6){
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
+                }
             }
         }
 
@@ -320,7 +332,16 @@ function performVersionCheck(){
                 }
 
                 $('#day_num_title').text("День #" + current_day);
+                if (current_day == last_day){
+                    $.ajax({
+                        type: "GET",
+                        url: "/"+ player_id + "/finish",
+                        success: function(response){
+                            window.location.href = "/" + player_id + "/finish";
+                        }
+                    });
 
+                }
 
                 removeAllChildNodes('backlog_container');
                 removeAllChildNodes('analytic_in_process_container');

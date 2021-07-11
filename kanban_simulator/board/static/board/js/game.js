@@ -20,6 +20,8 @@ var analytic_completed_tasks = [];
 var developer_completed_tasks = [];
 var test_completed_tasks = [];
 
+var is_backlog_function_processed = false;
+
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
@@ -80,6 +82,7 @@ function backLogInitialPopulation(){
 
             droppableAbility();
             allowToDrop();
+            is_backlog_function_processed = true;
     }});
     performVersionCheck();
 }
@@ -284,7 +287,8 @@ $(function() {
 
 // function for inter-player synchronization
 function performVersionCheck(){
-    $.ajax({
+    if (is_backlog_function_processed){
+        $.ajax({
         type: "POST",
         url: "version_check",
         data: {'team_id': team_id,
@@ -372,6 +376,10 @@ function performVersionCheck(){
             setTimeout(performVersionCheck, 1000);
         }
     });
+    }else{
+        setTimeout(performVersionCheck, 1000);
+    }
+
 }
 
 // remove all content inside specified column
@@ -447,6 +455,13 @@ function cumulativeGraph(){
     }
     var data = {
         labels: labels,
+        options: {
+            title: {
+                display: true,
+                text: 'Cumulative Flow Diagram',
+                position: 'left'
+            }
+        },
         datasets: [
         {
             label: 'Test tasks',
@@ -477,18 +492,7 @@ function cumulativeGraph(){
             },
             borderColor: 'rgb(255, 0, 0)',
             tension: 0.1
-        }],
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
+        }]
     };
     lineChart = new Chart(ctx, {
         type: 'line',
@@ -516,22 +520,18 @@ function barGraph(){
     }
     var data = {
         labels: labels,
+        options: {
+            title: {
+                display: true,
+                text: 'Lead Time Distribution',
+                position: 'bottom'
+            }
+        },
         datasets: [
         {
             label: 'Completed tasks',
             data: ds,
-        }],
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
+        }]
     };
     barChart = new Chart(ctx, {
         type: 'bar',

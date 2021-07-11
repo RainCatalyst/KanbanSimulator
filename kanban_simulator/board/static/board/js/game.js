@@ -191,7 +191,7 @@ function start_new_day(){
                 }
 
             }
-            }else if (card_list[k]["is_expedite"] || card_list[k]["column_number"] != last_column){
+            }else if (card_list[k]["is_expedite"] && card_list[k]["column_number"] != last_column){
                 card_list[k]["age"] += 1;
                 if (card_list[k]["age"] == 5){
                     card_list[k]["business_value"] = 0;
@@ -341,6 +341,12 @@ function performVersionCheck(){
                         }
                     });
 
+                }else if (current_day == last_day - 1){
+                    document.getElementById("end_game_label").innerHTML = "Игра заканчивается завтра! Поторопитесь!";
+                    $("#AlertEndGameModal").modal('toggle');
+                }else if (current_day == last_day - 7){
+                    document.getElementById("end_game_label").innerHTML = "Игра заканчивается через 7 дней! Поторопитесь!";
+                    $("#AlertEndGameModal").modal('toggle');
                 }
 
                 removeAllChildNodes('backlog_container');

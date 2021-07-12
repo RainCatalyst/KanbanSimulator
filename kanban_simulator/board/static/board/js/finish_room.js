@@ -35,13 +35,22 @@ function commands_check(){
 }
 
 function addListeners(pk){
-    var elem = $("#team_tab_" + pk);
-    elem.click(function(){
+    //alert("team_tab_" + pk);
+    var elem = document.getElementById("team_tab_" + pk).addEventListener("click", function(){
+        //alert("s,l");
         var id = parseInt($(this).attr("id").substring(9));
         var data = findDataByID(id);
         cumulativeGraph(data[1]);
         barGraph(data[0]);
-    });
+    }, false);
+    /*var elem = $("#team_tab_" + pk);
+    elem.click(function(){
+        //alert("something");
+        var id = parseInt($(this).attr("id").substring(9));
+        var data = findDataByID(id);
+        cumulativeGraph(data[1]);
+        barGraph(data[0]);
+    });*/
 }
 
 function findDataByID(pk){
@@ -62,6 +71,9 @@ function ratingByBusinessValue(){
         var tab_template = tabTemplate(i + 1, teams[i]["pk"]);
         document.getElementById("team_rating").innerHTML += template;
         document.getElementById("team_tabs").innerHTML += tab_template;
+    }
+
+    for (var i = 0; i< teams.length; i++){
         addListeners(teams[i]["pk"]);
     }
 

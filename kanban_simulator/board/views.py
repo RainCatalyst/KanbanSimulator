@@ -131,7 +131,7 @@ def populateBackLog(request):
     return JsonResponse({"error": ""}, status=400)
 
 
-# .. in process
+# start new day function which gets information for player(cards, characters and etc) and returns new efforts for characters
 @csrf_exempt
 def start_new_day(request):
     if request.method == 'POST':
@@ -180,7 +180,7 @@ def generate_random_effort_for_whole_team():
     return team_effort
 
 
-# accepts actual position of the character and updates it in the db
+# accepts actual position of the card and updates it in the db
 @csrf_exempt
 def move_card(request):
     if request.method == "POST":
@@ -216,7 +216,7 @@ def move_player(request):
     return JsonResponse({"Success": ""}, status=200)
 
 
-# check board version
+# check board version and update board of the particular player
 @csrf_exempt
 def version_check(request):
     if request.method == "POST":
@@ -264,6 +264,7 @@ def version_check(request):
     return JsonResponse({"Error": "error"}, status=400)
 
 
+# checks if new players arrived in waiting room
 @csrf_exempt
 def players_check(request, player_id):
     if request.method == "POST":
@@ -490,6 +491,7 @@ def rules(request):
     return render(request, 'board/rules.html')
 
 
+# redirects people from board to finish room with statistics
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
     try:
@@ -501,6 +503,7 @@ def finish(request, player_id):
     return render(request, 'board/finish.html')
 
 
+# checks if new team already finish
 @csrf_exempt
 def commands_check(request, player_id):
     if request.method == "POST":
@@ -525,6 +528,7 @@ def commands_check(request, player_id):
     return JsonResponse({"Error": "error"}, status=400)
 
 
+# function which is responsible for appropriate data structure and format for working with statistics
 def form_data_for_statistics(server_team):
     days = Day.objects.filter(team=server_team).order_by("age")
     bar_data = []

@@ -5,8 +5,10 @@ var current_day = 1;
 var player_collaboration_day = 10;
 var limits = [4, 4, 4];
 var BV = 0;
+// initial data for graph plotting
 var bar_data = [{"1": 0}, {"2": 0}, {"3": 0}, {"4": 0}];
 var line_data = [{"1": [1, 0, 0]}, {"2": [2, 1, 0]}, {"3": [3, 1, 0]}, {"4": [4, 2, 0]}];
+
 var lineChart;
 var barChart;
 
@@ -31,6 +33,25 @@ var is_backlog_function_processed = false;
 
 var last_day = 26;
 
+// needed for showing that players have only 1 week left
+var last_week_reminder = false;
+
+// needed for showing that players have only 1 day left
+var last_day_reminder = false;
+
+// needed for showing that first expedite modal was shown
+var first_expedite_modal_was_shown = false;
+
+// needed for showing that second expedite modal was shown
+var second_expedite_modal_was_shown = false;
+
+// needed for showing that third expedite modal was shown
+var third_expedite_modal_was_shown = false;
+
+// needed for showing that second half of cards modal was shown
+var second_half_model_shown = false;
+
+// function which is responsible for initial card states(position, progress and etc)
 function backLogInitialPopulation(){
     $.ajax({
         type: 'POST',
@@ -97,7 +118,7 @@ function backLogInitialPopulation(){
 }
 
 
-// in process...
+// function which calls every start day button click (here we calculate the progress, business value, next positions of the cards and etc)
 function start_new_day(){
 
     if (window.confirm("Do you really want to start new day?")) {
@@ -299,12 +320,13 @@ $(function() {
 
     $('#day_num_title').text("День #" + current_day);
 
+    // statistics button (business value calculating and graph plotting)
     $(document).on("click", "#stat_show", function () {
-     cumulativeGraph();
-     barGraph();
-     calculateBV();
-     document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
-     $('#StatisticsModal').modal('toggle');
+        cumulativeGraph();
+        barGraph();
+        calculateBV();
+        document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
+        $('#StatisticsModal').modal('toggle');
     });
 });
 
@@ -335,18 +357,28 @@ function performVersionCheck(){
                 current_version = board_info["version"];
                 if (current_day != board_info["Age"]){
                     current_day = board_info["Age"];
-                    if (current_day == FIRST_EXPEDITE || current_day == SECOND_EXPEDITE || current_day == THIRD_EXPEDITE){
+                    if (current_day == FIRST_EXPEDITE && !first_expedite_modal_was_shown){
                         showExpediteModal();
-                     }else if (current_day == SECOND_HALF_APPEARS){
+                        first_expedite_modal_was_shown = true;
+                     }else if (current_day == SECOND_EXPEDITE && !second_expedite_modal_was_shown){
+                        showExpediteModal();
+                        second_expedite_modal_was_shown = true;
+                     }else if (current_day == THIRD_EXPEDITE && !third_expedite_modal_was_shown){
+                        showExpediteModal();
+                        third_expedite_modal_was_shown = true;
+                     }else if (current_day == SECOND_HALF_APPEARS && !second_half_model_shown){
                         showNewCardsModal();
+                        second_half_model_shown = true;
                     }
                 }
 
                 $('#day_num_title').text("День #" + current_day);
-                if (current_day == last_day - 1){
+                if (current_day == last_day - 1 && !last_day_reminder){
+                    last_day_reminder = true;
                     document.getElementById("end_game_label").innerHTML = "Игра заканчивается завтра! Поторопитесь!";
                     $("#AlertWeekEndGameModal").modal('toggle');
-                }else if (current_day == last_day - 7){
+                }else if (current_day == last_day - 7 && !last_week_reminder){
+                    last_week_reminder = true;
                     document.getElementById("end_game_label").innerHTML = "Игра заканчивается через 7 дней! Поторопитесь!";
                     $("#AlertWeekEndGameModal").modal('toggle');
                 }
@@ -416,6 +448,7 @@ function performVersionCheck(){
 
 }
 
+// function which redirects all player inside same team to finish(statistic) room
 function goToFinishRoom(){
     $.ajax({
         type: "GET",
@@ -454,6 +487,7 @@ function compare_cards(card_a, card_b) {
   return 0;
 }
 
+// get number of children inside the parent container
 function getNumberOfChildNodesById(id){
     return document.getElementById(id).childElementCount;
 }
@@ -466,48 +500,49 @@ function showExpediteModal(){
     $('#AlertExpediteCardsModal').modal('toggle');
 }
 
+// calculate business value(1st algo for 5-24 days and 2nd for last days)
 function calculateBV(){
     var sum = 0;
     for (var k = 0; k < card_list.length; k ++){
         if (card_list[k]["column_number"] == 7){
+            sum += card_list[k]["business_value"];
+            console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
+        }
+        if (current_day >= last_day - 1){
+            if (card_list[k]["column_number"] == 6){
                 sum += card_list[k]["business_value"];
                 console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
-            }
-            if (current_day >= last_day - 1){
-                if (card_list[k]["column_number"] == 6){
-                    sum += card_list[k]["business_value"];
-                    console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
-                }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
-                    if (card_list[k]["is_expedite"]){
-                        if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-                            if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-                        }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                        }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
-                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                        }
-                    }else{
-                        if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-                            if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-                        }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                        }else if (card_list[k]["column_number"] == 1){
-                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                        }
+            }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
+                if (card_list[k]["is_expedite"]){
+                    if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+                        if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+                    }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                    }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
+                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                    }
+                }else{
+                    if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+                        if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
+                    }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+                    }else if (card_list[k]["column_number"] == 1){
+                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
                     }
                 }
             }
+        }
     }
     BV = sum;
 }
 
-
+// plot cumulative graph (cumulative amount of task which is done by every department)
 function cumulativeGraph(){
     if (lineChart != null){
         lineChart.destroy();
@@ -574,6 +609,7 @@ function cumulativeGraph(){
     });
 }
 
+// plot bar graph (number of task which is done in principle)
 function barGraph(){
     if (barChart != null){
         barChart.destroy();

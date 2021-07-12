@@ -46,6 +46,7 @@ function createCardTemplate(card_model){
             '</div>';
 }
 
+// html template creation function for expedite card
 function createExpediteCardTemplate(card_model){
     var class_name = "no_droppable_card";
     if (card_model["column_number"] == 1 || card_model["column_number"] == 3 || card_model["column_number"] == 5){
@@ -95,8 +96,8 @@ $(function() {
     allowToDrop();
 });
 
+// new cards don't know about their possible dragability, so we need to declare it
 function allowToDrop(){
-
 $('.droppable_anl_proc').droppable({
         accept: function(draggable){
         if (draggable.hasClass("draggable")){
@@ -227,6 +228,7 @@ function abilityToAddCharacters(card){
 
 }
 
+// also new cards don't know about their droppability (they can accept characters), so we need to update it
 function droppableAbility(){
     $('.droppable_card').droppable({
         accept: function(draggable){
@@ -255,10 +257,23 @@ function droppableAbility(){
             child.css("inset", "");
 
             if (players_list[role] != card_id){
+                deleteCharacterCopy('#kb_card_' + players_list[role], $(ui.draggable).attr("id"));
                 moveCharacter(role, card_id);
-                players_list[role] = card_id;
             }
     }});
+}
+
+// function related to draggability bug(2 copies of the same characters in different locations)
+function deleteCharacterCopy(card_id, player_id){
+    var parent_id;
+    if (card_id == -1){
+        parent_id = "#header_container";
+    }else{
+        parent_id = card_id;
+    }
+    if ($(parent_id).has("#" + player_id).length){
+        $(parent_id).find("#" + player_id).remove();
+    }
 }
 
 // function which is need for adding specific draggable classes to card,
@@ -297,6 +312,7 @@ function changePositionInList(id, column_number, row_number){
     }
 }
 
+// get pk of the card from it html id
 function getIdByCardModel(card){
     return card.attr("id").substring(card.attr("id").lastIndexOf('_') + 1);
 
@@ -331,6 +347,7 @@ function getProportion(first, second){
     return proportion;
 }
 
+// get amount of children which locates in columns 1 and 2 and they shouldn't be expedite, since expedite cards may break WIP limits
 function getAnalyticChildren(){
     var amount = 0;
     for (var i = 0; i < card_list.length; i++){
@@ -341,6 +358,7 @@ function getAnalyticChildren(){
     return amount;
 }
 
+// get amount of children which locates in columns 3 and 4 and they shouldn't be expedite, since expedite cards may break WIP limits
 function getDevChildren(){
     var amount = 0;
     for (var i = 0; i < card_list.length; i++){
@@ -351,6 +369,7 @@ function getDevChildren(){
     return amount;
 }
 
+// get amount of children which locates in columns 5 and 6 and they shouldn't be expedite, since expedite cards may break WIP limits
 function getTestChildren(){
     var amount = 0;
     for (var i = 0; i < card_list.length; i++){
@@ -359,10 +378,6 @@ function getTestChildren(){
         }
     }
     return amount;
-}
-
-function test(){
-    alert("dsa");
 }
 
 

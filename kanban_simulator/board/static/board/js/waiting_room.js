@@ -3,6 +3,7 @@ var game_id = 0;
 var current_version = -1;
 var player_id = -1;
 
+// create player template entry
 function player_template(player, count){
     return '<tr>' +
                     '<th scope="row">' + count +'</th>' +
@@ -10,6 +11,7 @@ function player_template(player, count){
                     '</tr>';
 }
 
+// synchronization function for checking new arrived players
 function new_players_check(){
     $.ajax({
         type: "POST",

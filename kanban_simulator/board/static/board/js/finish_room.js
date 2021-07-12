@@ -26,7 +26,14 @@ function commands_check(){
                 }
                 document.getElementById("team_rating").innerHTML = "";
                 document.getElementById("team_tabs").innerHTML = "";
+                if (lineChart != null){
+                   lineChart.destroy();
+                }
+                if (barChart != null){
+                    barChart.destroy();
+                }
                 ratingByBusinessValue();
+                document.getElementById("team_tabs").firstChild.firstChild.click();
 
             }
             setTimeout(commands_check, 1000);

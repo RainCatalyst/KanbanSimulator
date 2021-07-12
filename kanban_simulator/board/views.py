@@ -492,24 +492,12 @@ def rules(request):
 
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
-    # days = player.team.day_set.order_by("age")
-    # bar_data = []
-    # line_data = []
-    # processed_days = []
-    # for day in days:
-    #     if day.age not in processed_days:
-    #             bar_data.append({str(day.age): day.test_completed_tasks})
-    #                 line_data.append(
-    #                     {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
-    #             processed_days.append(day.age)
-    #
-    #         for i in range(1, len(line_data)):
-    #             vals = list(line_data[i].values())[0]
-    #             prev_vals = list(line_data[i - 1].values())[0]
-    #             line_data[i] = {
-    #                 list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
-    #                                                vals[1] + prev_vals[1],
-    #                                                vals[2] + prev_vals[2]]}
+    try:
+        team = player.team
+        team.card_set.all().delete()
+        team.character_set.all().delete()
+    except BaseException:
+        pass
     return render(request, 'board/finish.html')
 
 
@@ -519,18 +507,18 @@ def commands_check(request, player_id):
         teams_id = request.POST.getlist('teams[]', [])
         user_disp_commands = len(teams_id)
         server_ready_commands = Player.objects.get(pk=player_id).team.game.team_set.all().filter(dayNum=LAST_DAY)
-        print(len(server_ready_commands))
-        print(teams_id)
         if user_disp_commands != len(server_ready_commands):
-            print("accessed")
             graphics_data = []
             teams = []
             for team in server_ready_commands:
-                teams.append({"pk": team.pk, "bv": team.business_value_sum, "players": json.dumps(list(team.player_set.all().values('name')))})
+                teams.append({"pk": team.pk, "bv": team.business_value_sum,
+                              "players": json.dumps(list(team.player_set.all().values('name')))})
                 # print(teams)
                 bar_data, line_data = form_data_for_statistics(team)
                 graphics_data.append({"pk": team.pk, "data": [bar_data, line_data]})
-            return JsonResponse({"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))}, status=200)
+            return JsonResponse(
+                {"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))},
+                status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)
 

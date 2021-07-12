@@ -16,6 +16,8 @@ var FIRST_EXPEDITE = 8;
 var SECOND_EXPEDITE = 13;
 var THIRD_EXPEDITE = 16;
 
+var LATE_CARD_DAY = 10;
+var LATE_EXPEDITE_CARD_DAY = 6;
 // arrays of days
 var analytic_completed_tasks = [];
 var developer_completed_tasks = [];
@@ -173,32 +175,32 @@ function start_new_day(){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
                 if (card_list[k]["is_expedite"]){
-                    if (card_list[k]["age"] == 5){
+                    if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
                         card_list[k]["business_value"] = 0;
-                    }else if (card_list[k]["age"] == 6 ){
+                    }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1 ){
                         card_list[k]["business_value"] = -8;
-                    }else if (card_list[k]["age"] > 6){
+                    }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
                         card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
                     }
                 }else{
-                    if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
+                    if (card_list[k]["age"] == LATE_CARD_DAY - 2 || card_list[k]["age"] == LATE_CARD_DAY - 1){
                         card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
-                    }else if (card_list[k]["age"] == 10){
+                    }else if (card_list[k]["age"] == LATE_CARD_DAY){
                         card_list[k]["business_value"] = 0;
-                    }else if (card_list[k]["age"] == 11){
+                    }else if (card_list[k]["age"] == LATE_CARD_DAY + 1){
                         card_list[k]["business_value"] = -5;
-                    }else if (card_list[k]["age"] > 11){
+                    }else if (card_list[k]["age"] > LATE_CARD_DAY + 1){
                         card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 1.5);
                     }
 
                 }
             }else if (card_list[k]["is_expedite"] && card_list[k]["column_number"] != last_column){
                 card_list[k]["age"] += 1;
-                if (card_list[k]["age"] == 5){
+                if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
                     card_list[k]["business_value"] = 0;
-                }else if (card_list[k]["age"] == 6 ){
+                }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1){
                     card_list[k]["business_value"] = -8;
-                }else if (card_list[k]["age"] > 6){
+                }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
                     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
                 }
             }

@@ -168,29 +168,30 @@ function start_new_day(){
         }
 
         var last_column = 7;
+        var sum = 0;
         for (var k = 0; k < card_list.length; k ++){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
-            if (card_list[k]["is_expedite"]){
-                if (card_list[k]["age"] == 5){
-                    card_list[k]["business_value"] = 0;
-                }else if (card_list[k]["age"] == 6 ){
-                    card_list[k]["business_value"] = -8;
-                }else if (card_list[k]["age"] > 6){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
-                }
-            }else{
-                if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
-                }else if (card_list[k]["age"] == 10){
-                    card_list[k]["business_value"] = 0;
-                }else if (card_list[k]["age"] == 11){
-                    card_list[k]["business_value"] = -5;
-                }else if (card_list[k]["age"] > 11){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 1.5);
-                }
+                if (card_list[k]["is_expedite"]){
+                    if (card_list[k]["age"] == 5){
+                        card_list[k]["business_value"] = 0;
+                    }else if (card_list[k]["age"] == 6 ){
+                        card_list[k]["business_value"] = -8;
+                    }else if (card_list[k]["age"] > 6){
+                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
+                    }
+                }else{
+                    if (card_list[k]["age"] == 8 || card_list[k]["age"] == 9){
+                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
+                    }else if (card_list[k]["age"] == 10){
+                        card_list[k]["business_value"] = 0;
+                    }else if (card_list[k]["age"] == 11){
+                        card_list[k]["business_value"] = -5;
+                    }else if (card_list[k]["age"] > 11){
+                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 1.5);
+                    }
 
-            }
+                }
             }else if (card_list[k]["is_expedite"] && card_list[k]["column_number"] != last_column){
                 card_list[k]["age"] += 1;
                 if (card_list[k]["age"] == 5){
@@ -201,7 +202,12 @@ function start_new_day(){
                     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
                 }
             }
+
+            if (card_list[k]["column_number"] == 7){
+                sum += card_list[k]["business_value"];
+            }
         }
+        BV = sum;
 
         var anl_in_proc = card_list.filter(x => x["column_number"] == 1).sort(compare_cards);
         var dev_in_proc = card_list.filter(x => x["column_number"] == 3).sort(compare_cards);
@@ -257,6 +263,7 @@ function start_new_day(){
         data["test_completed"] = test_comp;
         data["cards"] = JSON.stringify(card_list);
         data["characters"] = players_list;
+        data["BV"] = BV;
 
         $.ajax({
             type: "POST",

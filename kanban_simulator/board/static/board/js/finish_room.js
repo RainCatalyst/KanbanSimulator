@@ -35,22 +35,18 @@ function commands_check(){
 }
 
 function addListeners(pk){
-    //alert("team_tab_" + pk);
     var elem = document.getElementById("team_tab_" + pk).addEventListener("click", function(){
-        //alert("s,l");
         var id = parseInt($(this).attr("id").substring(9));
         var data = findDataByID(id);
         cumulativeGraph(data[1]);
         barGraph(data[0]);
+        $(this).addClass("active");
+        for (var j =0; j < teams.length; j++){
+            if (teams[j]["pk"] != id){
+                $('#team_tab_' + teams[j]["pk"]).removeClass('active');
+            }
+        }
     }, false);
-    /*var elem = $("#team_tab_" + pk);
-    elem.click(function(){
-        //alert("something");
-        var id = parseInt($(this).attr("id").substring(9));
-        var data = findDataByID(id);
-        cumulativeGraph(data[1]);
-        barGraph(data[0]);
-    });*/
 }
 
 function findDataByID(pk){

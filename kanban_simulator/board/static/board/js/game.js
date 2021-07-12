@@ -339,21 +339,12 @@ function performVersionCheck(){
                 }
 
                 $('#day_num_title').text("День #" + current_day);
-                if (current_day == last_day){
-                    $.ajax({
-                        type: "GET",
-                        url: "/"+ player_id + "/finish",
-                        success: function(response){
-                            window.location.href = "/" + player_id + "/finish";
-                        }
-                    });
-
-                }else if (current_day == last_day - 1){
+                if (current_day == last_day - 1){
                     document.getElementById("end_game_label").innerHTML = "Игра заканчивается завтра! Поторопитесь!";
-                    $("#AlertEndGameModal").modal('toggle');
+                    $("#AlertWeekEndGameModal").modal('toggle');
                 }else if (current_day == last_day - 7){
                     document.getElementById("end_game_label").innerHTML = "Игра заканчивается через 7 дней! Поторопитесь!";
-                    $("#AlertEndGameModal").modal('toggle');
+                    $("#AlertWeekEndGameModal").modal('toggle');
                 }
 
                 removeAllChildNodes('backlog_container');
@@ -407,13 +398,28 @@ function performVersionCheck(){
                 updateCharacterConfiguration();
                 document.body.classList.remove('waiting');
             }
-            setTimeout(performVersionCheck, 1000);
+            if (current_day == last_day){
+                $('#AlertEndGameModal').modal('toggle');
+                setTimeout(goToFinishRoom, 3000);
+            }else{
+                setTimeout(performVersionCheck, 1000);
+            }
         }
     });
     }else{
         setTimeout(performVersionCheck, 1000);
     }
 
+}
+
+function goToFinishRoom(){
+    $.ajax({
+        type: "GET",
+        url: "/"+ player_id + "/finish",
+        success: function(response){
+        window.location.href = "/" + player_id + "/finish";
+        }
+    });
 }
 
 // remove all content inside specified column

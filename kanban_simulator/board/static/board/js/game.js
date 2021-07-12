@@ -18,6 +18,10 @@ var THIRD_EXPEDITE = 16;
 
 var LATE_CARD_DAY = 10;
 var LATE_EXPEDITE_CARD_DAY = 6;
+var LATE_CARD_INIT_BV = -5;
+var LATE_EXPEDITE_CARD_INIT_BV = -8;
+var LATE_CARD_FACTOR = 1.5;
+var LATE_EXPEDITE_CARD_FACTOR = 2;
 // arrays of days
 var analytic_completed_tasks = [];
 var developer_completed_tasks = [];
@@ -168,9 +172,10 @@ function start_new_day(){
                 }
             }
         }
+        calculateBV();
 
         var last_column = 7;
-        var sum = 0;
+        //var sum = 0;
         for (var k = 0; k < card_list.length; k ++){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
@@ -178,9 +183,9 @@ function start_new_day(){
                     if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
                         card_list[k]["business_value"] = 0;
                     }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1 ){
-                        card_list[k]["business_value"] = -8;
+                        card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
                     }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
-                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
+                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
                     }
                 }else{
                     if (card_list[k]["age"] == LATE_CARD_DAY - 2 || card_list[k]["age"] == LATE_CARD_DAY - 1){
@@ -188,9 +193,9 @@ function start_new_day(){
                     }else if (card_list[k]["age"] == LATE_CARD_DAY){
                         card_list[k]["business_value"] = 0;
                     }else if (card_list[k]["age"] == LATE_CARD_DAY + 1){
-                        card_list[k]["business_value"] = -5;
+                        card_list[k]["business_value"] = LATE_CARD_INIT_BV;
                     }else if (card_list[k]["age"] > LATE_CARD_DAY + 1){
-                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 1.5);
+                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
                     }
 
                 }
@@ -199,17 +204,13 @@ function start_new_day(){
                 if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
                     card_list[k]["business_value"] = 0;
                 }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1){
-                    card_list[k]["business_value"] = -8;
+                    card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
                 }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 2);
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
                 }
             }
-
-            if (card_list[k]["column_number"] == 7){
-                sum += card_list[k]["business_value"];
-            }
         }
-        BV = sum;
+        //BV = sum;
 
         var anl_in_proc = card_list.filter(x => x["column_number"] == 1).sort(compare_cards);
         var dev_in_proc = card_list.filter(x => x["column_number"] == 3).sort(compare_cards);
@@ -302,6 +303,7 @@ $(function() {
      cumulativeGraph();
      barGraph();
      calculateBV();
+     document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
      $('#StatisticsModal').modal('toggle');
     });
 });
@@ -466,13 +468,43 @@ function showExpediteModal(){
 
 function calculateBV(){
     var sum = 0;
-    for (var i = 0; i < card_list.length; i ++){
-        if (card_list[i]["column_number"] == 7){
-            sum += card_list[i]["business_value"];
-        }
+    for (var k = 0; k < card_list.length; k ++){
+        if (card_list[k]["column_number"] == 7){
+                sum += card_list[k]["business_value"];
+                console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
+            }
+            if (current_day >= last_day - 1){
+                if (card_list[k]["column_number"] == 6){
+                    sum += card_list[k]["business_value"];
+                    console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
+                }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
+                    if (card_list[k]["is_expedite"]){
+                        if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+                            if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+                        }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                        }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
+                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+                        }
+                    }else{
+                        if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+                            if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
+                        }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+                        }else if (card_list[k]["column_number"] == 1){
+                            if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+                            else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+                        }
+                    }
+                }
+            }
     }
     BV = sum;
-    document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
 }
 
 

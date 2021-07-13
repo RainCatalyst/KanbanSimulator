@@ -129,6 +129,11 @@ function start_new_day(){
         var dev_comp = 0;
         var test_comp = 0;
 
+        blocked = [];
+        for (var i = 0; i < card_list.length; i ++){
+            blocked.push(false);
+        }
+
         var changed_cards = [];
         for (var j = 0; j < players_list.length; j++){
             var character_position = players_list[j];
@@ -137,20 +142,20 @@ function start_new_day(){
                 if (!changed_cards.includes(card_id)) {
                     changed_cards.push(card_id);
                 }
-                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
+                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] && !blocked[card_id]){
                     card_list[card_id]["test_completed"] += current_effort[j] + (j == 5 || j == 6 ? 0 : -1);
                     if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
-                        card_list[card_id]["blocked"] = true;
+                        blocked[card_id] = true;
                     }
-                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && (card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"])){
+                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && !blocked[card_id]){
                     card_list[card_id]["develop_completed"] += current_effort[j] + (j == 2 || j == 3 || j == 4 ? 0 : -1);
                     if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
-                        card_list[card_id]["blocked"] = true;
+                        blocked[card_id] = true;
                     }
-                }else if(card_list[card_id]["blocked"] == null || !card_list[card_id]["blocked"]){
+                }else if(!blocked[card_id]){
                     card_list[card_id]["analytic_completed"] += current_effort[j] + (j == 0 || j == 1 ? 0 : -1);
                     if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
-                        card_list[card_id]["blocked"] = true;
+                        blocked[card_id] = true;
                     }
                 }
             }
@@ -160,7 +165,7 @@ function start_new_day(){
             var character_position = players_list[j];
             if (character_position != -1){
                 var card_id = getIndexOfArrayCardById(players_list[j]);
-                if (card_list[card_id]["blocked"] != null && card_list[card_id]["blocked"]){
+                if (blocked[card_id]){
                     players_list[j] = -1;
                 }
             }
@@ -170,7 +175,7 @@ function start_new_day(){
         var first_empty_row_test_comp = getNumberOfChildNodesById("test_completed_container");
 
         for (var i = 0; i < changed_cards.length; i++){
-            if (card_list[changed_cards[i]]["blocked"] != null && card_list[changed_cards[i]]["blocked"]){
+            if (blocked[changed_cards[i]]){
                 if (card_list[changed_cards[i]]["test_completed"] >= card_list[changed_cards[i]]["test_remaining"]){
                     test_comp += 1;
                     card_list[changed_cards[i]]["ready_day"] = current_day;

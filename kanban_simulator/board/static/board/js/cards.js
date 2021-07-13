@@ -1,4 +1,5 @@
 var card_list = [];
+var blocked = [];
 
 
 // html template creation function

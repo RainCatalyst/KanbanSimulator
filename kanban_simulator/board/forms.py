@@ -13,8 +13,9 @@ class CreateRoomForm(forms.Form):
 
 
 class JoinRoomForm(forms.Form):
-    name = forms.CharField(label='Ваш никнейм:', strip=False, max_length=20,
-                           widget=forms.TextInput(attrs={'placeholder': 'Введите свой никнейм'}))
+    name = forms.CharField(label='Ваш никнейм:', max_length=20,
+                           widget=forms.TextInput(
+                               attrs={'placeholder': 'Введите свой никнейм', 'pattern': "\S(.*\S)?"}))
     spectator = forms.BooleanField(label='Быть наблюдателем?', required=False)
 
 

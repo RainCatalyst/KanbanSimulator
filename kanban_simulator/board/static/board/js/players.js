@@ -71,6 +71,7 @@ $(function() {
     updateCharacterConfiguration();
 });
 
+// new elements don't know about their droppability and dragability, so we need to update it
 function updateCharacterConfiguration(){
     $('.players').draggable({revert: 'invalid',
                     stop: function(event){
@@ -79,14 +80,18 @@ function updateCharacterConfiguration(){
     $("#big_header_container").droppable({
         accept: '.players',
         drop: function(event, ui){
-            //$(this).append(ui.draggable[0]);
             var parent = $("#header_container");
-            parent.append(ui.draggable[0]);
-            var child = parent.children().last();
-            child.removeAttr("style");
-            child.css("position", "relative");
+            var child = $(ui.draggable);
             var role = characterDistinguishByID(child.attr("id"));
-            moveCharacter(role, -1);
+
+            if (players_list[role] != -1){
+                parent.append(child);
+                child.removeAttr("style");
+                child.css("position", "relative");
+                moveCharacter(role, -1);
+            }else{
+                return false;
+            }
         }
     });
 

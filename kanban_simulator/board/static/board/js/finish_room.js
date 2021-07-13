@@ -10,6 +10,7 @@ $(function() {
    commands_check();
 });
 
+// synchronization function for checking the teams which is already done
 function commands_check(){
     $.ajax({
         method: "POST",
@@ -26,7 +27,14 @@ function commands_check(){
                 }
                 document.getElementById("team_rating").innerHTML = "";
                 document.getElementById("team_tabs").innerHTML = "";
+                if (lineChart != null){
+                   lineChart.destroy();
+                }
+                if (barChart != null){
+                    barChart.destroy();
+                }
                 ratingByBusinessValue();
+                document.getElementById("team_tabs").firstChild.firstChild.click();
 
             }
             setTimeout(commands_check, 1000);
@@ -34,6 +42,7 @@ function commands_check(){
     });
 }
 
+// add onClickListener to tab button
 function addListeners(pk){
     var elem = document.getElementById("team_tab_" + pk).addEventListener("click", function(){
         var id = parseInt($(this).attr("id").substring(9));
@@ -49,6 +58,7 @@ function addListeners(pk){
     }, false);
 }
 
+// find graph data in array by given id
 function findDataByID(pk){
     for (var k = 0; k < graphics.length; k++){
         if (graphics[k]["pk"] == pk){
@@ -57,6 +67,7 @@ function findDataByID(pk){
     }
 }
 
+// rating the teams by overall business value
 function ratingByBusinessValue(){
     teams.sort(function(a, b) {
         return b.bv - a.bv;
@@ -76,6 +87,7 @@ function ratingByBusinessValue(){
 
 }
 
+// function for rating team template creation
 function ratingTemplate(count, team){
     var player_list = "";
     //console.log(teams);
@@ -89,19 +101,20 @@ function ratingTemplate(count, team){
     }
     return '<tr>' +
                 '<th scope="row">' + count +'</th>' +
-                '<td>Команда ' + count + '</td>' +
+                '<td>Команда #' + team["pk"] + '</td>' +
                 '<td>' + player_list + '</td>' +
                 '<td>' + team["bv"] + '</td>' +
                 '</tr>';
 
 }
-
+// function for team tab template creation
 function tabTemplate(count, pk){
     return '<li class="nav-item">' +
-                    '<button type="button" class="btn btn-outline-info nav-link text-dark" id="team_tab_' + pk + '">Команда ' + count + '</button>' +
+                    '<button type="button" class="btn btn-outline-info nav-link text-dark" id="team_tab_' + pk + '">Команда #' + pk + '</button>' +
                 '</li>';
 }
 
+// plotting the cumulative graph for entire game
 function cumulativeGraph(line_data){
     if (lineChart != null){
         lineChart.destroy();
@@ -168,6 +181,7 @@ function cumulativeGraph(line_data){
     });
 }
 
+// plotting the bar graph for entire game
 function barGraph(bar_data){
     if (barChart != null){
         barChart.destroy();

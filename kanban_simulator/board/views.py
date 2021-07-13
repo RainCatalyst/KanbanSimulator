@@ -131,7 +131,7 @@ def populateBackLog(request):
     return JsonResponse({"error": ""}, status=400)
 
 
-# .. in process
+# start new day function which gets information for player(cards, characters and etc) and returns new efforts for characters
 @csrf_exempt
 def start_new_day(request):
     if request.method == 'POST':
@@ -180,7 +180,7 @@ def generate_random_effort_for_whole_team():
     return team_effort
 
 
-# accepts actual position of the character and updates it in the db
+# accepts actual position of the card and updates it in the db
 @csrf_exempt
 def move_card(request):
     if request.method == "POST":
@@ -216,7 +216,7 @@ def move_player(request):
     return JsonResponse({"Success": ""}, status=200)
 
 
-# check board version
+# check board version and update board of the particular player
 @csrf_exempt
 def version_check(request):
     if request.method == "POST":
@@ -264,6 +264,7 @@ def version_check(request):
     return JsonResponse({"Error": "error"}, status=400)
 
 
+# checks if new players arrived in waiting room
 @csrf_exempt
 def players_check(request, player_id):
     if request.method == "POST":
@@ -490,53 +491,44 @@ def rules(request):
     return render(request, 'board/rules.html')
 
 
+# redirects people from board to finish room with statistics
 def finish(request, player_id):
     player = Player.objects.get(pk=player_id)
-    # days = player.team.day_set.order_by("age")
-    # bar_data = []
-    # line_data = []
-    # processed_days = []
-    # for day in days:
-    #     if day.age not in processed_days:
-    #             bar_data.append({str(day.age): day.test_completed_tasks})
-    #                 line_data.append(
-    #                     {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
-    #             processed_days.append(day.age)
-    #
-    #         for i in range(1, len(line_data)):
-    #             vals = list(line_data[i].values())[0]
-    #             prev_vals = list(line_data[i - 1].values())[0]
-    #             line_data[i] = {
-    #                 list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
-    #                                                vals[1] + prev_vals[1],
-    #                                                vals[2] + prev_vals[2]]}
+    try:
+        team = player.team
+        team.card_set.all().delete()
+        team.character_set.all().delete()
+    except BaseException:
+        pass
     return render(request, 'board/finish.html')
 
 
+# checks if new team already finish
 @csrf_exempt
 def commands_check(request, player_id):
     if request.method == "POST":
         teams_id = request.POST.getlist('teams[]', [])
         user_disp_commands = len(teams_id)
         server_ready_commands = Player.objects.get(pk=player_id).team.game.team_set.all().filter(dayNum=LAST_DAY)
-        print(len(server_ready_commands))
-        print(teams_id)
         if user_disp_commands != len(server_ready_commands):
-            print("accessed")
             graphics_data = []
             teams = []
             for team in server_ready_commands:
-                teams.append({"pk": team.pk, "bv": team.business_value_sum, "players": json.dumps(list(team.player_set.all().values('name')))})
+                teams.append({"pk": team.pk, "bv": team.business_value_sum,
+                              "players": json.dumps(list(team.player_set.all().values('name')))})
                 # print(teams)
                 bar_data, line_data = form_data_for_statistics(team)
                 graphics_data.append({"pk": team.pk, "data": [bar_data, line_data]})
-            return JsonResponse({"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))}, status=200)
+            return JsonResponse(
+                {"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))},
+                status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)
 
     return JsonResponse({"Error": "error"}, status=400)
 
 
+# function which is responsible for appropriate data structure and format for working with statistics
 def form_data_for_statistics(server_team):
     days = Day.objects.filter(team=server_team).order_by("age")
     bar_data = []

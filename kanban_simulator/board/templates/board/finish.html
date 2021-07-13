@@ -201,36 +201,21 @@
 
 <div class="container pt-5 overflow-auto" id="fin">
     <div class="row">
-        <div class="col-7">
-            <ul class="nav nav-tabs" id="team_tabs">
-
-            </ul>
-
-            {#            <div class="row">#}
-            {#                <div class="col">#}
-            {#                    <div class="border-success">#}
-            {#                        <canvas id="firstChart"></canvas>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#                <div class="col">#}
-            {#                    <div class="border-success">#}
-            {#                        <canvas id="secondChart"></canvas>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            </div>#}
+        <div class="col-7 text-center fw-bold">
+            <ul class="nav nav-tabs" id="team_tabs"></ul>
 
             <div class="row p-2">
-                <div id="plot">
+                <div class="mx-auto" id="plot">
                     <canvas id="firstChart"></canvas>
-                    {#                    <img src="{% static 'board/images/main-rule.png' %}" alt="first-image">#}
                 </div>
+                <p>Cumulative flow diagram</p>
             </div>
 
             <div class="row p-2">
-                <div id="plot">
+                <div class="mx-auto" id="plot">
                     <canvas id="secondChart"></canvas>
-                    {#                    <img src="{% static 'board/images/main-rule.png' %}" alt="first-image">#}
                 </div>
+                <p>Lead Time Distribution</p>
             </div>
 
 

@@ -199,25 +199,24 @@
     </header>
 </div>
 
-<div class="container pt-5 overflow-auto" id="fin">
-    <div class="row">
-        <div class="col-7 text-center fw-bold">
-            <ul class="nav nav-tabs" id="team_tabs"></ul>
+<div class="container pt-5 overflow-auto d-flex flex-column" id="fin">
+    <div class="row flex-fill d-flex h-100 justify-content-start">
+        <div class="col-7 text-center fw-bold h-100 justify-content-start overflow-auto">
+            <ul class="nav nav-tabs bg-light sticky-top" id="team_tabs"></ul>
 
             <div class="row p-2">
-                <div class="mx-auto" id="plot">
+                <div class="mx-auto">
                     <canvas id="firstChart"></canvas>
                 </div>
                 <p>Cumulative flow diagram</p>
             </div>
 
             <div class="row p-2">
-                <div class="mx-auto" id="plot">
+                <div class="mx-auto">
                     <canvas id="secondChart"></canvas>
                 </div>
                 <p>Lead Time Distribution</p>
             </div>
-
 
         </div>
 

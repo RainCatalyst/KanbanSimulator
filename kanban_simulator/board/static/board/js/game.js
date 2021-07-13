@@ -146,16 +146,19 @@ function start_new_day(){
                     card_list[card_id]["test_completed"] += current_effort[j] + (j == 5 || j == 6 ? 0 : -1);
                     if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
                         blocked[card_id] = true;
+                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
                     }
                 }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && !blocked[card_id]){
                     card_list[card_id]["develop_completed"] += current_effort[j] + (j == 2 || j == 3 || j == 4 ? 0 : -1);
                     if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
                         blocked[card_id] = true;
+                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
                     }
                 }else if(!blocked[card_id]){
                     card_list[card_id]["analytic_completed"] += current_effort[j] + (j == 0 || j == 1 ? 0 : -1);
                     if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
                         blocked[card_id] = true;
+                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
                     }
                 }
             }
@@ -170,6 +173,9 @@ function start_new_day(){
                 }
             }
         }
+        console.log("Character positions sending: ");
+        console.log(players_list);
+
         var first_empty_row_anl_comp = getNumberOfChildNodesById("analytic_completed_container");
         var first_empty_row_dev_comp = getNumberOfChildNodesById("devop_completed_container");
         var first_empty_row_test_comp = getNumberOfChildNodesById("test_completed_container");
@@ -349,6 +355,10 @@ function performVersionCheck(){
                 document.body.classList.add('waiting');
                 var cards = JSON.parse(response["cards"]);
                 var characters = JSON.parse(response["characters"]);
+
+                console.log("Accepted character list: ");
+                console.log(characters);
+
                 var board_info = JSON.parse(response["board_info"]);
                 limits[0] = board_info["Wip1"];
                 document.getElementById("anl_wip").innerHTML = limits[0];
@@ -432,7 +442,7 @@ function performVersionCheck(){
                     var character_template = createCharacterTemplate(characters[j]["role"]);
                     var column_number = 0;
                     var card_index = getIndexOfArrayCardById(characters[j]["card_id"]);
-                    players_list[j] = characters[j]["card_id"];
+                    players_list[characters[j]["role"]] = characters[j]["card_id"];
                     placeCharacterAtSpecifiedCard(character_template,
                         characters[j]["card_id"], card_index == -1 ? 0 :card_list[card_index]["column_number"]);
                 }

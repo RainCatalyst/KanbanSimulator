@@ -10,5 +10,3 @@ admin.site.register(Player)
 admin.site.register(Card)
 admin.site.register(Character)
 admin.site.register(UserStory)
-
-

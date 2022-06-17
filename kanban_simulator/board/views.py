@@ -34,7 +34,8 @@ def index(request):
 
             # creating teams
             for i in range(teams_num):
-                new_team = Team(name='Команда ' + str(i + 1), game=new_room, dayNum=FIRST_HALF_APPEARS)
+                new_team = Team(name='Команда ' + str(i + 1),
+                                game=new_room, dayNum=FIRST_HALF_APPEARS)
                 new_team.save()
 
             # creating player
@@ -509,7 +510,8 @@ def commands_check(request, player_id):
     if request.method == "POST":
         teams_id = request.POST.getlist('teams[]', [])
         user_disp_commands = len(teams_id)
-        server_ready_commands = Player.objects.get(pk=player_id).team.game.team_set.all().filter(dayNum=LAST_DAY)
+        server_ready_commands = Player.objects.get(
+            pk=player_id).team.game.team_set.all().filter(dayNum=LAST_DAY)
         if user_disp_commands != len(server_ready_commands):
             graphics_data = []
             teams = []
@@ -520,7 +522,8 @@ def commands_check(request, player_id):
                 bar_data, line_data = form_data_for_statistics(team)
                 graphics_data.append({"pk": team.pk, "data": [bar_data, line_data]})
             return JsonResponse(
-                {"SYN": False, "graphics": json.dumps(list(graphics_data)), "rating": json.dumps(list(teams))},
+                {"SYN": False, "graphics": json.dumps(
+                    list(graphics_data)), "rating": json.dumps(list(teams))},
                 status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)

@@ -36,7 +36,9 @@ def generate_cards_set():
             chosen_indexes.add(j)
             number_found = True
 
-def generate_initial_conditions():
+    return cards_set
+
+def generate_initial_conditions(cards_set):
     # generating initial conditions
     analytic_completed = []
     develop_completed = []
@@ -59,5 +61,7 @@ def generate_initial_conditions():
             analytic_completed.append(random.randint(0, card.analytic_points - 1))
             develop_completed.append(0)
             test_completed.append(0)
+
+    return analytic_completed, develop_completed, test_completed
         
     

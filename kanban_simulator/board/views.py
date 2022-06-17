@@ -357,7 +357,7 @@ def start_game(request, player_id):
     # cards that will be actually used in the game
     cards_set = generate_cards_set()
 
-    analytic_completed, develop_completed, test_completed = generate_initial_conditions()
+    analytic_completed, develop_completed, test_completed = generate_initial_conditions(cards_set)
 
     # creating cards for each team
     for team in team_set:

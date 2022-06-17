@@ -7,31 +7,17 @@ var limits = [4, 4, 4];
 var BV = 0;
 // initial data for graph plotting
 var bar_data = [{"1": 0}, {"2": 0}, {"3": 0}, {"4": 0}];
-var line_data = [{"1": [1, 0, 0]}, {"2": [2, 1, 0]}, {"3": [3, 1, 0]}, {"4": [4, 2, 0]}];
+var line_data = [{"1": [0, 0, 0]}, {"2": [0, 0, 0]}, {"3": [0, 0, 0]}, {"4": [0, 0, 0]}];
 
 var lineChart;
 var barChart;
 
-var FIRST_HALF_APPEARS = 5;
-var SECOND_HALF_APPEARS = 10;
-var FIRST_EXPEDITE = 8;
-var SECOND_EXPEDITE = 13;
-var THIRD_EXPEDITE = 16;
-
-var LATE_CARD_DAY = 10;
-var LATE_EXPEDITE_CARD_DAY = 6;
-var LATE_CARD_INIT_BV = -5;
-var LATE_EXPEDITE_CARD_INIT_BV = -8;
-var LATE_CARD_FACTOR = 1.5;
-var LATE_EXPEDITE_CARD_FACTOR = 2;
 // arrays of days
 var analytic_completed_tasks = [];
 var developer_completed_tasks = [];
 var test_completed_tasks = [];
 
 var is_backlog_function_processed = false;
-
-var last_day = 26;
 
 // needed for showing that players have only 1 week left
 var last_week_reminder = false;
@@ -212,34 +198,42 @@ function start_new_day(){
             if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
                 card_list[k]["age"] += 1;
                 if (card_list[k]["is_expedite"]){
-                    if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
-                        card_list[k]["business_value"] = 0;
-                    }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1 ){
-                        card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
-                    }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
+                    if (card_list[k]["age"] >= LATE_EXPEDITE_CARD_DAY){
                         card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
                     }
+                    // if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
+                    //     card_list[k]["business_value"] = 0;
+                    // }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1 ){
+                    //     card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
+                    // }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
+                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+                    // }
                 }else{
-                    if (card_list[k]["age"] == LATE_CARD_DAY - 2 || card_list[k]["age"] == LATE_CARD_DAY - 1){
-                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
-                    }else if (card_list[k]["age"] == LATE_CARD_DAY){
-                        card_list[k]["business_value"] = 0;
-                    }else if (card_list[k]["age"] == LATE_CARD_DAY + 1){
-                        card_list[k]["business_value"] = LATE_CARD_INIT_BV;
-                    }else if (card_list[k]["age"] > LATE_CARD_DAY + 1){
+                    if (card_list[k]["age"] >= LATE_CARD_DAY){
                         card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
                     }
-
+                    // if (card_list[k]["age"] == LATE_CARD_DAY - 2 || card_list[k]["age"] == LATE_CARD_DAY - 1){
+                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
+                    // }else if (card_list[k]["age"] == LATE_CARD_DAY){
+                    //     card_list[k]["business_value"] = 0;
+                    // }else if (card_list[k]["age"] == LATE_CARD_DAY + 1){
+                    //     card_list[k]["business_value"] = LATE_CARD_INIT_BV;
+                    // }else if (card_list[k]["age"] > LATE_CARD_DAY + 1){
+                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
+                    // }
                 }
             }else if (card_list[k]["is_expedite"] && card_list[k]["column_number"] != last_column){
                 card_list[k]["age"] += 1;
-                if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
-                    card_list[k]["business_value"] = 0;
-                }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1){
-                    card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
-                }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+                if (card_list[k]["age"] >= LATE_CARD_DAY){
+                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
                 }
+                // if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
+                //     card_list[k]["business_value"] = 0;
+                // }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1){
+                //     card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
+                // }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
+                //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+                // }
             }
         }
         //BV = sum;
@@ -336,7 +330,7 @@ $(function() {
         cumulativeGraph();
         barGraph();
         calculateBV();
-        document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС ВАЛЬЮ: " + BV;
+        document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС VALUE: " + BV;
         $('#StatisticsModal').modal('toggle');
     });
 });
@@ -498,7 +492,8 @@ function addCardToParent(parent, card){
 function compare_cards(card_a, card_b) {
   if (card_a["row_number"] > card_b["row_number"]) return 1;
   else if (card_a["row_number"] < card_b["row_number"]) return -1;
-
+  if (card_a["is_expedite"] && !card_b["is_expedite"]) return 1;
+  else if (!card_a["is_expedite" && card_b["is_expedite"]]) return -1;
   return 0;
 }
 
@@ -592,9 +587,9 @@ function cumulativeGraph(){
             data: test_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(0, 255, 0)'
+                above: 'rgb(25, 135, 84)'
             },
-            borderColor: 'rgb(0, 255, 0)',
+            borderColor: 'rgb(25, 135, 84)',
             tension: 0.1
         },
         {
@@ -602,9 +597,9 @@ function cumulativeGraph(){
             data: dev_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(0, 0, 255)'
+                above: 'rgb(13, 110, 253)'
             },
-            borderColor: 'rgb(0, 0, 255)',
+            borderColor: 'rgb(13, 110, 253)',
             tension: 0.1
         },
         {
@@ -612,9 +607,9 @@ function cumulativeGraph(){
             data: anl_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(255, 0, 0)'
+                above: 'rgb(220, 53, 69)'
             },
-            borderColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(220, 53, 69)',
             tension: 0.1
         }]
     };

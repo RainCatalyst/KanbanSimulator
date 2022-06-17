@@ -6,18 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import Room, Team, Day, Player, Card, Character, UserStory
 from .forms import CreateRoomForm, JoinRoomForm, PlayerFormSet, ChangeWIPLimitsForm
+from .constants import *
 import random
-
-NUMBER_OF_CHARACTERS = 7
-CARDS_IN_GAME = 30
-EXPEDITE_CARDS = 3
-FIRST_HALF_APPEARS = 5
-SECOND_HALF_APPEARS = 10
-FIRST_EXPEDITE = 8
-SECOND_EXPEDITE = 13
-THIRD_EXPEDITE = 16
-LAST_DAY = 26
-
 
 def index(request):
     if request.method == 'POST':
@@ -177,7 +167,7 @@ def start_new_day(request):
 def generate_random_effort_for_whole_team():
     team_effort = []
     for i in range(NUMBER_OF_CHARACTERS):
-        team_effort.append(random.randint(1, 6))
+        team_effort.append(random.randint(MIN_TEAM_EFFORT, MAX_TEAM_EFFORT))
     return team_effort
 
 
@@ -234,7 +224,7 @@ def version_check(request):
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
                     server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
-                cards_to_order = cards.filter(column_number=0).order_by('row_number')
+                cards_to_order = cards.filter(column_number=0).order_by('row_number').order_by('is_expedite')
                 max_row_num = cards_to_order.last().row_number
 
                 for card in cards_to_order:
@@ -458,19 +448,19 @@ def start_game(request, player_id):
             character.save()
 
         # creating statistics for each team
-        day1 = Day(age=1, team=team, anl_completed_tasks=1, dev_completed_tasks=0,
+        day1 = Day(age=1, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
                    test_completed_tasks=0)
         day1.save()
 
-        day2 = Day(age=2, team=team, anl_completed_tasks=1, dev_completed_tasks=1,
+        day2 = Day(age=2, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
                    test_completed_tasks=0)
         day2.save()
 
-        day3 = Day(age=3, team=team, anl_completed_tasks=1, dev_completed_tasks=0,
+        day3 = Day(age=3, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
                    test_completed_tasks=0)
         day3.save()
 
-        day4 = Day(age=4, team=team, anl_completed_tasks=1, dev_completed_tasks=1,
+        day4 = Day(age=4, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
                    test_completed_tasks=0)
         day4.save()
 

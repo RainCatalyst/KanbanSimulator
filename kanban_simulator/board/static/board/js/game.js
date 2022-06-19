@@ -105,15 +105,14 @@ function backLogInitialPopulation(){
 
 
 // function which calls every start day button click (here we calculate the progress, business value, next positions of the cards and etc)
-function start_new_day(){
-
+function start_new_day() {
     if (window.confirm("Do you really want to start new day?")) {
         console.log("Start new day");
-        var data = {"team": team_id};
+        var data = { team: team_id };
 
-        var anl_comp = 0;
-        var dev_comp = 0;
-        var test_comp = 0;
+        var analysisCompleted = 0;
+        var developmentCompleted = 0;
+        var testingCompleted = 0;
 
         blocked = [];
         for (var i = 0; i < card_list.length; i ++){
@@ -122,39 +121,42 @@ function start_new_day(){
 
         var changed_cards = [];
         for (var j = 0; j < players_list.length; j++){
-            var character_position = players_list[j];
-            if (character_position != -1){
-                var card_id = getIndexOfArrayCardById(character_position);
-                if (!changed_cards.includes(card_id)) {
-                    changed_cards.push(card_id);
+            const characterPosition = players_list[j];
+            if (characterPosition != -1) {
+                const cardIndex = getIndexOfArrayCardById(characterPosition);
+                const card = card_list[cardIndex];
+
+                if (!changed_cards.includes(cardIndex)) {
+                    changed_cards.push(cardIndex);
                 }
-                if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"] && !blocked[card_id]){
-                    card_list[card_id]["test_completed"] += current_effort[j] + (j == 5 || j == 6 ? 0 : -1);
-                    if (card_list[card_id]["test_completed"] >= card_list[card_id]["test_remaining"]){
-                        blocked[card_id] = true;
-                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
+
+                if (card.develop_completed >= card.develop_remaining && !blocked[cardIndex]) {
+                    card.test_completed += current_effort[j] + (j == 5 || j == 6 ? 0 : -1);
+                    if (card.test_completed >= card.test_remaining) {
+                        blocked[cardIndex] = true;
+                        console.log("CARD#" + card.pk + " is blocked");
                     }
-                }else if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"] && !blocked[card_id]){
-                    card_list[card_id]["develop_completed"] += current_effort[j] + (j == 2 || j == 3 || j == 4 ? 0 : -1);
-                    if (card_list[card_id]["develop_completed"] >= card_list[card_id]["develop_remaining"]){
-                        blocked[card_id] = true;
-                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
+                } else if (card.analytic_completed >= card.analytic_remaining && !blocked[cardIndex]) {
+                    card.develop_completed += current_effort[j] + (j == 2 || j == 3 || j == 4 ? 0 : -1);
+                    if (card.develop_completed >= card.develop_remaining) {
+                        blocked[cardIndex] = true;
+                        console.log("CARD#" + card.pk + " is blocked");
                     }
-                }else if(!blocked[card_id]){
-                    card_list[card_id]["analytic_completed"] += current_effort[j] + (j == 0 || j == 1 ? 0 : -1);
-                    if (card_list[card_id]["analytic_completed"] >= card_list[card_id]["analytic_remaining"]){
-                        blocked[card_id] = true;
-                        console.log("CARD#" + card_list[card_id]["pk"] + " is blocked");
+                } else if (!blocked[cardIndex]) {
+                    card.analytic_completed += current_effort[j] + (j == 0 || j == 1 ? 0 : -1);
+                    if (card.analytic_completed >= card.analytic_remaining) {
+                        blocked[cardIndex] = true;
+                        console.log("CARD#" + card.pk + " is blocked");
                     }
                 }
             }
         }
 
-        for (var j = 0; j < players_list.length; j++){
-            var character_position = players_list[j];
-            if (character_position != -1){
-                var card_id = getIndexOfArrayCardById(players_list[j]);
-                if (blocked[card_id]){
+        for (var j = 0; j < players_list.length; j++) {
+            const characterPosition = players_list[j];
+            if (characterPosition != -1) {
+                const cardIndex = getIndexOfArrayCardById(players_list[j]);
+                if (blocked[cardIndex]){
                     players_list[j] = -1;
                 }
             }
@@ -166,25 +168,26 @@ function start_new_day(){
         var first_empty_row_dev_comp = getNumberOfChildNodesById("devop_completed_container");
         var first_empty_row_test_comp = getNumberOfChildNodesById("test_completed_container");
 
-        for (var i = 0; i < changed_cards.length; i++){
-            if (blocked[changed_cards[i]]){
-                if (card_list[changed_cards[i]]["test_completed"] >= card_list[changed_cards[i]]["test_remaining"]){
-                    test_comp += 1;
-                    card_list[changed_cards[i]]["ready_day"] = current_day;
-                    card_list[changed_cards[i]]["column_number"] += 1;
-                    card_list[changed_cards[i]]["row_number"] = first_empty_row_test_comp;
+        for (cardIndex of changed_cards){
+            const card = card_list[cardIndex];
+            if (blocked[cardIndex]) {
+                if (card.test_completed >= card.test_remaining) {
+                    testingCompleted += 1;
+                    card.ready_day = current_day;
+                    card.column_number += 1;
+                    card.row_number = first_empty_row_test_comp;
                     first_empty_row_test_comp += 1;
                     test_completed_tasks.push(current_day);
-                }else if (card_list[changed_cards[i]]["develop_completed"] >= card_list[changed_cards[i]]["develop_remaining"]){
-                    dev_comp += 1;
-                    card_list[changed_cards[i]]["column_number"] += 1;
-                    card_list[changed_cards[i]]["row_number"] = first_empty_row_dev_comp;
+                } else if (card.develop_completed >= card.develop_remaining) {
+                    developmentCompleted += 1;
+                    card.column_number += 1;
+                    card.row_number = first_empty_row_dev_comp;
                     first_empty_row_dev_comp += 1;
                     developer_completed_tasks.push(current_day);
-                }else if (card_list[changed_cards[i]]["analytic_completed"] >= card_list[changed_cards[i]]["analytic_remaining"]){
-                    anl_comp += 1;
-                    card_list[changed_cards[i]]["column_number"] += 1;
-                    card_list[changed_cards[i]]["row_number"] = first_empty_row_anl_comp;
+                } else if (card.analytic_completed >= card.analytic_remaining) {
+                    analysisCompleted += 1;
+                    card.column_number += 1;
+                    card.row_number = first_empty_row_anl_comp;
                     first_empty_row_anl_comp += 1;
                     analytic_completed_tasks.push(current_day);
                 }
@@ -192,104 +195,55 @@ function start_new_day(){
         }
         calculateBV();
 
-        var last_column = 7;
-        //var sum = 0;
-        for (var k = 0; k < card_list.length; k ++){
-            if (card_list[k]["column_number"] != last_column && card_list[k]["column_number"] != 0){
-                card_list[k]["age"] += 1;
-                if (card_list[k]["is_expedite"]){
-                    if (card_list[k]["age"] >= LATE_EXPEDITE_CARD_DAY){
-                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-                    }
-                    // if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
-                    //     card_list[k]["business_value"] = 0;
-                    // }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1 ){
-                    //     card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
-                    // }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
-                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-                    // }
-                }else{
-                    if (card_list[k]["age"] >= LATE_CARD_DAY){
-                        card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-                    }
-                    // if (card_list[k]["age"] == LATE_CARD_DAY - 2 || card_list[k]["age"] == LATE_CARD_DAY - 1){
-                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * 0.5);
-                    // }else if (card_list[k]["age"] == LATE_CARD_DAY){
-                    //     card_list[k]["business_value"] = 0;
-                    // }else if (card_list[k]["age"] == LATE_CARD_DAY + 1){
-                    //     card_list[k]["business_value"] = LATE_CARD_INIT_BV;
-                    // }else if (card_list[k]["age"] > LATE_CARD_DAY + 1){
-                    //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-                    // }
-                }
-            }else if (card_list[k]["is_expedite"] && card_list[k]["column_number"] != last_column){
-                card_list[k]["age"] += 1;
-                if (card_list[k]["age"] >= LATE_CARD_DAY){
-                    card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-                }
-                // if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY){
-                //     card_list[k]["business_value"] = 0;
-                // }else if (card_list[k]["age"] == LATE_EXPEDITE_CARD_DAY + 1){
-                //     card_list[k]["business_value"] = LATE_EXPEDITE_CARD_INIT_BV;
-                // }else if (card_list[k]["age"] > LATE_EXPEDITE_CARD_DAY + 1){
-                //     card_list[k]["business_value"] = Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-                // }
+        const constraints = {
+            true: {
+                lateDay: LATE_EXPEDITE_CARD_DAY,
+                fine: EXIPEDITE_CARD_FINE,
+            },
+            false: {
+                lateDay: LATE_CARD_DAY,
+                fine: CARD_FINE,
             }
         }
-        //BV = sum;
 
-        var anl_in_proc = card_list.filter(x => x["column_number"] == 1).sort(compare_cards);
-        var dev_in_proc = card_list.filter(x => x["column_number"] == 3).sort(compare_cards);
-        var test_in_proc = card_list.filter(x => x["column_number"] == 5).sort(compare_cards);
+        for (card of card_list) {
+            card.age++;
 
-        for (var i = 0; i < anl_in_proc.length; i++){
-            anl_in_proc[i]["row_number"] = i;
+            const {
+                column_number: columnNumber,
+                is_expedite: isExpedite,
+                age
+            } = card
+
+            const { lateDay, fine } = constraints[isExpedite.toString()]
+
+            if (columnNumber !== 6 && columnNumber !== 7) {
+                age >= lateDay
+                    ? card.business_value -= fine
+                    : null;
+            }
         }
 
-        for (var i = 0; i < dev_in_proc.length; i++){
-            dev_in_proc[i]["row_number"] = i;
+        var analysisInProcess = card_list.filter(x => x.column_number == 1).sort(compare_cards);
+        var developmentInProcess = card_list.filter(x => x.column_number == 3).sort(compare_cards);
+        var testingInProcess = card_list.filter(x => x.column_number == 5).sort(compare_cards);
+
+        for (index in analysisInProcess) {
+            analysisInProcess[index].row_number = index;
         }
 
-        for (var i = 0; i < test_in_proc.length; i++){
-            test_in_proc[i]["row_number"] = i;
+        for (index in developmentInProcess) {
+            developmentInProcess[index].row_number = index;
         }
 
-        for (var i = 0; i < card_list.length; i ++){
-            if (card_list[i]["column_number"] == 1){
-                for (var j = 0; j < anl_in_proc.length; j++){
-                    if (card_list[i]["pk"] == anl_in_proc[j]["pk"]){
-                        card_list[i]["row_number"] = anl_in_proc[j]["row_number"];
-                        break;
-                    }
-                }
-                continue;
-            }
-
-            if (card_list[i]["column_number"] == 3){
-                for (var j = 0; j < dev_in_proc.length; j++){
-                    if (card_list[i]["pk"] == dev_in_proc[j]["pk"]){
-                        card_list[i]["row_number"] = dev_in_proc[j]["row_number"];
-                        break;
-                    }
-                }
-                continue;
-            }
-
-            if (card_list[i]["column_number"] == 5){
-                for (var j = 0; j < test_in_proc.length; j++){
-                    if (card_list[i]["pk"] == test_in_proc[j]["pk"]){
-                        card_list[i]["row_number"] = test_in_proc[j]["row_number"];
-                        break;
-                    }
-                }
-                continue;
-            }
+        for (index in testingInProcess) {
+            testingInProcess[index].row_number = index;
         }
 
         data["current_day"] = current_day;
-        data["anl_completed"] = anl_comp;
-        data["dev_completed"] = dev_comp;
-        data["test_completed"] = test_comp;
+        data["anl_completed"] = analysisCompleted;
+        data["dev_completed"] = developmentCompleted;
+        data["test_completed"] = testingCompleted;
         data["cards"] = JSON.stringify(card_list);
         data["characters"] = players_list;
         data["BV"] = BV;
@@ -315,7 +269,7 @@ function start_new_day(){
             }
         });
 
-     current_day ++;
+     current_day++;
     }
 }
 

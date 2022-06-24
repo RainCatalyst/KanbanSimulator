@@ -221,7 +221,7 @@ def version_check(request):
             # days = Day.objects.filter(team=server_team).order_by("age")
             # bar_data = []
             # line_data = []
-            bar_data, line_data = form_data_for_statistics(server_team)
+            bar_data, line_data, throughput_data = form_data_for_statistics(server_team)
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
                     server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
@@ -249,6 +249,7 @@ def version_check(request):
                                  "board_info": json.dumps(board_info),
                                  "bar_data": json.dumps(bar_data),
                                  "line_data": json.dumps(line_data),
+                                 "throughput_data": json.dumps(throughput_data),
                                  "SYN": False}, status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)
@@ -460,8 +461,8 @@ def commands_check(request, player_id):
                 teams.append({"pk": team.pk, "bv": team.business_value_sum,
                               "players": json.dumps(list(team.player_set.all().values('name')))})
                 # print(teams)
-                bar_data, line_data = form_data_for_statistics(team)
-                graphics_data.append({"pk": team.pk, "data": [bar_data, line_data]})
+                bar_data, line_data, throughput_data = form_data_for_statistics(team)
+                graphics_data.append({"pk": team.pk, "data": [bar_data, line_data, throughput_data]})
             return JsonResponse(
                 {"SYN": False, "graphics": json.dumps(
                     list(graphics_data)), "rating": json.dumps(list(teams))},
@@ -470,31 +471,6 @@ def commands_check(request, player_id):
             return JsonResponse({"SYN": True}, status=200)
 
     return JsonResponse({"Error": "error"}, status=400)
-
-
-# function which is responsible for appropriate data structure and format for working with statistics
-def form_data_for_statistics(server_team):
-    days = Day.objects.filter(team=server_team).order_by("age")
-    bar_data = []
-    line_data = []
-    processed_days = []
-    for day in days:
-        if day.age not in processed_days:
-            bar_data.append({str(day.age): day.test_completed_tasks})
-            line_data.append(
-                {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
-        processed_days.append(day.age)
-
-    for i in range(1, len(line_data)):
-        vals = list(line_data[i].values())[0]
-        prev_vals = list(line_data[i - 1].values())[0]
-        line_data[i] = {
-            list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
-                                           vals[1] + prev_vals[1],
-                                           vals[2] + prev_vals[2]]}
-
-    return bar_data, line_data
-
 
 # to be added
 def news(request):

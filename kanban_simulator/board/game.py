@@ -1,6 +1,7 @@
 from .models import Room, Team, Day, Player, Card, Character, UserStory
 from .constants import *
 import random
+from collections import Counter
 
 def generate_cards_set():
     # creating cards
@@ -64,4 +65,27 @@ def generate_initial_conditions(cards_set):
 
     return analytic_completed, develop_completed, test_completed
         
-    
+# function which is responsible for appropriate data structure and format for working with statistics
+def form_data_for_statistics(server_team):
+    days = Day.objects.filter(team=server_team).order_by("age")
+    bar_data = []
+    line_data = []
+    processed_days = []
+    for day in days:
+        if day.age not in processed_days:
+            bar_data.append({str(day.age): day.test_completed_tasks})
+            line_data.append(
+                {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
+        processed_days.append(day.age)
+
+    throughput_data = dict(Counter([list(x.values())[0] for x in bar_data[FIRST_HALF_APPEARS - 1:]]))
+
+    for i in range(1, len(line_data)):
+        vals = list(line_data[i].values())[0]
+        prev_vals = list(line_data[i - 1].values())[0]
+        line_data[i] = {
+            list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
+                                           vals[1] + prev_vals[1],
+                                           vals[2] + prev_vals[2]]}
+
+    return bar_data, line_data, throughput_data

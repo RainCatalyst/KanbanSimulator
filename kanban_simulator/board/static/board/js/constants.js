@@ -13,5 +13,9 @@ const LATE_EXPEDITE_CARD_FACTOR = 0.5;
 
 const EXIPEDITE_CARD_FINE = 7;
 const CARD_FINE = 3;
-
 const last_day = 26;
+
+// average effort
+// 7 - analysis vs 6
+// 10.5 - dev vs 10
+// 7 - testing vs 9

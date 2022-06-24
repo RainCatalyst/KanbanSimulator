@@ -8,9 +8,11 @@ var BV = 0;
 // initial data for graph plotting
 var bar_data = [{"1": 0}, {"2": 0}, {"3": 0}, {"4": 0}];
 var line_data = [{"1": [0, 0, 0]}, {"2": [0, 0, 0]}, {"3": [0, 0, 0]}, {"4": [0, 0, 0]}];
+var throughput_data = {"0": 4}
 
 var lineChart;
 var barChart;
+var throughtputChart;
 
 // arrays of days
 var analytic_completed_tasks = [];
@@ -281,8 +283,9 @@ $(function() {
 
     // statistics button (business value calculating and graph plotting)
     $(document).on("click", "#stat_show", function () {
-        cumulativeGraph();
-        barGraph();
+        plotCumulativeGraph();
+        plotBar();
+        plotThroughtputChart();
         calculateBV();
         document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС VALUE: " + BV;
         $('#StatisticsModal').modal('toggle');
@@ -316,6 +319,7 @@ function performVersionCheck(){
                 document.getElementById("test_wip").innerHTML = limits[2];
                 bar_data = JSON.parse(response["bar_data"]);
                 line_data = JSON.parse(response["line_data"]);
+                throughput_data = JSON.parse(response["throughput_data"])
 
                 current_version = board_info["version"];
                 if (current_day != board_info["Age"]){
@@ -472,55 +476,55 @@ function calculateBV(){
             sum += card_list[k]["business_value"];
             console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
         }
-        if (current_day >= last_day - 1){
-            if (card_list[k]["column_number"] == 6){
-                sum += card_list[k]["business_value"];
-                console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
-            }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
-                if (card_list[k]["is_expedite"]){
-                    if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-                        if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-                    }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                    }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
-                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-                    }
-                }else{
-                    if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-                        if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-                    }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                    }else if (card_list[k]["column_number"] == 1){
-                        if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                        else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-                    }
-                }
-            }
-        }
+        // if (current_day >= last_day - 1){
+        //     if (card_list[k]["column_number"] == 6){
+        //         sum += card_list[k]["business_value"];
+        //         console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
+        //     }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
+        //         if (card_list[k]["is_expedite"]){
+        //             if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+        //                 if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
+        //             }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+        //             }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
+        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
+        //             }
+        //         }else{
+        //             if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
+        //                 if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
+        //             }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
+        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+        //             }else if (card_list[k]["column_number"] == 1){
+        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
+        //             }
+        //         }
+        //     }
+        // }
     }
     BV = sum;
 }
 
 // plot cumulative graph (cumulative amount of task which is done by every department)
-function cumulativeGraph(){
+function plotCumulativeGraph(){
     if (lineChart != null){
         lineChart.destroy();
     }
     var ctx = document.getElementById('firstChart').getContext('2d');
     ctx.height = 400;
     ctx.width = 400;
-    var labels = Object.keys(line_data);
+    var labels = Object.keys(line_data).slice(FIRST_HALF_APPEARS - 1);
 
     var anl_data = [];
     var dev_data = [];
     var test_data = [];
 
-    for (var i =0; i < line_data.length; i++){
+    for (var i = FIRST_HALF_APPEARS - 1; i < line_data.length; i++){
         var pDay = Object.values(line_data[i])[0];
         anl_data.push(pDay[0]);
         dev_data.push(pDay[1]);
@@ -574,24 +578,21 @@ function cumulativeGraph(){
 }
 
 // plot bar graph (number of task which is done in principle)
-function barGraph(){
+function plotBar(){
     if (barChart != null){
         barChart.destroy();
     }
     var ctx = document.getElementById('secondChart').getContext('2d');
     ctx.height = 400;
     ctx.width = 400;
-    var labels = Object.keys(bar_data);
-
-    var anl_data = [];
-    var dev_data = [];
-    var test_data = [];
+    var labels = Object.keys(bar_data).slice(FIRST_HALF_APPEARS - 1);
 
     var ds = [];
 
-    for (var i =0; i < bar_data.length; i++){
+    for (var i = FIRST_HALF_APPEARS - 1; i < bar_data.length; i++){
         ds.push(Object.values(bar_data[i])[0]);
     }
+
     var data = {
         labels: labels,
         options: {
@@ -613,3 +614,34 @@ function barGraph(){
     });
 }
 
+function plotThroughtputChart(){
+    if (throughtputChart != null){
+        throughtputChart.destroy();
+    }
+    var ctx = document.getElementById('throughputChart').getContext('2d');
+    ctx.height = 400;
+    ctx.width = 400;
+    var labels = Object.keys(throughput_data);
+
+    var ds = Object.values(throughput_data);
+
+    var data = {
+        labels: labels,
+        options: {
+            title: {
+                display: true,
+                text: 'Throughput Diagram',
+                position: 'bottom'
+            }
+        },
+        datasets: [
+        {
+            label: 'Completed tasks',
+            data: ds,
+        }]
+    };
+    throughtputChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+    });
+}

@@ -1,3 +1,4 @@
+from matplotlib.pyplot import scatter
 from .models import Room, Team, Day, Player, Card, Character, UserStory
 from .constants import *
 import random
@@ -66,7 +67,7 @@ def generate_initial_conditions(cards_set):
     return analytic_completed, develop_completed, test_completed
         
 # function which is responsible for appropriate data structure and format for working with statistics
-def form_data_for_statistics(server_team):
+def form_data_for_statistics(server_team, cards):
     days = Day.objects.filter(team=server_team).order_by("age")
     bar_data = []
     line_data = []
@@ -80,6 +81,11 @@ def form_data_for_statistics(server_team):
 
     throughput_data = dict(Counter([list(x.values())[0] for x in bar_data[FIRST_HALF_APPEARS - 1:]]))
 
+    scatter_data = []
+    for card in cards:
+        if card.ready_day != -1 and card.ready_day > 4:
+            scatter_data.append({"x": card.ready_day, "y": card.ready_day - card.start_day})
+
     for i in range(1, len(line_data)):
         vals = list(line_data[i].values())[0]
         prev_vals = list(line_data[i - 1].values())[0]
@@ -88,4 +94,4 @@ def form_data_for_statistics(server_team):
                                            vals[1] + prev_vals[1],
                                            vals[2] + prev_vals[2]]}
 
-    return bar_data, line_data, throughput_data
+    return bar_data, line_data, throughput_data, scatter_data

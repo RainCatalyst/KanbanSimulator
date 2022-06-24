@@ -9,10 +9,12 @@ var BV = 0;
 var bar_data = [{"1": 0}, {"2": 0}, {"3": 0}, {"4": 0}];
 var line_data = [{"1": [0, 0, 0]}, {"2": [0, 0, 0]}, {"3": [0, 0, 0]}, {"4": [0, 0, 0]}];
 var throughput_data = {"0": 4}
+var scatter_data = {}
 
 var lineChart;
 var barChart;
 var throughtputChart;
+var scatterChart;
 
 // arrays of days
 var analytic_completed_tasks = [];
@@ -286,6 +288,7 @@ $(function() {
         plotCumulativeGraph();
         plotBar();
         plotThroughtputChart();
+        plotScatterChart();
         calculateBV();
         document.getElementById('bv_sum_container').innerHTML = "БИЗНЕС VALUE: " + BV;
         $('#StatisticsModal').modal('toggle');
@@ -320,6 +323,7 @@ function performVersionCheck(){
                 bar_data = JSON.parse(response["bar_data"]);
                 line_data = JSON.parse(response["line_data"]);
                 throughput_data = JSON.parse(response["throughput_data"])
+                scatter_data = JSON.parse(response["scatter_data"])
 
                 current_version = board_info["version"];
                 if (current_day != board_info["Age"]){
@@ -520,6 +524,11 @@ function plotCumulativeGraph(){
     ctx.width = 400;
     var labels = Object.keys(line_data).slice(FIRST_HALF_APPEARS - 1);
 
+    for (var i = 0; i < labels.length; i++)
+    {
+        labels[i] = (parseInt(labels[i]) + 1).toString();
+    }
+
     var anl_data = [];
     var dev_data = [];
     var test_data = [];
@@ -587,6 +596,11 @@ function plotBar(){
     ctx.width = 400;
     var labels = Object.keys(bar_data).slice(FIRST_HALF_APPEARS - 1);
 
+    for (var i = 0; i < labels.length; i++)
+    {
+        labels[i] = (parseInt(labels[i]) + 1).toString();
+    }
+
     var ds = [];
 
     for (var i = FIRST_HALF_APPEARS - 1; i < bar_data.length; i++){
@@ -606,6 +620,7 @@ function plotBar(){
         {
             label: 'Completed tasks',
             data: ds,
+            backgroundColor: 'rgb(100, 149, 237)'
         }]
     };
     barChart = new Chart(ctx, {
@@ -638,10 +653,55 @@ function plotThroughtputChart(){
         {
             label: 'Completed tasks',
             data: ds,
+            backgroundColor: 'rgb(100, 149, 237)'
         }]
     };
     throughtputChart = new Chart(ctx, {
         type: 'bar',
         data: data,
+    });
+}
+
+function plotScatterChart(){
+    if (scatterChart != null){
+        scatterChart.destroy();
+    }
+    var ctx = document.getElementById('scatterChart').getContext('2d');
+    ctx.height = 400;
+    ctx.width = 400;
+    var labels = Object.keys(scatter_data);
+
+    var ds = scatter_data;//Object.values(throughput_data);
+
+    var data = {
+        labels: labels,
+        datasets: [
+        {
+            label: 'Completed tasks',
+            data: ds,
+            backgroundColor: 'rgb(100, 149, 237)'
+        }]
+    };
+    scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Cycle Time Scatterplot',
+                position: 'bottom'
+            },
+            scales: {
+                x: {
+                    min: FIRST_HALF_APPEARS,
+                    max: current_day
+                }
+            },
+            elements: {
+                point: {
+                    radius: 5
+                }
+            }
+        }
     });
 }

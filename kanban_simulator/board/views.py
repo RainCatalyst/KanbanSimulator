@@ -139,7 +139,6 @@ def start_new_day(request):
             test_comp = request.POST.get('test_completed', 0)
 
             for card in cards:
-                print("Column_number", card["column_number"])
                 Card.objects.filter(pk=card["pk"]).update(age=card["age"], ready_day=card["ready_day"],
                                                           analytic_completed=card["analytic_completed"],
                                                           develop_completed=card["develop_completed"],
@@ -221,7 +220,7 @@ def version_check(request):
             # days = Day.objects.filter(team=server_team).order_by("age")
             # bar_data = []
             # line_data = []
-            bar_data, line_data, throughput_data = form_data_for_statistics(server_team)
+            bar_data, line_data, throughput_data, scatter_data = form_data_for_statistics(server_team, cards)
             if server_team.dayNum == FIRST_HALF_APPEARS or server_team.dayNum == SECOND_HALF_APPEARS or \
                     server_team.dayNum == FIRST_EXPEDITE or server_team.dayNum == SECOND_EXPEDITE or \
                     server_team.dayNum == THIRD_EXPEDITE:
@@ -250,6 +249,7 @@ def version_check(request):
                                  "bar_data": json.dumps(bar_data),
                                  "line_data": json.dumps(line_data),
                                  "throughput_data": json.dumps(throughput_data),
+                                 "scatter_data": json.dumps(scatter_data),
                                  "SYN": False}, status=200)
         else:
             return JsonResponse({"SYN": True}, status=200)
@@ -461,8 +461,8 @@ def commands_check(request, player_id):
                 teams.append({"pk": team.pk, "bv": team.business_value_sum,
                               "players": json.dumps(list(team.player_set.all().values('name')))})
                 # print(teams)
-                bar_data, line_data, throughput_data = form_data_for_statistics(team)
-                graphics_data.append({"pk": team.pk, "data": [bar_data, line_data, throughput_data]})
+                bar_data, line_data, throughput_data, scatter_data = form_data_for_statistics(team)
+                graphics_data.append({"pk": team.pk, "data": [bar_data, line_data, throughput_data, scatter_data]})
             return JsonResponse(
                 {"SYN": False, "graphics": json.dumps(
                     list(graphics_data)), "rating": json.dumps(list(teams))},

@@ -460,8 +460,9 @@ def commands_check(request, player_id):
             for team in server_ready_commands:
                 teams.append({"pk": team.pk, "bv": team.business_value_sum,
                               "players": json.dumps(list(team.player_set.all().values('name')))})
+                cards = Card.objects.filter(team=team, start_day__lte=team.dayNum)
                 # print(teams)
-                bar_data, line_data, throughput_data, scatter_data = form_data_for_statistics(team)
+                bar_data, line_data, throughput_data, scatter_data = form_data_for_statistics(team, cards)
                 graphics_data.append({"pk": team.pk, "data": [bar_data, line_data, throughput_data, scatter_data]})
             return JsonResponse(
                 {"SYN": False, "graphics": json.dumps(

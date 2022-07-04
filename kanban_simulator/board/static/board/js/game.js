@@ -747,22 +747,4 @@ function plotScatterChart(){
             }
         },
     });
-    //options: {
-        //     title: {
-        //         display: true,
-        //         text: 'Cycle Time Scatterplot',
-        //         position: 'bottom'
-        //     },
-        //     scales: {
-        //         x: {
-        //             min: FIRST_HALF_APPEARS,
-        //             max: current_day
-        //         }
-        //     },
-        //     elements: {
-        //         point: {
-        //             radius: 5
-        //         }
-        //     }
-        // }
 }

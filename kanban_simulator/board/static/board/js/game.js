@@ -550,13 +550,13 @@ function plotCumulativeGraph(){
         },
         datasets: [
         {
-            label: 'Test tasks',
-            data: test_data,
+            label: 'Analytic tasks',
+            data: anl_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(25, 135, 84)'
+                above: 'rgb(220, 53, 69)'
             },
-            borderColor: 'rgb(25, 135, 84)',
+            borderColor: 'rgb(220, 53, 69)',
             tension: 0.1
         },
         {
@@ -570,15 +570,16 @@ function plotCumulativeGraph(){
             tension: 0.1
         },
         {
-            label: 'Analytic tasks',
-            data: anl_data,
+            label: 'Test tasks',
+            data: test_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(220, 53, 69)'
+                above: 'rgb(25, 135, 84)'
             },
-            borderColor: 'rgb(220, 53, 69)',
+            borderColor: 'rgb(25, 135, 84)',
             tension: 0.1
-        }]
+        }
+        ]
     };
     lineChart = new Chart(ctx, {
         type: 'line',

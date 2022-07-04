@@ -13,6 +13,7 @@ const LATE_EXPEDITE_CARD_FACTOR = 0.5;
 
 const EXIPEDITE_CARD_FINE = 7;
 const CARD_FINE = 3;
+
 const last_day = 26;
 
 // average effort

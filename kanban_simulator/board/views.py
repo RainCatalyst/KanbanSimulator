@@ -38,6 +38,15 @@ def index(request):
         form = CreateRoomForm()
         return render(request, 'board/index.html', {'form': form})
 
+def get_teams(request, player_id):
+    list = []
+
+    room = Player.objects.get(pk=player_id).team.game
+    teams = Team.objects.filter(game=room)
+    for team in teams:
+        list.append(team.id)
+    
+    return JsonResponse({"teams": list})
 
 @csrf_exempt
 def board(request, player_id):

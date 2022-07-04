@@ -22,6 +22,7 @@ urlpatterns = [
     path('rules', views.rules, name='rules'),
     path('<int:player_id>/finish', views.finish, name='finish'),
     path('<int:player_id>/finish/commands_check', views.commands_check, name='commandsCheck'),
+    path('<int:player_id>/get_teams', views.get_teams, name='getTeams'),
 
     # to be added
     path('news', views.news, name='news')

@@ -311,6 +311,12 @@
                             data-bs-target="#WIPModal">Изменить WIP limit
                     </button>
 
+                    {% if player.spectator %}
+                        <button type="button" class="btn btn-outline-secondary text-dark" data-bs-toggle="modal"
+                            data-bs-target="#TeamsModal" id="switch_teams_button">Переключиться на команду
+                        </button>
+                    {% endif %}
+
                     {% if not player.spectator %}
 
                         <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal"
@@ -421,6 +427,15 @@
                                         </button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="TeamsModal" tabindex="-1" aria-labelledby="TeamsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content border-0" id="TeamsModalWindow">
+                                Список доступных команд:
+                                <ul id="TeamsList"></ul>
                             </div>
                         </div>
                     </div>
@@ -587,6 +602,26 @@
         team_id = {{ player.team.pk }};
         player_id = {{ player.pk }};
         backLogInitialPopulation();
+
+        document.getElementById('switch_teams_button').onclick = () => {
+            $.ajax({
+                type: 'GET',
+                url: `http://127.0.0.1:8000/${player_id}/get_teams`,
+                success: function(response) {
+                    let ul = document.getElementById('TeamsList')
+                    ul.innerHTML = ''
+                    response.teams.forEach((teamId, index) => {
+                        let li = document.createElement('li')
+                        li.id = 'teams_list_li'
+                        li.innerHTML = teamId
+                        li.onclick = () => {
+                            team_id = teamId
+                        }
+                        ul.appendChild(li)
+                    })
+                }
+            })
+        }
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>

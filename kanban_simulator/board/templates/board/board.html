@@ -234,11 +234,14 @@
         <div class="collapse navbar-collapse" id="navbarsExample04">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
-                <li class="nav-item dropdown pe-2">
-                    <button type="button" class="btn btn-outline-light text-dark" onclick="start_new_day()">Начать
-                        день
-                    </button>
-                </li>
+                {% if not player.spectator %}
+                    <li class="nav-item dropdown pe-2">
+                        <button type="button" class="btn btn-outline-light text-dark" onclick="start_new_day()">Начать
+                            день
+                        </button>
+                    </li>
+
+                {% endif %}
 
                 <li class="nav-item text-dark d-flex align-items-center">
                     <div class="nav-link text-dark"><i class="bi bi-calendar-week pe-2"></i><i id="day_num_title">День
@@ -247,7 +250,10 @@
 
             </ul>
 
-            <ul class="navbar-nav mx-auto mb-2 mb-md-0" id="header_container">
+            <ul class="navbar-nav mx-auto mb-2 mb-md-0" id="header_container" style="position:relative;">
+                {% if player.spectator %}
+                    <div id="foreground"></div>
+                {% endif %}
                 <div class="anl_player players" id="anl_player0">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30"
                          height="29.375" viewBox="0 0 48 47">
@@ -307,9 +313,11 @@
 
                 <li class="nav-item dropdown pe-2">
 
-                    <button type="button" class="btn btn-outline-secondary text-dark" data-bs-toggle="modal"
-                            data-bs-target="#WIPModal">Изменить WIP limit
-                    </button>
+                    {% if not player.spectator %}
+                        <button type="button" class="btn btn-outline-secondary text-dark" data-bs-toggle="modal"
+                                data-bs-target="#WIPModal">Изменить WIP limit
+                        </button>
+                    {% endif %}
 
                     {% if player.spectator %}
                         <button type="button" class="btn btn-outline-secondary text-dark" data-bs-toggle="modal"
@@ -499,7 +507,10 @@
 </div>
 
 <div class="container-fluid overflow-auto bg-light d-flex flex-column" id="temp" style="background-color: #c6f6d5">
-    <div class="row text-center text-break p-2 mb-1 flex-fill d-flex h-100 justify-content-start" id="board_container">
+    <div class="row text-center text-break p-2 mb-1 flex-fill d-flex h-100 justify-content-start" id="board_container" style="position: relative;">
+        {% if player.spectator %}
+            <div id="foreground"></div>
+        {% endif %}
         <div class="col containers droppable" id="backlog_container"></div>
         <div class="col-3 border-start containers" id="analytic_container">
             <div class="row flex-fill d-flex h-100 justify-content-start">
@@ -609,16 +620,27 @@
                 url: `http://127.0.0.1:8000/${player_id}/get_teams`,
                 success: function(response) {
                     let ul = document.getElementById('TeamsList')
+                    ul.style.listStyle = 'none'
                     ul.innerHTML = ''
-                    response.teams.forEach((teamId, index) => {
-                        let li = document.createElement('li')
-                        li.id = 'teams_list_li'
-                        li.innerHTML = teamId
-                        li.onclick = () => {
-                            team_id = teamId
-                        }
-                        ul.appendChild(li)
+                    const liArray = response.teams.map((teamId, index) => {
+                        const li = document.createElement('li')
+                        li.style.cursor = 'pointer'
+                        li.innerHTML = teamId + (teamId === team_id ? ' Выбрано' : null)
+                        return li
                     })
+
+                    for (let index = 0; index < liArray.length; index++) {
+                        const li = liArray[index]
+                        li.onclick = () => {
+                            team_id = response.teams[index]
+                            for (let j = 0; j < liArray.length; j++) {
+                                liArray[j].innerHTML = response.teams[j]
+                            }
+                            li.innerHTML += ' Выбрано'
+                        }
+                    }
+
+                    liArray.forEach(li => ul.appendChild(li))
                 }
             })
         }

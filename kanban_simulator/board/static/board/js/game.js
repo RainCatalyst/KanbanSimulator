@@ -476,40 +476,15 @@ function showExpediteModal(){
 function calculateBV(){
     var sum = 0;
     for (var k = 0; k < card_list.length; k ++){
-        if (card_list[k]["column_number"] == 7){
-            sum += card_list[k]["business_value"];
-            console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
+        const card = card_list[k];
+        if (card.column_number == 7){
+            sum += card.business_value;
         }
-        // if (current_day >= last_day - 1){
-        //     if (card_list[k]["column_number"] == 6){
-        //         sum += card_list[k]["business_value"];
-        //         console.log(card_list[k]["title"] + " : " + card_list[k]["business_value"]);
-        //     }else if (card_list[k]["business_value"] <= 0 && card_list[k]["column_number"] != 7){
-        //         if (card_list[k]["is_expedite"]){
-        //             if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-        //                 if (card_list[k]["business_value"] == 0) sum += LATE_EXPEDITE_CARD_INIT_BV;
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR);
-        //             }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR);
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-        //             }else if (card_list[k]["column_number"] == 0 || card_list[k]["column_number"] == 1){
-        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_EXPEDITE_CARD_INIT_BV * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR * LATE_EXPEDITE_CARD_FACTOR);
-        //             }
-        //         }else{
-        //             if (card_list[k]["column_number"] == 4 || card_list[k]["column_number"] == 5){
-        //                 if (card_list[k]["business_value"] == 0) sum += LATE_CARD_INIT_BV;
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR);
-        //             }else if (card_list[k]["column_number"] == 2 || card_list[k]["column_number"] == 3){
-        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR);
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-        //             }else if (card_list[k]["column_number"] == 1){
-        //                 if (card_list[k]["business_value"] == 0) sum += Math.round(LATE_CARD_INIT_BV * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-        //                 else sum += Math.round(card_list[k]["business_value"] * LATE_CARD_FACTOR * LATE_CARD_FACTOR * LATE_CARD_FACTOR);
-        //             }
-        //         }
-        //     }
-        // }
+        if (current_day >= last_day - 1){
+            var travel_distance = 7 - card_list[k]["column_number"];
+            var fine = card.is_expedite ? EXIPEDITE_CARD_FINE : CARD_FINE;
+            sum -= fine * travel_distance;
+        }
     }
     BV = sum;
 }
@@ -772,22 +747,4 @@ function plotScatterChart(){
             }
         },
     });
-    //options: {
-        //     title: {
-        //         display: true,
-        //         text: 'Cycle Time Scatterplot',
-        //         position: 'bottom'
-        //     },
-        //     scales: {
-        //         x: {
-        //             min: FIRST_HALF_APPEARS,
-        //             max: current_day
-        //         }
-        //     },
-        //     elements: {
-        //         point: {
-        //             radius: 5
-        //         }
-        //     }
-        // }
 }

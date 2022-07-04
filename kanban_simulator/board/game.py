@@ -72,6 +72,7 @@ def form_data_for_statistics(server_team, cards):
     bar_data = []
     line_data = []
     processed_days = []
+
     for day in days:
         if day.age not in processed_days:
             bar_data.append({str(day.age): day.test_completed_tasks})
@@ -80,6 +81,9 @@ def form_data_for_statistics(server_team, cards):
         processed_days.append(day.age)
 
     throughput_data = dict(Counter([list(x.values())[0] for x in bar_data[FIRST_HALF_APPEARS - 1:]]))
+
+    for day in range(processed_days[-1] + 1, LAST_DAY):
+        bar_data.append({str(day): 0})
 
     scatter_data = []
     for card in cards:

@@ -541,13 +541,6 @@ function plotCumulativeGraph(){
     }
     var data = {
         labels: labels,
-        options: {
-            title: {
-                display: true,
-                text: 'Cumulative Flow Diagram',
-                position: 'left'
-            }
-        },
         datasets: [
         {
             label: 'Analytic tasks',
@@ -584,6 +577,31 @@ function plotCumulativeGraph(){
     lineChart = new Chart(ctx, {
         type: 'line',
         data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Cumulative Flow Diagram',
+                position: 'left'
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 5,
+                    ticks: {
+                        autoSkip: false,
+                        maxTicksLimit: 100,
+                        stepSize: 1
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1
+                    }
+                }
+            }
+        }
     });
 }
 
@@ -610,13 +628,6 @@ function plotBar(){
 
     var data = {
         labels: labels,
-        options: {
-            title: {
-                display: true,
-                text: 'Lead Time Distribution',
-                position: 'bottom'
-            }
-        },
         datasets: [
         {
             label: 'Completed tasks',
@@ -627,6 +638,34 @@ function plotBar(){
     barChart = new Chart(ctx, {
         type: 'bar',
         data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Lead Time Distribution',
+                position: 'bottom'
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 5,
+                    max: last_day - 1,
+                    ticks: {
+                        autoSkip: false,
+                        maxTicksLimit: 100,
+                        stepSize: 1
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    suggestedMin: 0,
+                    suggestedMax: 5,
+                    ticks: {
+                        stepSize: 1,
+                        autoSkip: false
+                    }
+                }
+            },
+        }
     });
 }
 
@@ -643,16 +682,9 @@ function plotThroughtputChart(){
 
     var data = {
         labels: labels,
-        options: {
-            title: {
-                display: true,
-                text: 'Throughput Diagram',
-                position: 'bottom'
-            }
-        },
         datasets: [
         {
-            label: 'Completed tasks',
+            label: 'Days',
             data: ds,
             backgroundColor: 'rgb(100, 149, 237)'
         }]
@@ -660,6 +692,31 @@ function plotThroughtputChart(){
     throughtputChart = new Chart(ctx, {
         type: 'bar',
         data: data,
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 0,
+                    suggestedMax: 5,
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Throughput Diagram',
+                position: 'bottom'
+            }
+        }
     });
 }
 
@@ -673,6 +730,7 @@ function plotScatterChart(){
     var labels = Object.keys(scatter_data);
 
     var ds = scatter_data;//Object.values(throughput_data);
+    console.log(ds);
 
     var data = {
         labels: labels,
@@ -687,15 +745,24 @@ function plotScatterChart(){
         type: 'scatter',
         data: data,
         options: {
-            title: {
-                display: true,
-                text: 'Cycle Time Scatterplot',
-                position: 'bottom'
-            },
             scales: {
                 x: {
-                    min: FIRST_HALF_APPEARS,
-                    max: current_day
+                    type: 'linear',
+                    min: 5,
+                    max: last_day - 1,
+                    ticks: {
+                        autoSkip: false,
+                        maxTicksLimit: 100,
+                        stepSize: 1
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    suggestedMin: 0,
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1
+                    }
                 }
             },
             elements: {
@@ -703,6 +770,24 @@ function plotScatterChart(){
                     radius: 5
                 }
             }
-        }
+        },
     });
+    //options: {
+        //     title: {
+        //         display: true,
+        //         text: 'Cycle Time Scatterplot',
+        //         position: 'bottom'
+        //     },
+        //     scales: {
+        //         x: {
+        //             min: FIRST_HALF_APPEARS,
+        //             max: current_day
+        //         }
+        //     },
+        //     elements: {
+        //         point: {
+        //             radius: 5
+        //         }
+        //     }
+        // }
 }

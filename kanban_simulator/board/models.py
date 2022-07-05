@@ -41,6 +41,10 @@ class Day(models.Model):
     anl_completed_tasks = models.IntegerField()
     dev_completed_tasks = models.IntegerField()
     test_completed_tasks = models.IntegerField()
+    anl_active_tasks = models.IntegerField(default=0)
+    dev_active_tasks = models.IntegerField(default=0)
+    test_active_tasks = models.IntegerField(default=0)
+    done_active_tasks = models.IntegerField(default=0)
 
     def __str__(self):
         return 'ID: ' + str(self.pk) + '. ' + self.team.__str__()

@@ -68,6 +68,7 @@ def generate_initial_conditions(cards_set):
         
 # function which is responsible for appropriate data structure and format for working with statistics
 def form_data_for_statistics(server_team, cards):
+    # team = Team.objects.get(pk=server_team)
     days = Day.objects.filter(team=server_team).order_by("age")
     bar_data = []
     line_data = []
@@ -77,7 +78,7 @@ def form_data_for_statistics(server_team, cards):
         if day.age not in processed_days:
             bar_data.append({str(day.age): day.test_completed_tasks})
             line_data.append(
-                {str(day.age): [day.anl_completed_tasks, day.dev_completed_tasks, day.test_completed_tasks]})
+                {str(day.age): [day.anl_active_tasks, day.dev_active_tasks, day.test_active_tasks, day.done_active_tasks]})
         processed_days.append(day.age)
 
     throughput_data = dict(Counter([list(x.values())[0] for x in bar_data[FIRST_HALF_APPEARS - 1:]]))
@@ -90,12 +91,22 @@ def form_data_for_statistics(server_team, cards):
         if card.ready_day != -1 and card.ready_day > 4:
             scatter_data.append({"x": card.ready_day, "y": card.ready_day - card.start_day})
 
-    for i in range(1, len(line_data)):
-        vals = list(line_data[i].values())[0]
-        prev_vals = list(line_data[i - 1].values())[0]
-        line_data[i] = {
-            list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
-                                           vals[1] + prev_vals[1],
-                                           vals[2] + prev_vals[2]]}
+    for i in range(len(line_data)):
+        values = list(line_data[i].values())[0]
+        key = list(line_data[i].keys())[0]
+        for i in range(len(values) - 2, -1, -1):
+            values[i] += values[i + 1]
+        line_data[i] = {key: values}
+    # for i in range(1, len(line_data)):
+    #     vals = list(line_data[i].values())[0]
+    #     prev_vals = list(line_data[i - 1].values())[0]
+    #     line_data[i] = {
+    #         list(line_data[i].keys())[0]: [vals[0] + prev_vals[0],
+    #                                        vals[1] + prev_vals[1],
+    #                                        vals[2] + prev_vals[2]]}
+    # print(line_data)
+    # cards = Card.objects.filter(team=server_team)
+    # for card in cards:
+
 
     return bar_data, line_data, throughput_data, scatter_data

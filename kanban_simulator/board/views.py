@@ -146,6 +146,10 @@ def start_new_day(request):
             anl_comp = request.POST.get('anl_completed', 0)
             dev_comp = request.POST.get('dev_completed', 0)
             test_comp = request.POST.get('test_completed', 0)
+            anl_active =  request.POST.get('anl_active', 0)
+            dev_active =  request.POST.get('dev_active', 0)
+            test_active =  request.POST.get('test_active', 0)
+            done_active = request.POST.get('done_active', 0)
 
             for card in cards:
                 Card.objects.filter(pk=card["pk"]).update(age=card["age"], ready_day=card["ready_day"],
@@ -160,7 +164,8 @@ def start_new_day(request):
                 Character.objects.filter(team=team, role=i).update(card_id=characters[i])
 
             day = Day(age=int(day_num) + 1, team=team, anl_completed_tasks=anl_comp, dev_completed_tasks=dev_comp,
-                      test_completed_tasks=test_comp)
+                      test_completed_tasks=test_comp, anl_active_tasks=anl_active, dev_active_tasks=dev_active,
+                      test_active_tasks=test_active, done_active_tasks=done_active)
             day.save()
             team.version += 1
             team.dayNum = int(day_num) + 1
@@ -410,19 +415,19 @@ def start_game(request, player_id):
 
         # creating statistics for each team
         day1 = Day(age=1, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
-                   test_completed_tasks=0)
+                   test_completed_tasks=0, anl_active_tasks=0, dev_active_tasks=0, test_active_tasks=0)
         day1.save()
 
         day2 = Day(age=2, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
-                   test_completed_tasks=0)
+                   test_completed_tasks=0, anl_active_tasks=0, dev_active_tasks=0, test_active_tasks=0)
         day2.save()
 
         day3 = Day(age=3, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
-                   test_completed_tasks=0)
+                   test_completed_tasks=0, anl_active_tasks=0, dev_active_tasks=0, test_active_tasks=0)
         day3.save()
 
         day4 = Day(age=4, team=team, anl_completed_tasks=0, dev_completed_tasks=0,
-                   test_completed_tasks=0)
+                   test_completed_tasks=0, anl_active_tasks=0, dev_active_tasks=0, test_active_tasks=0)
         day4.save()
 
     room.ready = True

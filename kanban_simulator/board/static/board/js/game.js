@@ -118,6 +118,11 @@ function start_new_day() {
         var developmentCompleted = 0;
         var testingCompleted = 0;
 
+        var anlActive = 0;
+        var devActive = 0;
+        var testActive = 0;
+        var doneActive = 0;
+
         blocked = [];
         for (var i = 0; i < card_list.length; i ++){
             blocked.push(false);
@@ -167,6 +172,8 @@ function start_new_day() {
         }
         console.log("Character positions sending: ");
         console.log(players_list);
+        console.log("Sending data ");
+        console.log(anlActive);
 
         var first_empty_row_anl_comp = getNumberOfChildNodesById("analytic_completed_container");
         var first_empty_row_dev_comp = getNumberOfChildNodesById("devop_completed_container");
@@ -228,6 +235,26 @@ function start_new_day() {
             }
         }
 
+        for (card of card_list) {
+            console.log(card.column_number);
+            if (card.column_number == 1 || card.column_number == 2)
+            {
+                anlActive += 1;
+            }
+            else if (card.column_number == 3 || card.column_number == 4)
+            {
+                devActive += 1;
+            }
+            else if (card.column_number == 5 || card.column_number == 6)
+            {
+                testActive += 1;
+            }
+            else if (card.column_number == 7)
+            {
+                doneActive += 1;
+            }
+        }
+
         var analysisInProcess = card_list.filter(x => x.column_number == 1).sort(compare_cards);
         var developmentInProcess = card_list.filter(x => x.column_number == 3).sort(compare_cards);
         var testingInProcess = card_list.filter(x => x.column_number == 5).sort(compare_cards);
@@ -248,9 +275,14 @@ function start_new_day() {
         data["anl_completed"] = analysisCompleted;
         data["dev_completed"] = developmentCompleted;
         data["test_completed"] = testingCompleted;
+        data["anl_active"] = anlActive;
+        data["dev_active"] = devActive;
+        data["test_active"] = testActive;
+        data["done_active"] = doneActive;
         data["cards"] = JSON.stringify(card_list);
         data["characters"] = players_list;
         data["BV"] = BV;
+
 
         $.ajax({
             type: "POST",
@@ -507,24 +539,36 @@ function plotCumulativeGraph(){
     var anl_data = [];
     var dev_data = [];
     var test_data = [];
+    var done_data = [];
 
     for (var i = FIRST_HALF_APPEARS - 1; i < line_data.length; i++){
         var pDay = Object.values(line_data[i])[0];
         anl_data.push(pDay[0]);
         dev_data.push(pDay[1]);
         test_data.push(pDay[2]);
+        done_data.push(pDay[3]);
     }
     var data = {
         labels: labels,
         datasets: [
         {
-            label: 'Analytic tasks',
-            data: anl_data,
+            label: 'Finished tasks',
+            data: done_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(220, 53, 69)'
+                above: 'rgb(255, 216, 0)'
             },
-            borderColor: 'rgb(220, 53, 69)',
+            borderColor: 'rgb(255, 216, 0)',
+            tension: 0.1
+        },
+        {
+            label: 'Test tasks',
+            data: test_data,
+            fill: {
+                target: 'origin',
+                above: 'rgb(25, 135, 84)'
+            },
+            borderColor: 'rgb(25, 135, 84)',
             tension: 0.1
         },
         {
@@ -538,13 +582,13 @@ function plotCumulativeGraph(){
             tension: 0.1
         },
         {
-            label: 'Test tasks',
-            data: test_data,
+            label: 'Analytic tasks',
+            data: anl_data,
             fill: {
                 target: 'origin',
-                above: 'rgb(25, 135, 84)'
+                above: 'rgb(220, 53, 69)'
             },
-            borderColor: 'rgb(25, 135, 84)',
+            borderColor: 'rgb(220, 53, 69)',
             tension: 0.1
         }
         ]
